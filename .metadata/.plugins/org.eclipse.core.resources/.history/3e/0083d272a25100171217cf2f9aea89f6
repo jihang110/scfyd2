@@ -1,0 +1,4 @@
+alert($("#chooseTaskId").val();
+$(function(){
+	
+})

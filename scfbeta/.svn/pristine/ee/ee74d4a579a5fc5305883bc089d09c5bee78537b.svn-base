@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ut.scf.dao.crm.IOrgnLoanCountDao">
+  <resultMap id="BaseResultMap" type="com.ut.scf.pojo.OrgnLoanCount">
+    <id column="rec_uid" jdbcType="VARCHAR" property="recUid" />
+    <result column="corp_id" jdbcType="VARCHAR" property="corpId" />
+    <result column="loan_date" jdbcType="TIMESTAMP" property="loanDate" />
+    <result column="due_date" jdbcType="TIMESTAMP" property="dueDate" />
+    <result column="loan_bank" jdbcType="VARCHAR" property="loanBank" />
+    <result column="assure_company" jdbcType="VARCHAR" property="assureCompany" />
+    <result column="caution_money" jdbcType="DECIMAL" property="cautionMoney" />
+    <result column="loan_money" jdbcType="DECIMAL" property="loanMoney" />
+    <result column="profit_rate" jdbcType="DECIMAL" property="profitRate" />
+    <result column="pawn" jdbcType="VARCHAR" property="pawn" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user_id" jdbcType="VARCHAR" property="createUserId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    rec_uid, corp_id, loan_date, due_date, loan_bank, assure_company, caution_money, 
+    loan_money, profit_rate, pawn, create_time, create_user_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from orgn_loan_count
+    where rec_uid = #{recUid,jdbcType=VARCHAR}
+  </select> 
+<!--    <select id="selectByPrimaryKeyId" parameterType="java.lang.String" resultMap="BaseResultMap"> -->
+<!-- 	select -->
+<!-- 	rec_uid, corp_id, loan_date, due_date, loan_bank, assure_company, -->
+<!-- 	caution_money, -->
+<!-- 	loan_money, profit_rate, pawn, create_time, create_user_id -->
+<!-- 	from orgn_loan_count -->
+<!-- 	<if test="recUid != null"> -->
+<!-- 		where rec_uid = #{recUid,jdbcType=VARCHAR} -->
+<!-- 	</if> -->
+<!-- 	</select> -->
+    
+   <select id="selectOrgnFlowList" resultMap="BaseResultMap" parameterType="hashmap">
+	select 
+		f.rec_uid recUid, f.corp_id corpId, f.loan_date loanDate, f.due_date dueDate,
+		f.loan_bank loanBank, f.assure_company assure_company, f.caution_money cautionMoney,
+		f.loan_money loanMoney, f.profit_rate profitRate, f.pawn Pawn, c.corp_name corpName
+	 from orgn_loan_count f join corp_info c on f.corp_id = c.corp_id 
+	 where 1=1 and c.status = 1
+    <if test="corpId != null">
+	  and f.corp_id = #{corpId}
+	</if>
+	order by f.create_time desc
+</select>
+    
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from orgn_loan_count
+    where rec_uid = #{recUid,jdbcType=VARCHAR}
+  </delete>
+  <!-- <insert id="insert" parameterType="com.ut.scf.pojo.OrgnLoanCount">
+    insert into orgn_loan_count (rec_uid, corp_id, loan_date, 
+      due_date, loan_bank, assure_company, 
+      caution_money, loan_money, profit_rate, 
+      pawn, create_time, create_user_id
+      )
+    values (#{recUid,jdbcType=VARCHAR}, #{corpId,jdbcType=VARCHAR}, #{loanDate,jdbcType=TIMESTAMP}, 
+      #{dueDate,jdbcType=TIMESTAMP}, #{loanBank,jdbcType=VARCHAR}, #{assureCompany,jdbcType=VARCHAR}, 
+      #{cautionMoney,jdbcType=DECIMAL}, #{loanMoney,jdbcType=DECIMAL}, #{profitRate,jdbcType=DECIMAL}, 
+      #{pawn,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=VARCHAR}
+      )
+  </insert> -->
+  <insert id="insert" parameterType="hashmap">
+    insert into orgn_loan_count (rec_uid, corp_id, loan_date, 
+      due_date, loan_bank, assure_company, 
+      caution_money, loan_money, profit_rate, 
+      pawn, create_time, create_user_id
+      )
+    values (#{recUid,jdbcType=VARCHAR}, #{corpId,jdbcType=VARCHAR}, #{loanDate,jdbcType=TIMESTAMP}, 
+      #{dueDate,jdbcType=TIMESTAMP}, #{loanBank,jdbcType=VARCHAR}, #{assureCompany,jdbcType=VARCHAR}, 
+      #{cautionMoney,jdbcType=DECIMAL}, #{loanMoney,jdbcType=DECIMAL}, #{profitRate,jdbcType=DECIMAL}, 
+      #{pawn,jdbcType=VARCHAR}, sysdate, #{createUserId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ut.scf.pojo.OrgnLoanCount">
+    insert into orgn_loan_count
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="recUid != null">
+        rec_uid,
+      </if>
+      <if test="corpId != null">
+        corp_id,
+      </if>
+      <if test="loanDate != null">
+        loan_date,
+      </if>
+      <if test="dueDate != null">
+        due_date,
+      </if>
+      <if test="loanBank != null">
+        loan_bank,
+      </if>
+      <if test="assureCompany != null">
+        assure_company,
+      </if>
+      <if test="cautionMoney != null">
+        caution_money,
+      </if>
+      <if test="loanMoney != null">
+        loan_money,
+      </if>
+      <if test="profitRate != null">
+        profit_rate,
+      </if>
+      <if test="pawn != null">
+        pawn,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="recUid != null">
+        #{recUid,jdbcType=VARCHAR},
+      </if>
+      <if test="corpId != null">
+        #{corpId,jdbcType=VARCHAR},
+      </if>
+      <if test="loanDate != null">
+        #{loanDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dueDate != null">
+        #{dueDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loanBank != null">
+        #{loanBank,jdbcType=VARCHAR},
+      </if>
+      <if test="assureCompany != null">
+        #{assureCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="cautionMoney != null">
+        #{cautionMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="loanMoney != null">
+        #{loanMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="profitRate != null">
+        #{profitRate,jdbcType=DECIMAL},
+      </if>
+      <if test="pawn != null">
+        #{pawn,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ut.scf.pojo.OrgnLoanCount">
+    update orgn_loan_count
+    <set>
+      <if test="corpId != null">
+        corp_id = #{corpId,jdbcType=VARCHAR},
+      </if>
+      <if test="loanDate != null">
+        loan_date = #{loanDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dueDate != null">
+        due_date = #{dueDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loanBank != null">
+        loan_bank = #{loanBank,jdbcType=VARCHAR},
+      </if>
+      <if test="assureCompany != null">
+        assure_company = #{assureCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="cautionMoney != null">
+        caution_money = #{cautionMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="loanMoney != null">
+        loan_money = #{loanMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="profitRate != null">
+        profit_rate = #{profitRate,jdbcType=DECIMAL},
+      </if>
+      <if test="pawn != null">
+        pawn = #{pawn,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where rec_uid = #{recUid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="hashmap">
+    update orgn_loan_count
+    set corp_id = #{corpId,jdbcType=VARCHAR},
+      loan_date = #{loanDate,jdbcType=TIMESTAMP},
+      due_date = #{dueDate,jdbcType=TIMESTAMP},
+      loan_bank = #{loanBank,jdbcType=VARCHAR},
+      assure_company = #{assureCompany,jdbcType=VARCHAR},
+      caution_money = #{cautionMoney,jdbcType=DECIMAL},
+      loan_money = #{loanMoney,jdbcType=DECIMAL},
+      profit_rate = #{profitRate,jdbcType=DECIMAL},
+      pawn = #{pawn,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{createUserId,jdbcType=VARCHAR}
+    where rec_uid = #{recUid,jdbcType=VARCHAR}
+  </update>
+</mapper>

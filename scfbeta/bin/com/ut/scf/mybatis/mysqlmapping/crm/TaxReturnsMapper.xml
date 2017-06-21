@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ut.scf.dao.crm.ITaxReturnsDao">
+  <resultMap id="BaseResultMap" type="com.ut.scf.pojo.TaxReturns">
+    <id column="vat_id" jdbcType="VARCHAR" property="vatId" />
+    <result column="corp_id" jdbcType="VARCHAR" property="corpId" />
+    <result column="oper_year" jdbcType="CHAR" property="operYear" />
+    <result column="purchases_tax" jdbcType="DECIMAL" property="purchasesTax" />
+    <result column="sales_tax" jdbcType="DECIMAL" property="salesTax" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user_id" jdbcType="VARCHAR" property="createUserId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    vat_id, corp_id, oper_year, purchases_tax, sales_tax, create_time, create_user_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tax_returns
+    where vat_id = #{vatId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectTaxReturnsList" resultMap="BaseResultMap" parameterType="hashmap">
+	select 
+	 f.vat_id vatId, f.corp_id corpId, f.oper_year operYear, f.purchases_tax purchasesTax, 
+	 f.sales_tax salesTax, f.create_time createTime, F.create_user_id createUserId, c.corp_name corpName
+	 from tax_returns f join corp_info c on f.corp_id = c.corp_id 
+	 where 1=1 and c.status = 1
+    <if test="corpId != null">
+	  and f.corp_id = #{corpId}
+	</if>
+	order by f.create_time desc
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tax_returns
+    where vat_id = #{vatId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="hashmap">
+    insert into tax_returns (vat_id, corp_id, oper_year, 
+      purchases_tax, sales_tax, create_time, 
+      create_user_id)
+    values (#{vatId,jdbcType=VARCHAR}, #{corpId,jdbcType=VARCHAR}, #{operYear,jdbcType=CHAR}, 
+      #{purchasesTax,jdbcType=DECIMAL}, #{salesTax,jdbcType=DECIMAL}, now(), 
+      #{createUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ut.scf.pojo.TaxReturns">
+    insert into tax_returns
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="vatId != null">
+        vat_id,
+      </if>
+      <if test="corpId != null">
+        corp_id,
+      </if>
+      <if test="operYear != null">
+        oper_year,
+      </if>
+      <if test="purchasesTax != null">
+        purchases_tax,
+      </if>
+      <if test="salesTax != null">
+        sales_tax,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="vatId != null">
+        #{vatId,jdbcType=VARCHAR},
+      </if>
+      <if test="corpId != null">
+        #{corpId,jdbcType=VARCHAR},
+      </if>
+      <if test="operYear != null">
+        #{operYear,jdbcType=CHAR},
+      </if>
+      <if test="purchasesTax != null">
+        #{purchasesTax,jdbcType=DECIMAL},
+      </if>
+      <if test="salesTax != null">
+        #{salesTax,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ut.scf.pojo.TaxReturns">
+    update tax_returns
+    <set>
+      <if test="corpId != null">
+        corp_id = #{corpId,jdbcType=VARCHAR},
+      </if>
+      <if test="operYear != null">
+        oper_year = #{operYear,jdbcType=CHAR},
+      </if>
+      <if test="purchasesTax != null">
+        purchases_tax = #{purchasesTax,jdbcType=DECIMAL},
+      </if>
+      <if test="salesTax != null">
+        sales_tax = #{salesTax,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where vat_id = #{vatId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="hashmap">
+    update tax_returns
+    set corp_id = #{corpId,jdbcType=VARCHAR},
+      oper_year = #{operYear,jdbcType=CHAR},
+      purchases_tax = #{purchasesTax,jdbcType=DECIMAL},
+      sales_tax = #{salesTax,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{createUserId,jdbcType=VARCHAR}
+    where vat_id = #{vatId,jdbcType=VARCHAR}
+  </update>
+</mapper>

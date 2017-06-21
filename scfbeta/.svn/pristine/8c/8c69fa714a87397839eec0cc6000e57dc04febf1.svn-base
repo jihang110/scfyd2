@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+  <!-- classPathEntry:数据库的JDBC驱动,换成你自己的驱动位置 -->
+  <classPathEntry location="D:\Engine5.0.1.130514\lib\mysql-connector-java-5.1.27-bin.jar" />
+  <context id="context1">
+    <jdbcConnection connectionURL="jdbc:mysql://172.25.1.56:3306/scfcore?tinyInt1isBit=false" driverClass="com.mysql.jdbc.Driver" password="std" userId="std" />
+    <javaModelGenerator targetPackage="com.ut.scf.pojo" targetProject="scfbeta" />
+    <sqlMapGenerator targetPackage="com.ut.scf.mybatis.mapping" targetProject="scfbeta" />
+    <javaClientGenerator targetPackage="com.ut.scf.dao" targetProject="scfbeta" type="XMLMAPPER" />
+    <table schema="scfcore" tableName="flow_pro_tuning">
+    </table>
+  </context>
+</generatorConfiguration>

@@ -1,0 +1,41 @@
+package com.ut.scf.core.util;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
+/**
+ * 
+ * @author tianyuan
+ * 
+ */
+public class ActJdbcUtils {
+	private static ActJdbcUtils instance = null;
+	private Properties prop = null;
+
+	private ActJdbcUtils() {
+		prop = new Properties();
+		 InputStream is = ActJdbcUtils.class.getClassLoader().getResourceAsStream(  
+	                "scf/src/jdbc.properties");  
+		try {
+			prop.load(is);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static ActJdbcUtils getInstance() {
+		if (instance == null) {
+			synchronized (ActJdbcUtils.class) {
+				if (instance == null) {
+					instance = new ActJdbcUtils();
+				}
+			}
+		}
+		return instance;
+	}
+
+	public String getValue(String strKey) {
+		return prop.getProperty(strKey);
+	}
+}

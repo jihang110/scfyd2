@@ -1,0 +1,30 @@
+ #mysql configuration
+jdbc.driver.class=com.mysql.jdbc.Driver
+<<<<<<< .mine
+#jdbc.url=jdbc:mysql://172.25.1.56:3306/scfbeta?tinyInt1isBit=false
+jdbc.url=jdbc:mysql://127.0.0.1:3306/scfbeta?tinyInt1isBit=false
+jdbc.activitiurl=jdbc:mysql://127.0.0.1:3306/activiti?tinyInt1isBit=false
+=======
+jdbc.url=jdbc:mysql://172.25.1.56:3306/scfcore?tinyInt1isBit=false
+#jdbc.url=jdbc:mysql://127.0.0.1:3306/scfcore?user=std&password=std&useUnicode=true&characterEncoding=UTF-8
+jdbc.activitiurl=jdbc:mysql://172.25.1.56:3306/activiti?tinyInt1isBit=false
+>>>>>>> .r21644
+<<<<<<< .mine
+jdbc.username=scf
+jdbc.password=scf
+=======
+jdbc.username=std
+jdbc.password=std
+
+#oracle configuration
+ ora_driver=oracle.jdbc.driver.OracleDriver
+ ora_url=jdbc:oracle:thin:@172.25.1.56:1521:scfcloud
+ ora_username=scfcloud
+ ora_password=scfcloud
+ 
+ 
+ dataSource=mysql
+
+
+
+>>>>>>> .r21644

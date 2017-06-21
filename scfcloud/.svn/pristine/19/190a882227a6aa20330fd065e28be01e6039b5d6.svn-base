@@ -1,0 +1,431 @@
+<div class="panel-body">
+    <!-- 企业征信 -->
+     <div class="container-fluid new_hide">
+		<div class="row" style="margin-bottom: 10px;margin-top: 20px;">
+			<div class="col-sm-2" style="line-height: 40px;">
+				<strong class="text-muted">企业征信</strong>
+			</div>
+		</div>
+		<div class="pull-left">
+			<button class="btn btn-link" onclick="addCreditFun('corp', 1)">
+				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
+			</button>
+		</div>
+	</div>
+	<table id="corpListTable" class="table table-bordered"></table>
+	
+    <!-- 个人征信 -->   
+     <div class="container-fluid new_hide">
+		<div class="row" style="margin-bottom: 10px;margin-top: 20px;">
+			<div class="col-sm-2" style="line-height: 40px;">
+				<strong class="text-muted">个人征信</strong>
+			</div>
+		</div>
+		<div class="pull-left">
+			<button class="btn btn-link" onclick="addCreditFun('share', 1)">
+				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
+			</button>
+		</div>
+	</div>
+	 <table id="shareListTable" class="table table-bordered"></table>
+	 
+    <!-- 机构借款统计表 -->   
+	<div class="container-fluid new_hide">
+		<div class="row" style="margin-bottom: 10px;margin-top: 20px;">
+			<div class="col-sm-2" style="line-height: 40px;">
+				<strong class="text-muted">机构借款统计表</strong>
+			</div>
+		</div>
+		<div class="pull-left">
+			<button class="btn btn-link" onclick="addCreditFun('orgn', 1)">
+				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
+			</button>
+		</div>
+	</div>
+	<table id="orgnListTable" class="table table-bordered"></table>
+    
+    <!-- 对外担保明细 -->
+    <div class="container-fluid new_hide">
+		<div class="row" style="margin-bottom: 10px;margin-top: 20px;">
+			<div class="col-sm-2" style="line-height: 40px;">
+				<strong class="text-muted">对外担保明细</strong>
+			</div>
+		</div>
+		<div class="pull-left">
+			<button class="btn btn-link" onclick="addCreditFun('guarantee', 1)">
+				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
+			</button>
+		</div>
+	</div>
+	<table id="guaranteeListTable" class="table table-bordered"></table>
+	
+	<!-- 诉讼情况表 -->
+    <div class="container-fluid new_hide">
+		<div class="row" style="margin-bottom: 10px;margin-top: 20px;">
+			<div class="col-sm-2" style="line-height: 40px;">
+				<strong class="text-muted">诉讼情况表</strong>
+			</div>
+		</div>
+		<div class="pull-left">
+			<button class="btn btn-link" onclick="addCreditFun('litigant', 1)">
+				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
+			</button>
+		</div>
+	</div>
+	<table id="litigantListTable" class="table table-bordered"></table>
+	
+		<!-- 附件上传 -->
+	<div class="container-fluid new_hide">
+		<div class="row" style="margin-bottom: 10px;margin-top: 20px;">
+			<div class="col-sm-2" style="line-height: 40px;">
+				<strong class="text-muted">附件上传</strong>
+			</div>
+		</div>
+			<div class="pull-left">
+				<button class="btn btn-link" onclick="uploadAttachment(3)">
+					<span class="glyphicon glyphicon-export" aria-hidden="true">&nbsp;</span>上传
+				</button>
+			</div>
+	</div>
+	<table id="creditAttachment" class="table table-bordered"></table>
+</div>
+
+ <!-- 企业征信模态框 -->
+<form class="form-horizontal" role="form" id="corpAddForm" data-toggle="validator">
+	<input type="hidden" id="creditId" name="creditId">
+	<div class="modal fade" id="corpAddModal" tabindex="-1" role="dialog"
+		aria-labelledby="corpAddModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="corpAddModalLabel">新增</h4>
+				</div>
+				<div class="modal-body">
+					<fieldset id='corpField'>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="relaEnterpriseId">关联企业</label>
+							<div class="col-sm-6">
+								<select id="relaEnterpriseId" name="relaEnterpriseId"
+									class="form-control">
+								</select>
+							</div>
+						</div>
+						<div class="form-group" style="display: none">
+							<label class="col-sm-4 control-label" for="creditType">征信类型</label>
+							<div class="col-sm-6">
+								<input type="text" name="creditType" class="form-control"
+									id="creditType" value="0">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="corpInquiryTime">查询时间</label>
+							<div class="col-sm-6">
+								<span style="position: relative; z-index: 9999;"> <input
+									id="corpInquiryTime" style="cursor: pointer;"
+									name="inquiryTime" class="form-control time" size="16"
+									type="text" readonly>
+								</span> <span class="add-on"
+									style="margin-top: -31px; margin-right: 10px;"> <i
+									class="glyphicon glyphicon-calendar"></i>
+								</span>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+				<div class="modal-footer">
+					<div class="form-group">
+						<div class="col-sm-4" id="corp_btn_blank"></div>
+						<div class="col-sm-3">
+							<button type="button" class="btn btn-default cancel"
+								data-dismiss="modal">取消</button>
+						</div>
+						<div class="col-sm-3">
+							<button type="submit" id="corp_btn_save"
+								class="btn btn-default add">保存</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
+<!--个人征信模态框 -->
+<form class="form-horizontal" role="form" id="shareAddForm" data-toggle="validator">
+	<input type="hidden" id="creditId" name="creditId">
+	<div class="modal fade" id="shareAddModal" tabindex="-1" role="dialog"
+		aria-labelledby="shareAddModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="shareAddModalLabel">新增</h4>
+				</div>
+				<div class="modal-body">
+					<fieldset id='shareField'>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="shareHolderId">
+								<span class="required">*</span>股东姓名
+							</label>
+							<div class="col-sm-6">
+								<select id="shareHolderId" name="shareHolderId"
+									class="form-control">
+								</select>
+							</div>
+						</div>
+						<div class="form-group" style="display: none">
+							<label class="col-sm-4 control-label" for="creditType">征信类型</label>
+							<div class="col-sm-6">
+								<input type="text" name="creditType" class="form-control"
+									id="creditType" value="1">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="shareInquiryTime">查询时间</label>
+							<div class="col-sm-6">
+								<span style="position: relative; z-index: 9999;"> <input
+									id="shareInquiryTime" style="cursor: pointer;"
+									name="inquiryTime" class="form-control time" size="16"
+									type="text" readonly>
+								</span> <span class="add-on"
+									style="margin-top: -31px; margin-right: 10px;"> <i
+									class="glyphicon glyphicon-calendar"></i>
+								</span>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+				<div class="modal-footer">
+					<div class="form-group">
+						<div class="col-sm-4" id="share_btn_blank"></div>
+						<div class="col-sm-3">
+							<button type="button" class="btn btn-default cancel"
+								data-dismiss="modal">取消</button>
+						</div>
+						<div class="col-sm-3">
+							<button type="submit" id="share_btn_save"
+								class="btn btn-default add">保存</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
+<!-- 机构借款统计表的模态框 -->
+<form class="form-horizontal" role="form" id="orgnAddForm" data-toggle="validator">
+	<input type="hidden" id="recUid" name="recUid">
+	<!-- modal -->
+	<div class="modal fade" id="orgnAddModal" aria-hidden="true"
+		data-backdrop="static" tabindex="-1" role="dialog"
+		aria-labelledby="addModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="orgnAddModalLabel">添加</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label class="col-sm-4 control-label" for="loanDate">贷款时间</label>
+						<div class="col-sm-6">
+							<span style="position: relative; z-index: 9999;"> <input
+								id="loanDate" name="loanDate" class="form-control time"
+								style="cursor: pointer;" readonly>
+							</span> <span class="add-on"
+								style="margin-top: -31px; margin-right: 10px;"><i
+								class="glyphicon glyphicon-calendar"></i></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label" for="dueDate">到期日</label>
+						<div class="col-sm-6">
+							<span style="position: relative; z-index: 9999;"> <input
+								id="dueDate" name="dueDate" class="form-control time"
+								style="cursor: pointer;" readonly>
+							</span> <span class="add-on"
+								style="margin-top: -31px; margin-right: 10px;"><i
+								class="glyphicon glyphicon-calendar"></i></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label" for="loanBank">借款银行</label>
+						<div class="col-sm-6">
+							<input class="form-control" name="loanBank" id="loanBank"
+								required>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label" for="assureCompany">担保公司</label>
+						<div class="col-sm-6">
+							<input class="form-control" name="assureCompany"
+								id="assureCompany" required>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label" for="cautionMoney">保证金(担保公司)</label>
+						<div class="col-sm-6">
+							<input class="form-control" name="cautionMoney" id="cautionMoney">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label" for="loanMoney">金额(元)</label>
+						<div class="col-sm-6">
+							<input class="form-control" name="loanMoney" id="loanMoney">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label" for="profitRate">利率(%)</label>
+						<div class="col-sm-6">
+							<input class="form-control" name="profitRate" id="profitRate">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label" for="pawn">抵押物</label>
+						<div class="col-sm-6">
+							<input class="form-control" name="pawn" id="pawn" required>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="form-group">
+						<div class="col-sm-4"></div>
+						<div class="col-sm-3">
+							<button type="button" class="btn btn-default cancel"
+								data-dismiss="modal">取消</button>
+						</div>
+						<div class="col-sm-3">
+							<button type="submit" id="btn_save" class="btn btn-default add">保存</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
+<!-- 对外担保明细模态框 -->
+<form class="form-horizontal" role="form" id="guaranteeAddForm" data-toggle="validator">
+	<input type="hidden" id="recUid" name="recUid">
+	<div class="modal fade" id="guaranteeAddModal" tabindex="-1" role="dialog"
+		aria-labelledby="addModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="guaranteeAddModalLabel">添加</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label class="col-sm-4 control-label" for="guarantorName"><span
+							class="required">*</span>被担保方名称</label>
+						<div class="col-sm-6">
+							<input type="text" name="guarantorName" class="form-control"
+								id="guarantorName" placeholder="被担保方名称">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label" for="guaranteeMoney"><span
+							class="required">*</span>担保金额</label>
+						<div class="col-sm-6">
+							<input type="text" name="guaranteeMoney" class="form-control"
+								id="guaranteeMoney">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label" for="guaranteeType"><span
+							class="required">*</span>担保类型</label>
+						<div class="col-sm-6">
+							<select id="guaranteeType" name="guaranteeType" class="form-control">
+								<option value="0">保证</option>
+								<option value="1">抵押</option>
+								<option value="2">质押</option>
+								<option value="3">留置</option>
+								<option value="4">定金</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="form-group">
+						<div class="col-sm-4"></div>
+						<div class="col-sm-3">
+							<button type="button" class="btn btn-default cancel"
+								data-dismiss="modal">取消</button>
+						</div>
+						<div class="col-sm-3">
+							<button type="submit" id="btn_save" class="btn btn-default add">保存</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
+
+
+<!-- 诉讼情况表的模态框 -->
+<form class="form-horizontal" role="form" id="litigantAddForm" data-toggle="validator">
+	<input type="hidden" id="recUid" name="recUid">
+	<div class="modal fade" id="litigantAddModal" tabindex="-1" role="dialog"
+		aria-labelledby="addModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="litigantAddModalLabel">新增</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label class="col-sm-4 control-label" for="litigantName">诉讼方名称</label>
+						<div class="col-sm-6">
+							<input class="form-control" name="litigantName" id="litigantName" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label" for="litigantMoney">诉讼金额</label>
+						<div class="col-sm-6">
+							<input class="form-control" name="litigantMoney"
+								id="litigantMoney">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-4 control-label" for="querySource">查询来源</label>
+						<div class="col-sm-6">
+							<input class="form-control" name="querySource" id="querySource">
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="form-group">
+						<div class="col-sm-4"></div>
+						<div class="col-sm-3">
+							<button type="button" class="btn btn-default cancel"
+								data-dismiss="modal">取消</button>
+						</div>
+						<div class="col-sm-3">
+							<button type="submit" id="btn_save" class="btn btn-default add">保存</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>

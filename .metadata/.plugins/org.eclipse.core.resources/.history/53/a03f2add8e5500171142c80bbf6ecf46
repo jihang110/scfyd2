@@ -1,0 +1,88 @@
+package com.ut.scf.service.project.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.ut.scf.dao.project.IFinanceInfoDao;
+import com.ut.scf.dao.project.IRevenueDao;
+import com.ut.scf.dao.pub.IGaranteeMoneyDao;
+import com.ut.scf.respbean.BaseRespBean;
+import com.ut.scf.respbean.ListRespBean;
+import com.ut.scf.service.project.ICountAnalyseService;
+
+@Service("countAnalyseService")
+public class CountAnalyseServiceImpl implements ICountAnalyseService {
+	@Resource private IFinanceInfoDao financeInfoDao;
+	@Resource private IRevenueDao revenueDao;
+	@Resource private IGaranteeMoneyDao garanteeMoneyDao;
+	@Override
+	@Transactional(readOnly = true)
+	public BaseRespBean getFinanceCountInfo(Map<String, Object> paramMap) {
+		ListRespBean listRespBean = new ListRespBean();
+		List<Map<String, Object>> financeInfoList = financeInfoDao.getFinanceInfoGroupByName(paramMap);
+		listRespBean.setDataList(financeInfoList);
+		return listRespBean;
+	}
+	@Override
+	@Transactional(readOnly = true)
+	public BaseRespBean getRevenueCountInfo(Map<String, Object> paramMap) {
+		ListRespBean listRespBean = new ListRespBean();
+		List<Map<String, Object>> revenueInfoByAgency = revenueDao.getRevenueInfoByAgency(paramMap);
+		listRespBean.setDataList(revenueInfoByAgency);
+		return listRespBean;
+	}
+	/*
+	 * (non-Javadoc)保证金统计分析
+	 * @see com.ut.scf.service.project.ICountAnalyseService#getRevenueCountInfo(java.util.Map)
+	 */
+	@Override
+	@Transactional(readOnly = true)
+	public BaseRespBean getGuarantInfo(Map<String, Object> paramMap) {
+		ListRespBean listRespBean = new ListRespBean();
+		List<Map<String, Object>> garanteeMoneyByName = garanteeMoneyDao.getGaranteeMoneyByName(paramMap);
+		listRespBean.setDataList(garanteeMoneyByName);
+		return listRespBean;
+	}
+	@Override
+	public BaseRespBean getOverdueCountInfo(Map<String, Object> paramMap) {
+		ListRespBean listRespBean = new ListRespBean();
+		List<Map<String, Object>> oldList = financeInfoDao.getOverdueInfoGroupByName(paramMap);
+//		表数据
+//			根据客户名称分类
+	    List<Map<String,Object>> newList = new ArrayList<Map<String,Object>>();
+	     
+	    for(int i=0; i<oldList.size(); i++){
+	        Map<String,Object> oldMap = oldList.get(i);
+	        int count = 0;//逾期次数
+	        if(newList.size()>0){
+	            boolean isContain = false;
+	            for(int j=0; j<newList.size();j++){
+	                Map<String,Object> newMap = newList.get(j);
+	                if(newMap.get("agencyName").equals(oldMap.get("agencyName"))){
+	                    	count++;
+	                    isContain = true;
+	                    break;
+	                }
+	            }
+	             
+	            if(!isContain){
+	                newList.add(oldMap);
+	            }
+	             
+	        }else{
+	            newList.add(oldMap);
+	        }
+	        
+	    }
+//		echart数据
+		listRespBean.setDataList(newList);
+		return listRespBean;
+	}
+
+}

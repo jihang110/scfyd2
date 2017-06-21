@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ut.scf.dao.crm.IBankReconciliationDao">
+  <resultMap id="BaseResultMap" type="com.ut.scf.pojo.BankReconciliation">
+    <id column="rec_id" jdbcType="VARCHAR" property="recId" />
+    <result column="corp_id" jdbcType="VARCHAR" property="corpId" />
+    <result column="account_bank" jdbcType="VARCHAR" property="accountBank" />
+    <result column="account_name" jdbcType="VARCHAR" property="accountName" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="currency" jdbcType="VARCHAR" property="currency" />
+    <result column="start_date" jdbcType="DATE" property="startDate" />
+    <result column="end_date" jdbcType="DATE" property="endDate" />
+    <result column="debit_amount" jdbcType="DECIMAL" property="debitAmount" />
+    <result column="credit_amount" jdbcType="DECIMAL" property="creditAmount" />
+    <result column="account_amount" jdbcType="DECIMAL" property="accountAmount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user_id" jdbcType="VARCHAR" property="createUserId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    rec_id, corp_id, account_bank, account_name, account, currency, start_date, end_date, 
+    debit_amount, credit_amount, account_amount, create_time, create_user_id
+  </sql>
+  <select id="bankReconciliationList" parameterType="hashmap" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from bank_reconciliation
+  	where 1=1
+  	<if test="corpId != null">
+	  and corp_id = #{corpId}
+	</if>
+	order by create_time
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from bank_reconciliation
+    where rec_id = #{recId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from bank_reconciliation
+    where rec_id = #{recId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ut.scf.pojo.BankReconciliation">
+    insert into bank_reconciliation (rec_id, corp_id, account_bank, 
+      account_name, account, currency, 
+      start_date, end_date, debit_amount, 
+      credit_amount, account_amount, create_time, 
+      create_user_id)
+    values (#{recId,jdbcType=VARCHAR}, #{corpId,jdbcType=VARCHAR}, #{accountBank,jdbcType=VARCHAR}, 
+      #{accountName,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{currency,jdbcType=VARCHAR}, 
+      #{startDate,jdbcType=DATE}, #{endDate,jdbcType=DATE}, #{debitAmount,jdbcType=DECIMAL}, 
+      #{creditAmount,jdbcType=DECIMAL}, #{accountAmount,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ut.scf.pojo.BankReconciliation">
+    insert into bank_reconciliation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="recId != null">
+        rec_id,
+      </if>
+      <if test="corpId != null">
+        corp_id,
+      </if>
+      <if test="accountBank != null">
+        account_bank,
+      </if>
+      <if test="accountName != null">
+        account_name,
+      </if>
+      <if test="account != null">
+        account,
+      </if>
+      <if test="currency != null">
+        currency,
+      </if>
+      <if test="startDate != null">
+        start_date,
+      </if>
+      <if test="endDate != null">
+        end_date,
+      </if>
+      <if test="debitAmount != null">
+        debit_amount,
+      </if>
+      <if test="creditAmount != null">
+        credit_amount,
+      </if>
+      <if test="accountAmount != null">
+        account_amount,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="recId != null">
+        #{recId,jdbcType=VARCHAR},
+      </if>
+      <if test="corpId != null">
+        #{corpId,jdbcType=VARCHAR},
+      </if>
+      <if test="accountBank != null">
+        #{accountBank,jdbcType=VARCHAR},
+      </if>
+      <if test="accountName != null">
+        #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null">
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null">
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null">
+        #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=DATE},
+      </if>
+      <if test="debitAmount != null">
+        #{debitAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="creditAmount != null">
+        #{creditAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="accountAmount != null">
+        #{accountAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ut.scf.pojo.BankReconciliation">
+    update bank_reconciliation
+    <set>
+      <if test="corpId != null">
+        corp_id = #{corpId,jdbcType=VARCHAR},
+      </if>
+      <if test="accountBank != null">
+        account_bank = #{accountBank,jdbcType=VARCHAR},
+      </if>
+      <if test="accountName != null">
+        account_name = #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null">
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null">
+        currency = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null">
+        start_date = #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null">
+        end_date = #{endDate,jdbcType=DATE},
+      </if>
+      <if test="debitAmount != null">
+        debit_amount = #{debitAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="creditAmount != null">
+        credit_amount = #{creditAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="accountAmount != null">
+        account_amount = #{accountAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where rec_id = #{recId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ut.scf.pojo.BankReconciliation">
+    update bank_reconciliation
+    set corp_id = #{corpId,jdbcType=VARCHAR},
+      account_bank = #{accountBank,jdbcType=VARCHAR},
+      account_name = #{accountName,jdbcType=VARCHAR},
+      account = #{account,jdbcType=VARCHAR},
+      currency = #{currency,jdbcType=VARCHAR},
+      start_date = #{startDate,jdbcType=DATE},
+      end_date = #{endDate,jdbcType=DATE},
+      debit_amount = #{debitAmount,jdbcType=DECIMAL},
+      credit_amount = #{creditAmount,jdbcType=DECIMAL},
+      account_amount = #{accountAmount,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{createUserId,jdbcType=VARCHAR}
+    where rec_id = #{recId,jdbcType=VARCHAR}
+  </update>
+</mapper>

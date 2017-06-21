@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ut.scf.dao.sys.IUserDao" >
+  
+  <select id="userLogin" resultType="hashmap" parameterType="hashmap" >
+    select su.user_id userId, su.username username, sur.role_id roleId, sr.role_name roleName
+    from scfnew.sys_user su join scfnew.sys_user_role sur on su.user_id=sur.user_id
+    join scfnew.sys_role sr on sur.role_id=sr.role_id
+    where su.username=#{username} and su.password=#{password} and su.status=1 limit 1
+  </select>
+  
+</mapper>

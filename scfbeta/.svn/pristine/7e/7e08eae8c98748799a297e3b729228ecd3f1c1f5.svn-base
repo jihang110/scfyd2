@@ -1,0 +1,106 @@
+package com.ut.scf.service.test;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.ut.scf.core.util.ScfUUID;
+import com.ut.scf.pojo.auto.SysMenu;
+import com.ut.scf.reqbean.sys.MenuMoveReqBean;
+import com.ut.scf.reqbean.sys.MenuTreeReqBean;
+import com.ut.scf.respbean.BaseRespBean;
+import com.ut.scf.service.sys.IMenuService;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "classpath:spring-mybatis-test.xml" })
+public class MenuServiceTest {
+
+	private static final Logger log = LoggerFactory.getLogger(MenuServiceTest.class);
+
+	@Autowired
+	private IMenuService menuService;
+
+	@Test
+	public void getMenuTreeTest() {
+		log.info("=============================getMenuTreeTest start=============================");
+		MenuTreeReqBean reqBean = new MenuTreeReqBean();
+		reqBean.setRoleId("ROLE000001");
+		BaseRespBean respBean = menuService.getMenuTree(reqBean);
+		log.info("menuTree : " + respBean);
+		Assert.assertNotNull(respBean);
+		log.info("=============================getMenuTreeTest end=============================");
+	}
+
+	@Test
+	public void addMenuTest() {
+		log.info("=============================addMenuTest start=============================");
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("menuName", "测试类专用Name");
+		paramMap.put("menuLevel", "1");
+		paramMap.put("parentId", null);
+		paramMap.put("menuOrder", "20");
+		paramMap.put("menuPath", null);
+		paramMap.put("note", "笔记本啊  啊啊啊啊啊");
+		BaseRespBean respBean = menuService.addMenu(paramMap);
+		log.info("addMenu : " + respBean);
+		Assert.assertNotNull(respBean);
+		log.info("=============================addMenuTest end=============================");
+	}
+
+	@Test
+	public void updateMenuTest() {
+		log.info("=============================updateMenuTest start=============================");
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("menuName", "测试类专用Name");
+		paramMap.put("menuOrder", "20");
+		paramMap.put("menuPath", "/role/add.html");
+		paramMap.put("note", "笔记本啊  啊啊啊啊啊");
+		SysMenu sysMenu = new SysMenu();
+		sysMenu.setMenuId(ScfUUID.generate());
+		sysMenu.setMenuName((String) paramMap.get("menuName"));
+		sysMenu.setMenuPath((String) paramMap.get("menuPath"));
+		sysMenu.setMenuOrder(new BigDecimal((Integer)paramMap.get("menuOrder")));
+		sysMenu.setNote((String) paramMap.get("note"));
+		sysMenu.setStatus(new BigDecimal(1));
+		BaseRespBean respBean = menuService.updateMenu(sysMenu);
+		log.info("updateMenu : " + respBean);
+		Assert.assertNotNull(respBean);
+		log.info("=============================updateMenuTest end=============================");
+
+	}
+
+	@Test
+	public void deleteMenuTest() {
+		log.info("=============================deleteMenuTest start=============================");
+		String menuId = "2c9981c65703513e273403513e400000";
+		BaseRespBean respBean = menuService.deleteMenu(menuId);
+		log.info("deleteMenu : " + respBean);
+		Assert.assertNotNull(respBean);
+		log.info("=============================deleteMenuTest end=============================");
+	}
+
+	@Test
+	public void updateMenuByMoveTest() {
+		log.info("=============================deleteMenuTest start=============================");
+		List<MenuMoveReqBean> list = new ArrayList<>();
+		MenuMoveReqBean bean = new MenuMoveReqBean();
+		bean.setMenuId("2c9981c65703513e273403513e400000");
+		bean.setOrder(10);
+		list.add(bean);
+		BaseRespBean respBean = menuService.updateMenuByMove(list);
+		log.info("updateMenu : " + respBean);
+		Assert.assertNotNull(respBean);
+		log.info("=============================deleteMenuTest end=============================");
+	}
+}

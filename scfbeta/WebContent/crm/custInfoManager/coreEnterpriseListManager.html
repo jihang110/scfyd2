@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>核心企业信息</title>
+<scfCSS>
+<link rel="stylesheet" href="/scfbeta/css/bootstrap-table.css" />
+<link rel="stylesheet" href="/scfbeta/css/sysfun.css" />
+</scfCSS>
+<scfScript>
+<script type="text/javascript" src="/scfbeta/js/bootstrap-table.js"></script>
+<script type="text/javascript" src="/scfbeta/js/crm/custInfoManager/coreEnterpriseListManager.js"></script>
+</scfScript>
+</head>
+<body>
+	<section class="iframeBody">
+		<div class="main-content-child">
+			<div class="row">
+				<div class="title">
+					<span>核心企业信息</span>
+				</div>
+			</div>
+			<fieldset>
+				<div class="row rowpad">
+					<div class="form-group">
+						<form id="searchForm" class="form-horizontal" role="form">
+							<div class="col-sm-4 col-sm-offset-4 input-group pull-left">
+								<input class="form-control" placeholder="核心企业名称" name='corpName' id="listcorpName" autofocus />
+								<div class="input-group-addon searchIcon" onclick="searchFun()">
+									<a class="glyphicon glyphicon-search icon-white" style="color:#ffffff;padding:0px 5px;" title="搜索" href="javascript:void(0)"></a>
+								</div>
+								<div class="input-group-addon searchIcon" onclick="ResetBtn()">
+			       					<a class="fa fa-rotate-left reset icon-white" style="color:#ffffff;padding:0px 5px;" title="重置搜索信息" href="javascript:void(0)"></a>
+			    				</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</fieldset>
+
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-sm-2">
+						<button style="margin-left: 20px;" id="btn_add" type="button"
+							class="btn btn-link add" data-toggle="Left Align" >
+							<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
+						</button>
+					</div>
+				</div>
+				<table id="userListTable" class="table"></table>
+			</div>
+		</div>
+	</section>
+</body>
+</html>

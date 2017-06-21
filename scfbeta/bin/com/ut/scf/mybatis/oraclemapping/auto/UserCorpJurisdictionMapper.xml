@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ut.scf.dao.auto.UserCorpJurisdictionMapper">
+  <resultMap id="BaseResultMap" type="com.ut.scf.pojo.auto.UserCorpJurisdiction">
+    <id column="REC_UID" jdbcType="NVARCHAR" property="recUid" />
+    <result column="USER_ID" jdbcType="NVARCHAR" property="userId" />
+    <result column="CORP_ID" jdbcType="NVARCHAR" property="corpId" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    REC_UID, USER_ID, CORP_ID, CREATE_TIME
+  </sql>
+  <select id="selectByExample" parameterType="com.ut.scf.pojo.auto.UserCorpJurisdictionExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from SCFCLOUD.USER_CORP_JURISDICTION
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from SCFCLOUD.USER_CORP_JURISDICTION
+    where REC_UID = #{recUid,jdbcType=NVARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from SCFCLOUD.USER_CORP_JURISDICTION
+    where REC_UID = #{recUid,jdbcType=NVARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ut.scf.pojo.auto.UserCorpJurisdictionExample">
+    delete from SCFCLOUD.USER_CORP_JURISDICTION
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ut.scf.pojo.auto.UserCorpJurisdiction">
+    insert into SCFCLOUD.USER_CORP_JURISDICTION (REC_UID, USER_ID, CORP_ID, 
+      CREATE_TIME)
+    values (#{recUid,jdbcType=NVARCHAR}, #{userId,jdbcType=NVARCHAR}, #{corpId,jdbcType=NVARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ut.scf.pojo.auto.UserCorpJurisdiction">
+    insert into SCFCLOUD.USER_CORP_JURISDICTION
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="recUid != null">
+        REC_UID,
+      </if>
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="corpId != null">
+        CORP_ID,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="recUid != null">
+        #{recUid,jdbcType=NVARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=NVARCHAR},
+      </if>
+      <if test="corpId != null">
+        #{corpId,jdbcType=NVARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ut.scf.pojo.auto.UserCorpJurisdictionExample" resultType="java.lang.Integer">
+    select count(*) from SCFCLOUD.USER_CORP_JURISDICTION
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update SCFCLOUD.USER_CORP_JURISDICTION
+    <set>
+      <if test="record.recUid != null">
+        REC_UID = #{record.recUid,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.userId != null">
+        USER_ID = #{record.userId,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.corpId != null">
+        CORP_ID = #{record.corpId,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update SCFCLOUD.USER_CORP_JURISDICTION
+    set REC_UID = #{record.recUid,jdbcType=NVARCHAR},
+      USER_ID = #{record.userId,jdbcType=NVARCHAR},
+      CORP_ID = #{record.corpId,jdbcType=NVARCHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ut.scf.pojo.auto.UserCorpJurisdiction">
+    update SCFCLOUD.USER_CORP_JURISDICTION
+    <set>
+      <if test="userId != null">
+        USER_ID = #{userId,jdbcType=NVARCHAR},
+      </if>
+      <if test="corpId != null">
+        CORP_ID = #{corpId,jdbcType=NVARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where REC_UID = #{recUid,jdbcType=NVARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ut.scf.pojo.auto.UserCorpJurisdiction">
+    update SCFCLOUD.USER_CORP_JURISDICTION
+    set USER_ID = #{userId,jdbcType=NVARCHAR},
+      CORP_ID = #{corpId,jdbcType=NVARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+    where REC_UID = #{recUid,jdbcType=NVARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,813 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ut.scf.dao.auto.CorpInfoMapper">
+  <resultMap id="BaseResultMap" type="com.ut.scf.pojo.auto.CorpInfo">
+    <id column="CORP_ID" jdbcType="NVARCHAR" property="corpId" />
+    <result column="CORP_NAME" jdbcType="NVARCHAR" property="corpName" />
+    <result column="CORP_TYPE" jdbcType="NVARCHAR" property="corpType" />
+    <result column="SYS_TYPE" jdbcType="DECIMAL" property="sysType" />
+    <result column="IS_COUNTRY" jdbcType="DECIMAL" property="isCountry" />
+    <result column="LEGAL_PERSON" jdbcType="NVARCHAR" property="legalPerson" />
+    <result column="CONTROL_PERSON" jdbcType="NVARCHAR" property="controlPerson" />
+    <result column="REG_DATE" jdbcType="TIMESTAMP" property="regDate" />
+    <result column="LOGO_URL" jdbcType="NVARCHAR" property="logoUrl" />
+    <result column="REAL_PAY_CAP" jdbcType="DECIMAL" property="realPayCap" />
+    <result column="CCY" jdbcType="NVARCHAR" property="ccy" />
+    <result column="LOAN_CARD_NO" jdbcType="NVARCHAR" property="loanCardNo" />
+    <result column="INDUSTRY" jdbcType="NVARCHAR" property="industry" />
+    <result column="NATIONAL_TAX_REGISTRATION" jdbcType="NVARCHAR" property="nationalTaxRegistration" />
+    <result column="LOCAL_TAX_REGISTRATION" jdbcType="NVARCHAR" property="localTaxRegistration" />
+    <result column="REG_CAP" jdbcType="DECIMAL" property="regCap" />
+    <result column="REG_ADDRESS" jdbcType="NVARCHAR" property="regAddress" />
+    <result column="OFFICE_ADDRESS" jdbcType="NVARCHAR" property="officeAddress" />
+    <result column="SPEC_NATURAL" jdbcType="NVARCHAR" property="specNatural" />
+    <result column="BUSI_SCOPE" jdbcType="NVARCHAR" property="busiScope" />
+    <result column="HISTORY_EVC" jdbcType="NVARCHAR" property="historyEvc" />
+    <result column="CORE_CORP_ID" jdbcType="NVARCHAR" property="coreCorpId" />
+    <result column="CORE_CORP_NAME" jdbcType="NVARCHAR" property="coreCorpName" />
+    <result column="ORGN_CREDIT_NUM" jdbcType="NVARCHAR" property="orgnCreditNum" />
+    <result column="APP_NUM" jdbcType="NVARCHAR" property="appNum" />
+    <result column="OPEN_ACCOUNT_LICENCE" jdbcType="NVARCHAR" property="openAccountLicence" />
+    <result column="CUSTOMER_APP_SERIAL_NUM" jdbcType="NVARCHAR" property="customerAppSerialNum" />
+    <result column="ORGN_NUM" jdbcType="NVARCHAR" property="orgnNum" />
+    <result column="BUSINESS_LICENSE" jdbcType="NVARCHAR" property="businessLicense" />
+    <result column="STAFF_NUM" jdbcType="DECIMAL" property="staffNum" />
+    <result column="FIXED_PHONE" jdbcType="NVARCHAR" property="fixedPhone" />
+    <result column="APPLICANT_NAME" jdbcType="NVARCHAR" property="applicantName" />
+    <result column="APPLICANT_PHONE" jdbcType="NVARCHAR" property="applicantPhone" />
+    <result column="APPLICANT_FIX_PHONE" jdbcType="NVARCHAR" property="applicantFixPhone" />
+    <result column="APPLY_AMT" jdbcType="DECIMAL" property="applyAmt" />
+    <result column="NOTE" jdbcType="NVARCHAR" property="note" />
+    <result column="JOB" jdbcType="NVARCHAR" property="job" />
+    <result column="EMAIL" jdbcType="NVARCHAR" property="email" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="CREATE_USER_ID" jdbcType="NVARCHAR" property="createUserId" />
+    <result column="STATUS" jdbcType="DECIMAL" property="status" />
+    <result column="IS_PUSH" jdbcType="DECIMAL" property="isPush" />
+    <result column="PRD_STATUS" jdbcType="DECIMAL" property="prdStatus" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    CORP_ID, CORP_NAME, CORP_TYPE, SYS_TYPE, IS_COUNTRY, LEGAL_PERSON, CONTROL_PERSON, 
+    REG_DATE, LOGO_URL, REAL_PAY_CAP, CCY, LOAN_CARD_NO, INDUSTRY, NATIONAL_TAX_REGISTRATION, 
+    LOCAL_TAX_REGISTRATION, REG_CAP, REG_ADDRESS, OFFICE_ADDRESS, SPEC_NATURAL, BUSI_SCOPE, 
+    HISTORY_EVC, CORE_CORP_ID, CORE_CORP_NAME, ORGN_CREDIT_NUM, APP_NUM, OPEN_ACCOUNT_LICENCE, 
+    CUSTOMER_APP_SERIAL_NUM, ORGN_NUM, BUSINESS_LICENSE, STAFF_NUM, FIXED_PHONE, APPLICANT_NAME, 
+    APPLICANT_PHONE, APPLICANT_FIX_PHONE, APPLY_AMT, NOTE, JOB, EMAIL, CREATE_TIME, CREATE_USER_ID, 
+    STATUS, IS_PUSH, PRD_STATUS
+  </sql>
+  <select id="selectByExample" parameterType="com.ut.scf.pojo.auto.CorpInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from SCFCLOUD.CORP_INFO
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from SCFCLOUD.CORP_INFO
+    where CORP_ID = #{corpId,jdbcType=NVARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from SCFCLOUD.CORP_INFO
+    where CORP_ID = #{corpId,jdbcType=NVARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ut.scf.pojo.auto.CorpInfoExample">
+    delete from SCFCLOUD.CORP_INFO
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ut.scf.pojo.auto.CorpInfo">
+    insert into SCFCLOUD.CORP_INFO (CORP_ID, CORP_NAME, CORP_TYPE, 
+      SYS_TYPE, IS_COUNTRY, LEGAL_PERSON, 
+      CONTROL_PERSON, REG_DATE, LOGO_URL, 
+      REAL_PAY_CAP, CCY, LOAN_CARD_NO, 
+      INDUSTRY, NATIONAL_TAX_REGISTRATION, LOCAL_TAX_REGISTRATION, 
+      REG_CAP, REG_ADDRESS, OFFICE_ADDRESS, 
+      SPEC_NATURAL, BUSI_SCOPE, HISTORY_EVC, 
+      CORE_CORP_ID, CORE_CORP_NAME, ORGN_CREDIT_NUM, 
+      APP_NUM, OPEN_ACCOUNT_LICENCE, CUSTOMER_APP_SERIAL_NUM, 
+      ORGN_NUM, BUSINESS_LICENSE, STAFF_NUM, 
+      FIXED_PHONE, APPLICANT_NAME, APPLICANT_PHONE, 
+      APPLICANT_FIX_PHONE, APPLY_AMT, NOTE, 
+      JOB, EMAIL, CREATE_TIME, 
+      CREATE_USER_ID, STATUS, IS_PUSH, 
+      PRD_STATUS)
+    values (#{corpId,jdbcType=NVARCHAR}, #{corpName,jdbcType=NVARCHAR}, #{corpType,jdbcType=NVARCHAR}, 
+      #{sysType,jdbcType=DECIMAL}, #{isCountry,jdbcType=DECIMAL}, #{legalPerson,jdbcType=NVARCHAR}, 
+      #{controlPerson,jdbcType=NVARCHAR}, #{regDate,jdbcType=TIMESTAMP}, #{logoUrl,jdbcType=NVARCHAR}, 
+      #{realPayCap,jdbcType=DECIMAL}, #{ccy,jdbcType=NVARCHAR}, #{loanCardNo,jdbcType=NVARCHAR}, 
+      #{industry,jdbcType=NVARCHAR}, #{nationalTaxRegistration,jdbcType=NVARCHAR}, #{localTaxRegistration,jdbcType=NVARCHAR}, 
+      #{regCap,jdbcType=DECIMAL}, #{regAddress,jdbcType=NVARCHAR}, #{officeAddress,jdbcType=NVARCHAR}, 
+      #{specNatural,jdbcType=NVARCHAR}, #{busiScope,jdbcType=NVARCHAR}, #{historyEvc,jdbcType=NVARCHAR}, 
+      #{coreCorpId,jdbcType=NVARCHAR}, #{coreCorpName,jdbcType=NVARCHAR}, #{orgnCreditNum,jdbcType=NVARCHAR}, 
+      #{appNum,jdbcType=NVARCHAR}, #{openAccountLicence,jdbcType=NVARCHAR}, #{customerAppSerialNum,jdbcType=NVARCHAR}, 
+      #{orgnNum,jdbcType=NVARCHAR}, #{businessLicense,jdbcType=NVARCHAR}, #{staffNum,jdbcType=DECIMAL}, 
+      #{fixedPhone,jdbcType=NVARCHAR}, #{applicantName,jdbcType=NVARCHAR}, #{applicantPhone,jdbcType=NVARCHAR}, 
+      #{applicantFixPhone,jdbcType=NVARCHAR}, #{applyAmt,jdbcType=DECIMAL}, #{note,jdbcType=NVARCHAR}, 
+      #{job,jdbcType=NVARCHAR}, #{email,jdbcType=NVARCHAR}, sysdate, 
+      #{createUserId,jdbcType=NVARCHAR}, 1, #{isPush,jdbcType=DECIMAL}, 
+      #{prdStatus,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ut.scf.pojo.auto.CorpInfo">
+    insert into SCFCLOUD.CORP_INFO
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="corpId != null">
+        CORP_ID,
+      </if>
+      <if test="corpName != null">
+        CORP_NAME,
+      </if>
+      <if test="corpType != null">
+        CORP_TYPE,
+      </if>
+      <if test="sysType != null">
+        SYS_TYPE,
+      </if>
+      <if test="isCountry != null">
+        IS_COUNTRY,
+      </if>
+      <if test="legalPerson != null">
+        LEGAL_PERSON,
+      </if>
+      <if test="controlPerson != null">
+        CONTROL_PERSON,
+      </if>
+      <if test="regDate != null">
+        REG_DATE,
+      </if>
+      <if test="logoUrl != null">
+        LOGO_URL,
+      </if>
+      <if test="realPayCap != null">
+        REAL_PAY_CAP,
+      </if>
+      <if test="ccy != null">
+        CCY,
+      </if>
+      <if test="loanCardNo != null">
+        LOAN_CARD_NO,
+      </if>
+      <if test="industry != null">
+        INDUSTRY,
+      </if>
+      <if test="nationalTaxRegistration != null">
+        NATIONAL_TAX_REGISTRATION,
+      </if>
+      <if test="localTaxRegistration != null">
+        LOCAL_TAX_REGISTRATION,
+      </if>
+      <if test="regCap != null">
+        REG_CAP,
+      </if>
+      <if test="regAddress != null">
+        REG_ADDRESS,
+      </if>
+      <if test="officeAddress != null">
+        OFFICE_ADDRESS,
+      </if>
+      <if test="specNatural != null">
+        SPEC_NATURAL,
+      </if>
+      <if test="busiScope != null">
+        BUSI_SCOPE,
+      </if>
+      <if test="historyEvc != null">
+        HISTORY_EVC,
+      </if>
+      <if test="coreCorpId != null">
+        CORE_CORP_ID,
+      </if>
+      <if test="coreCorpName != null">
+        CORE_CORP_NAME,
+      </if>
+      <if test="orgnCreditNum != null">
+        ORGN_CREDIT_NUM,
+      </if>
+      <if test="appNum != null">
+        APP_NUM,
+      </if>
+      <if test="openAccountLicence != null">
+        OPEN_ACCOUNT_LICENCE,
+      </if>
+      <if test="customerAppSerialNum != null">
+        CUSTOMER_APP_SERIAL_NUM,
+      </if>
+      <if test="orgnNum != null">
+        ORGN_NUM,
+      </if>
+      <if test="businessLicense != null">
+        BUSINESS_LICENSE,
+      </if>
+      <if test="staffNum != null">
+        STAFF_NUM,
+      </if>
+      <if test="fixedPhone != null">
+        FIXED_PHONE,
+      </if>
+      <if test="applicantName != null">
+        APPLICANT_NAME,
+      </if>
+      <if test="applicantPhone != null">
+        APPLICANT_PHONE,
+      </if>
+      <if test="applicantFixPhone != null">
+        APPLICANT_FIX_PHONE,
+      </if>
+      <if test="applyAmt != null">
+        APPLY_AMT,
+      </if>
+      <if test="note != null">
+        NOTE,
+      </if>
+      <if test="job != null">
+        JOB,
+      </if>
+      <if test="email != null">
+        EMAIL,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="createUserId != null">
+        CREATE_USER_ID,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="isPush != null">
+        IS_PUSH,
+      </if>
+      <if test="prdStatus != null">
+        PRD_STATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="corpId != null">
+        #{corpId,jdbcType=NVARCHAR},
+      </if>
+      <if test="corpName != null">
+        #{corpName,jdbcType=NVARCHAR},
+      </if>
+      <if test="corpType != null">
+        #{corpType,jdbcType=NVARCHAR},
+      </if>
+      <if test="sysType != null">
+        #{sysType,jdbcType=DECIMAL},
+      </if>
+      <if test="isCountry != null">
+        #{isCountry,jdbcType=DECIMAL},
+      </if>
+      <if test="legalPerson != null">
+        #{legalPerson,jdbcType=NVARCHAR},
+      </if>
+      <if test="controlPerson != null">
+        #{controlPerson,jdbcType=NVARCHAR},
+      </if>
+      <if test="regDate != null">
+        #{regDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="logoUrl != null">
+        #{logoUrl,jdbcType=NVARCHAR},
+      </if>
+      <if test="realPayCap != null">
+        #{realPayCap,jdbcType=DECIMAL},
+      </if>
+      <if test="ccy != null">
+        #{ccy,jdbcType=NVARCHAR},
+      </if>
+      <if test="loanCardNo != null">
+        #{loanCardNo,jdbcType=NVARCHAR},
+      </if>
+      <if test="industry != null">
+        #{industry,jdbcType=NVARCHAR},
+      </if>
+      <if test="nationalTaxRegistration != null">
+        #{nationalTaxRegistration,jdbcType=NVARCHAR},
+      </if>
+      <if test="localTaxRegistration != null">
+        #{localTaxRegistration,jdbcType=NVARCHAR},
+      </if>
+      <if test="regCap != null">
+        #{regCap,jdbcType=DECIMAL},
+      </if>
+      <if test="regAddress != null">
+        #{regAddress,jdbcType=NVARCHAR},
+      </if>
+      <if test="officeAddress != null">
+        #{officeAddress,jdbcType=NVARCHAR},
+      </if>
+      <if test="specNatural != null">
+        #{specNatural,jdbcType=NVARCHAR},
+      </if>
+      <if test="busiScope != null">
+        #{busiScope,jdbcType=NVARCHAR},
+      </if>
+      <if test="historyEvc != null">
+        #{historyEvc,jdbcType=NVARCHAR},
+      </if>
+      <if test="coreCorpId != null">
+        #{coreCorpId,jdbcType=NVARCHAR},
+      </if>
+      <if test="coreCorpName != null">
+        #{coreCorpName,jdbcType=NVARCHAR},
+      </if>
+      <if test="orgnCreditNum != null">
+        #{orgnCreditNum,jdbcType=NVARCHAR},
+      </if>
+      <if test="appNum != null">
+        #{appNum,jdbcType=NVARCHAR},
+      </if>
+      <if test="openAccountLicence != null">
+        #{openAccountLicence,jdbcType=NVARCHAR},
+      </if>
+      <if test="customerAppSerialNum != null">
+        #{customerAppSerialNum,jdbcType=NVARCHAR},
+      </if>
+      <if test="orgnNum != null">
+        #{orgnNum,jdbcType=NVARCHAR},
+      </if>
+      <if test="businessLicense != null">
+        #{businessLicense,jdbcType=NVARCHAR},
+      </if>
+      <if test="staffNum != null">
+        #{staffNum,jdbcType=DECIMAL},
+      </if>
+      <if test="fixedPhone != null">
+        #{fixedPhone,jdbcType=NVARCHAR},
+      </if>
+      <if test="applicantName != null">
+        #{applicantName,jdbcType=NVARCHAR},
+      </if>
+      <if test="applicantPhone != null">
+        #{applicantPhone,jdbcType=NVARCHAR},
+      </if>
+      <if test="applicantFixPhone != null">
+        #{applicantFixPhone,jdbcType=NVARCHAR},
+      </if>
+      <if test="applyAmt != null">
+        #{applyAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=NVARCHAR},
+      </if>
+      <if test="job != null">
+        #{job,jdbcType=NVARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=NVARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=NVARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=DECIMAL},
+      </if>
+      <if test="isPush != null">
+        #{isPush,jdbcType=DECIMAL},
+      </if>
+      <if test="prdStatus != null">
+        #{prdStatus,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ut.scf.pojo.auto.CorpInfoExample" resultType="java.lang.Integer">
+    select count(*) from SCFCLOUD.CORP_INFO
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update SCFCLOUD.CORP_INFO
+    <set>
+      <if test="record.corpId != null">
+        CORP_ID = #{record.corpId,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.corpName != null">
+        CORP_NAME = #{record.corpName,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.corpType != null">
+        CORP_TYPE = #{record.corpType,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.sysType != null">
+        SYS_TYPE = #{record.sysType,jdbcType=DECIMAL},
+      </if>
+      <if test="record.isCountry != null">
+        IS_COUNTRY = #{record.isCountry,jdbcType=DECIMAL},
+      </if>
+      <if test="record.legalPerson != null">
+        LEGAL_PERSON = #{record.legalPerson,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.controlPerson != null">
+        CONTROL_PERSON = #{record.controlPerson,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.regDate != null">
+        REG_DATE = #{record.regDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.logoUrl != null">
+        LOGO_URL = #{record.logoUrl,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.realPayCap != null">
+        REAL_PAY_CAP = #{record.realPayCap,jdbcType=DECIMAL},
+      </if>
+      <if test="record.ccy != null">
+        CCY = #{record.ccy,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.loanCardNo != null">
+        LOAN_CARD_NO = #{record.loanCardNo,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.industry != null">
+        INDUSTRY = #{record.industry,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.nationalTaxRegistration != null">
+        NATIONAL_TAX_REGISTRATION = #{record.nationalTaxRegistration,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.localTaxRegistration != null">
+        LOCAL_TAX_REGISTRATION = #{record.localTaxRegistration,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.regCap != null">
+        REG_CAP = #{record.regCap,jdbcType=DECIMAL},
+      </if>
+      <if test="record.regAddress != null">
+        REG_ADDRESS = #{record.regAddress,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.officeAddress != null">
+        OFFICE_ADDRESS = #{record.officeAddress,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.specNatural != null">
+        SPEC_NATURAL = #{record.specNatural,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.busiScope != null">
+        BUSI_SCOPE = #{record.busiScope,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.historyEvc != null">
+        HISTORY_EVC = #{record.historyEvc,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.coreCorpId != null">
+        CORE_CORP_ID = #{record.coreCorpId,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.coreCorpName != null">
+        CORE_CORP_NAME = #{record.coreCorpName,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.orgnCreditNum != null">
+        ORGN_CREDIT_NUM = #{record.orgnCreditNum,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.appNum != null">
+        APP_NUM = #{record.appNum,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.openAccountLicence != null">
+        OPEN_ACCOUNT_LICENCE = #{record.openAccountLicence,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.customerAppSerialNum != null">
+        CUSTOMER_APP_SERIAL_NUM = #{record.customerAppSerialNum,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.orgnNum != null">
+        ORGN_NUM = #{record.orgnNum,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.businessLicense != null">
+        BUSINESS_LICENSE = #{record.businessLicense,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.staffNum != null">
+        STAFF_NUM = #{record.staffNum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.fixedPhone != null">
+        FIXED_PHONE = #{record.fixedPhone,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.applicantName != null">
+        APPLICANT_NAME = #{record.applicantName,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.applicantPhone != null">
+        APPLICANT_PHONE = #{record.applicantPhone,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.applicantFixPhone != null">
+        APPLICANT_FIX_PHONE = #{record.applicantFixPhone,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.applyAmt != null">
+        APPLY_AMT = #{record.applyAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="record.note != null">
+        NOTE = #{record.note,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.job != null">
+        JOB = #{record.job,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.email != null">
+        EMAIL = #{record.email,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUserId != null">
+        CREATE_USER_ID = #{record.createUserId,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.status != null">
+        STATUS = #{record.status,jdbcType=DECIMAL},
+      </if>
+      <if test="record.isPush != null">
+        IS_PUSH = #{record.isPush,jdbcType=DECIMAL},
+      </if>
+      <if test="record.prdStatus != null">
+        PRD_STATUS = #{record.prdStatus,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update SCFCLOUD.CORP_INFO
+    set CORP_ID = #{record.corpId,jdbcType=NVARCHAR},
+      CORP_NAME = #{record.corpName,jdbcType=NVARCHAR},
+      CORP_TYPE = #{record.corpType,jdbcType=NVARCHAR},
+      SYS_TYPE = #{record.sysType,jdbcType=DECIMAL},
+      IS_COUNTRY = #{record.isCountry,jdbcType=DECIMAL},
+      LEGAL_PERSON = #{record.legalPerson,jdbcType=NVARCHAR},
+      CONTROL_PERSON = #{record.controlPerson,jdbcType=NVARCHAR},
+      REG_DATE = #{record.regDate,jdbcType=TIMESTAMP},
+      LOGO_URL = #{record.logoUrl,jdbcType=NVARCHAR},
+      REAL_PAY_CAP = #{record.realPayCap,jdbcType=DECIMAL},
+      CCY = #{record.ccy,jdbcType=NVARCHAR},
+      LOAN_CARD_NO = #{record.loanCardNo,jdbcType=NVARCHAR},
+      INDUSTRY = #{record.industry,jdbcType=NVARCHAR},
+      NATIONAL_TAX_REGISTRATION = #{record.nationalTaxRegistration,jdbcType=NVARCHAR},
+      LOCAL_TAX_REGISTRATION = #{record.localTaxRegistration,jdbcType=NVARCHAR},
+      REG_CAP = #{record.regCap,jdbcType=DECIMAL},
+      REG_ADDRESS = #{record.regAddress,jdbcType=NVARCHAR},
+      OFFICE_ADDRESS = #{record.officeAddress,jdbcType=NVARCHAR},
+      SPEC_NATURAL = #{record.specNatural,jdbcType=NVARCHAR},
+      BUSI_SCOPE = #{record.busiScope,jdbcType=NVARCHAR},
+      HISTORY_EVC = #{record.historyEvc,jdbcType=NVARCHAR},
+      CORE_CORP_ID = #{record.coreCorpId,jdbcType=NVARCHAR},
+      CORE_CORP_NAME = #{record.coreCorpName,jdbcType=NVARCHAR},
+      ORGN_CREDIT_NUM = #{record.orgnCreditNum,jdbcType=NVARCHAR},
+      APP_NUM = #{record.appNum,jdbcType=NVARCHAR},
+      OPEN_ACCOUNT_LICENCE = #{record.openAccountLicence,jdbcType=NVARCHAR},
+      CUSTOMER_APP_SERIAL_NUM = #{record.customerAppSerialNum,jdbcType=NVARCHAR},
+      ORGN_NUM = #{record.orgnNum,jdbcType=NVARCHAR},
+      BUSINESS_LICENSE = #{record.businessLicense,jdbcType=NVARCHAR},
+      STAFF_NUM = #{record.staffNum,jdbcType=DECIMAL},
+      FIXED_PHONE = #{record.fixedPhone,jdbcType=NVARCHAR},
+      APPLICANT_NAME = #{record.applicantName,jdbcType=NVARCHAR},
+      APPLICANT_PHONE = #{record.applicantPhone,jdbcType=NVARCHAR},
+      APPLICANT_FIX_PHONE = #{record.applicantFixPhone,jdbcType=NVARCHAR},
+      APPLY_AMT = #{record.applyAmt,jdbcType=DECIMAL},
+      NOTE = #{record.note,jdbcType=NVARCHAR},
+      JOB = #{record.job,jdbcType=NVARCHAR},
+      EMAIL = #{record.email,jdbcType=NVARCHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      CREATE_USER_ID = #{record.createUserId,jdbcType=NVARCHAR},
+      STATUS = #{record.status,jdbcType=DECIMAL},
+      IS_PUSH = #{record.isPush,jdbcType=DECIMAL},
+      PRD_STATUS = #{record.prdStatus,jdbcType=DECIMAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ut.scf.pojo.auto.CorpInfo">
+    update SCFCLOUD.CORP_INFO
+    <set>
+      <if test="corpName != null">
+        CORP_NAME = #{corpName,jdbcType=NVARCHAR},
+      </if>
+      <if test="corpType != null">
+        CORP_TYPE = #{corpType,jdbcType=NVARCHAR},
+      </if>
+      <if test="sysType != null">
+        SYS_TYPE = #{sysType,jdbcType=DECIMAL},
+      </if>
+      <if test="isCountry != null">
+        IS_COUNTRY = #{isCountry,jdbcType=DECIMAL},
+      </if>
+      <if test="legalPerson != null">
+        LEGAL_PERSON = #{legalPerson,jdbcType=NVARCHAR},
+      </if>
+      <if test="controlPerson != null">
+        CONTROL_PERSON = #{controlPerson,jdbcType=NVARCHAR},
+      </if>
+      <if test="regDate != null">
+        REG_DATE = #{regDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="logoUrl != null">
+        LOGO_URL = #{logoUrl,jdbcType=NVARCHAR},
+      </if>
+      <if test="realPayCap != null">
+        REAL_PAY_CAP = #{realPayCap,jdbcType=DECIMAL},
+      </if>
+      <if test="ccy != null">
+        CCY = #{ccy,jdbcType=NVARCHAR},
+      </if>
+      <if test="loanCardNo != null">
+        LOAN_CARD_NO = #{loanCardNo,jdbcType=NVARCHAR},
+      </if>
+      <if test="industry != null">
+        INDUSTRY = #{industry,jdbcType=NVARCHAR},
+      </if>
+      <if test="nationalTaxRegistration != null">
+        NATIONAL_TAX_REGISTRATION = #{nationalTaxRegistration,jdbcType=NVARCHAR},
+      </if>
+      <if test="localTaxRegistration != null">
+        LOCAL_TAX_REGISTRATION = #{localTaxRegistration,jdbcType=NVARCHAR},
+      </if>
+      <if test="regCap != null">
+        REG_CAP = #{regCap,jdbcType=DECIMAL},
+      </if>
+      <if test="regAddress != null">
+        REG_ADDRESS = #{regAddress,jdbcType=NVARCHAR},
+      </if>
+      <if test="officeAddress != null">
+        OFFICE_ADDRESS = #{officeAddress,jdbcType=NVARCHAR},
+      </if>
+      <if test="specNatural != null">
+        SPEC_NATURAL = #{specNatural,jdbcType=NVARCHAR},
+      </if>
+      <if test="busiScope != null">
+        BUSI_SCOPE = #{busiScope,jdbcType=NVARCHAR},
+      </if>
+      <if test="historyEvc != null">
+        HISTORY_EVC = #{historyEvc,jdbcType=NVARCHAR},
+      </if>
+      <if test="coreCorpId != null">
+        CORE_CORP_ID = #{coreCorpId,jdbcType=NVARCHAR},
+      </if>
+      <if test="coreCorpName != null">
+        CORE_CORP_NAME = #{coreCorpName,jdbcType=NVARCHAR},
+      </if>
+      <if test="orgnCreditNum != null">
+        ORGN_CREDIT_NUM = #{orgnCreditNum,jdbcType=NVARCHAR},
+      </if>
+      <if test="appNum != null">
+        APP_NUM = #{appNum,jdbcType=NVARCHAR},
+      </if>
+      <if test="openAccountLicence != null">
+        OPEN_ACCOUNT_LICENCE = #{openAccountLicence,jdbcType=NVARCHAR},
+      </if>
+      <if test="customerAppSerialNum != null">
+        CUSTOMER_APP_SERIAL_NUM = #{customerAppSerialNum,jdbcType=NVARCHAR},
+      </if>
+      <if test="orgnNum != null">
+        ORGN_NUM = #{orgnNum,jdbcType=NVARCHAR},
+      </if>
+      <if test="businessLicense != null">
+        BUSINESS_LICENSE = #{businessLicense,jdbcType=NVARCHAR},
+      </if>
+      <if test="staffNum != null">
+        STAFF_NUM = #{staffNum,jdbcType=DECIMAL},
+      </if>
+      <if test="fixedPhone != null">
+        FIXED_PHONE = #{fixedPhone,jdbcType=NVARCHAR},
+      </if>
+      <if test="applicantName != null">
+        APPLICANT_NAME = #{applicantName,jdbcType=NVARCHAR},
+      </if>
+      <if test="applicantPhone != null">
+        APPLICANT_PHONE = #{applicantPhone,jdbcType=NVARCHAR},
+      </if>
+      <if test="applicantFixPhone != null">
+        APPLICANT_FIX_PHONE = #{applicantFixPhone,jdbcType=NVARCHAR},
+      </if>
+      <if test="applyAmt != null">
+        APPLY_AMT = #{applyAmt,jdbcType=DECIMAL},
+      </if>
+      <if test="note != null">
+        NOTE = #{note,jdbcType=NVARCHAR},
+      </if>
+      <if test="job != null">
+        JOB = #{job,jdbcType=NVARCHAR},
+      </if>
+      <if test="email != null">
+        EMAIL = #{email,jdbcType=NVARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        CREATE_USER_ID = #{createUserId,jdbcType=NVARCHAR},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=DECIMAL},
+      </if>
+      <if test="isPush != null">
+        IS_PUSH = #{isPush,jdbcType=DECIMAL},
+      </if>
+      <if test="prdStatus != null">
+        PRD_STATUS = #{prdStatus,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where CORP_ID = #{corpId,jdbcType=NVARCHAR} and status = 1
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ut.scf.pojo.auto.CorpInfo">
+    update SCFCLOUD.CORP_INFO
+    set CORP_NAME = #{corpName,jdbcType=NVARCHAR},
+      CORP_TYPE = #{corpType,jdbcType=NVARCHAR},
+      SYS_TYPE = #{sysType,jdbcType=DECIMAL},
+      IS_COUNTRY = #{isCountry,jdbcType=DECIMAL},
+      LEGAL_PERSON = #{legalPerson,jdbcType=NVARCHAR},
+      CONTROL_PERSON = #{controlPerson,jdbcType=NVARCHAR},
+      REG_DATE = #{regDate,jdbcType=TIMESTAMP},
+      LOGO_URL = #{logoUrl,jdbcType=NVARCHAR},
+      REAL_PAY_CAP = #{realPayCap,jdbcType=DECIMAL},
+      CCY = #{ccy,jdbcType=NVARCHAR},
+      LOAN_CARD_NO = #{loanCardNo,jdbcType=NVARCHAR},
+      INDUSTRY = #{industry,jdbcType=NVARCHAR},
+      NATIONAL_TAX_REGISTRATION = #{nationalTaxRegistration,jdbcType=NVARCHAR},
+      LOCAL_TAX_REGISTRATION = #{localTaxRegistration,jdbcType=NVARCHAR},
+      REG_CAP = #{regCap,jdbcType=DECIMAL},
+      REG_ADDRESS = #{regAddress,jdbcType=NVARCHAR},
+      OFFICE_ADDRESS = #{officeAddress,jdbcType=NVARCHAR},
+      SPEC_NATURAL = #{specNatural,jdbcType=NVARCHAR},
+      BUSI_SCOPE = #{busiScope,jdbcType=NVARCHAR},
+      HISTORY_EVC = #{historyEvc,jdbcType=NVARCHAR},
+      CORE_CORP_ID = #{coreCorpId,jdbcType=NVARCHAR},
+      CORE_CORP_NAME = #{coreCorpName,jdbcType=NVARCHAR},
+      ORGN_CREDIT_NUM = #{orgnCreditNum,jdbcType=NVARCHAR},
+      APP_NUM = #{appNum,jdbcType=NVARCHAR},
+      OPEN_ACCOUNT_LICENCE = #{openAccountLicence,jdbcType=NVARCHAR},
+      CUSTOMER_APP_SERIAL_NUM = #{customerAppSerialNum,jdbcType=NVARCHAR},
+      ORGN_NUM = #{orgnNum,jdbcType=NVARCHAR},
+      BUSINESS_LICENSE = #{businessLicense,jdbcType=NVARCHAR},
+      STAFF_NUM = #{staffNum,jdbcType=DECIMAL},
+      FIXED_PHONE = #{fixedPhone,jdbcType=NVARCHAR},
+      APPLICANT_NAME = #{applicantName,jdbcType=NVARCHAR},
+      APPLICANT_PHONE = #{applicantPhone,jdbcType=NVARCHAR},
+      APPLICANT_FIX_PHONE = #{applicantFixPhone,jdbcType=NVARCHAR},
+      APPLY_AMT = #{applyAmt,jdbcType=DECIMAL},
+      NOTE = #{note,jdbcType=NVARCHAR},
+      JOB = #{job,jdbcType=NVARCHAR},
+      EMAIL = #{email,jdbcType=NVARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      CREATE_USER_ID = #{createUserId,jdbcType=NVARCHAR},
+      STATUS = #{status,jdbcType=DECIMAL},
+      IS_PUSH = #{isPush,jdbcType=DECIMAL},
+      PRD_STATUS = #{prdStatus,jdbcType=DECIMAL}
+    where CORP_ID = #{corpId,jdbcType=NVARCHAR}
+  </update>
+</mapper>

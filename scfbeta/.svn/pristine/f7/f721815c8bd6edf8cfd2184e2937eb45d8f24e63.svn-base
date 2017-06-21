@@ -1,0 +1,214 @@
+package com.ut.scf.service.bpm.impl;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.activiti.engine.HistoryService;
+import org.activiti.engine.RepositoryService;
+import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.ut.scf.core.dict.ErrorCodeEnum;
+import com.ut.scf.dao.bpm.IActUserDao;
+import com.ut.scf.reqbean.bpm.ActFlowDeleteDeployReqBean;
+import com.ut.scf.respbean.BaseRespBean;
+import com.ut.scf.respbean.ListRespBean;
+import com.ut.scf.service.bpm.IActFlowService;
+
+@Service("actFlowService")
+public class ActFlowServiceImpl implements IActFlowService{
+
+	@Resource private IActUserDao actUserDao;
+	@Override
+	@Transactional(readOnly = true)
+	public BaseRespBean getActDefinitionList(RepositoryService repositoryService) {
+		ListRespBean respBean = new ListRespBean();
+		List<Map<String, String>> list = new ArrayList<Map<String,String>>();
+		for (ProcessDefinition processDefinition : repositoryService.createProcessDefinitionQuery().list()) {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("definitionKey", processDefinition.getKey());
+			map.put("definitionName", processDefinition.getName());
+			map.put("deploymentId", processDefinition.getDeploymentId());
+			map.put("definitionId", processDefinition.getId());
+			list.add(map);
+		}
+		respBean.setDataList(list);
+		return respBean;
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public BaseRespBean getActProcessInstanceList(RuntimeService runtimeService) {
+		ListRespBean respBean = new ListRespBean();
+		List<Map<String, String>> list = new ArrayList<Map<String,String>>();
+		for (ProcessInstance processInstance : runtimeService.createProcessInstanceQuery().list()) {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("processInstanceId", processInstance.getId());
+			map.put("processDefinitionId", processInstance.getProcessDefinitionId());
+			list.add(map);
+		}
+		respBean.setDataList(list);
+		return respBean;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public BaseRespBean getActTaskList(TaskService taskService) {
+		ListRespBean respBean = new ListRespBean();
+		List<Map<String, String>> list = new ArrayList<Map<String,String>>();
+		for (Task task : taskService.createTaskQuery().list()) {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("taskId", task.getId());
+			map.put("taskName", task.getName());
+			map.put("assignee", task.getAssignee());
+			list.add(map);
+		}
+		respBean.setDataList(list);
+		return respBean;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public BaseRespBean startActFlow(RuntimeService runtimeService,String processDefinitionId) {
+		ListRespBean respBean = new ListRespBean();
+		runtimeService.startProcessInstanceById(processDefinitionId);
+		return respBean;
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public BaseRespBean  completeTask(TaskService taskService,String taskId,String taskName,String agreeStr){
+		ListRespBean respBean = new ListRespBean();
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("superior", "superior");
+		boolean agree;
+		if(agreeStr.equals("0")){
+			agree = true;
+		}else{
+			agree = false;
+		}
+		taskService.setVariable(taskId, "agree", agree);//true批准，false不批准
+		taskService.complete(taskId);
+		return respBean;
+	}
+	
+	@Override
+	public BaseRespBean deployActFlow(RepositoryService repositoryService,String processDefinitionId) {
+		ListRespBean respBean = new ListRespBean();
+		repositoryService.activateProcessDefinitionById(processDefinitionId);
+		return respBean;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public BaseRespBean terminateActFlow(RuntimeService runtimeService,
+			String processInstanceId) {
+		ListRespBean respBean = new ListRespBean();
+		runtimeService.deleteProcessInstance(processInstanceId, "删除");
+		return respBean;
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public BaseRespBean getOverProcessList(Map<String,Object> paramMap,HistoryService historyService) {
+		ListRespBean respBean = new ListRespBean();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		List<Map<String, Object>> userList = actUserDao.getUserByRole(paramMap);
+		List<Map<String, String>> list = new ArrayList<Map<String,String>>();
+		for (Map<String, Object> userMap : userList) {
+            String username = userMap.get("username").toString();
+            List<HistoricTaskInstance> taskList=historyService // 历史任务Service  
+    	            .createHistoricTaskInstanceQuery() // 创建历史任务实例查询  
+    	            //.taskAssignee(username) // 指定办理人  
+    	            .taskCandidateUser(username)
+    	            .finished() // 查询未完成的任务    
+    	            .list(); 
+            
+    		for(HistoricTaskInstance hti:taskList){  
+    			Map<String, String> map = new HashMap<String, String>();
+    	        map.put("taskId", hti.getId());//任务ID
+    	        map.put("processInstanceId", hti.getProcessInstanceId());//流程实例ID
+    	        map.put("assignee", hti.getAssignee());//办理人
+    	        map.put("startTime", sdf.format(hti.getStartTime()));//创建时间
+    	        map.put("endTime", sdf.format(hti.getEndTime()));//创建时间
+    	        list.add(map);
+    	    }  
+        }
+		respBean.setDataList(list);
+		return respBean;
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public BaseRespBean getNotOverProcessList(HistoryService historyService,Map<String, Object> paramMap) {
+		ListRespBean respBean = new ListRespBean();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		List<Map<String, Object>> userList = actUserDao.getUserByRole(paramMap);
+		List<Map<String, String>> list = new ArrayList<Map<String,String>>();
+		for (Map<String, Object> userMap : userList) {
+            String userName = userMap.get("username").toString();
+            List<HistoricTaskInstance> taskList=historyService // 历史任务Service  
+    	            .createHistoricTaskInstanceQuery() // 创建历史任务实例查询  
+    	           // .taskAssignee(userName) // 指定办理人  
+    	            .taskCandidateUser(userName)
+    	            .unfinished() // 查询未完成的任务    
+    	            .list(); 
+    		for(HistoricTaskInstance hti:taskList){  
+    			Map<String, String> map = new HashMap<String, String>();
+    	        System.out.println("任务ID:"+hti.getId());  
+    	        map.put("taskId", hti.getId());//任务ID
+    	        map.put("processInstanceId", hti.getProcessInstanceId());//流程实例ID
+    	        map.put("assignee", hti.getAssignee());//办理人
+    	        map.put("startTime", sdf.format(hti.getStartTime()));//创建时间
+    	        //map.put("startTime", hti.getEndTime().toString());//结束时间
+    	        list.add(map);
+    	    }  
+        }
+		respBean.setDataList(list);
+		return respBean;
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public BaseRespBean  delteProcessDefinitionByKey(ActFlowDeleteDeployReqBean reqBean,RepositoryService repositoryService){
+		BaseRespBean respBean = new BaseRespBean();
+		// 先使用流程定义的key查询流程定义，查询出所有的版本  
+	    List<ProcessDefinition> list = repositoryService
+	            .createProcessDefinitionQuery()  
+	            .processDefinitionKey(reqBean.getProcessDefinitionKey())// 使用流程定义的key查询  
+	            .list();  
+	    // 遍历，获取每个流程定义的部署ID  
+	    if (list != null && list.size() > 0) {  
+	        for (ProcessDefinition pd : list) {  
+	            // 获取部署ID  
+	            String deploymentId = pd.getDeploymentId();  
+	            if(reqBean.getDeploymentId().equals(deploymentId)){
+	            	//      /*  
+	            	//       * 不带级联的删除， 只能删除没有启动的流程，如果流程启动，就会抛出异常  
+	            	//       */  
+	            	//       processEngine.getRepositoryService().deleteDeployment(deploymentId);  
+	            	
+	            	/** 
+	            	 * 级联删除 不管流程是否启动，都可以删除 
+	            	 */  
+	            	repositoryService.deleteDeployment(deploymentId, true);  
+	            	respBean.setResult(ErrorCodeEnum.SUCCESS);
+	            }
+	        }  
+	  
+	    }  
+		return respBean;
+	}
+}

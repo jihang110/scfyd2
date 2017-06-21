@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ut.scf.dao.crm.IExternalGuaranteeDao">
+  <resultMap id="BaseResultMap" type="com.ut.scf.pojo.ExternalGuarantee">
+    <id column="rec_uid" jdbcType="VARCHAR" property="recUid" />
+    <result column="corp_id" jdbcType="VARCHAR" property="corpId" />
+    <result column="guarantor_name" jdbcType="VARCHAR" property="guarantorName" />
+    <result column="guarantee_money" jdbcType="DECIMAL" property="guaranteeMoney" />
+    <result column="guarantee_type" jdbcType="BIT" property="guaranteeType" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user_id" jdbcType="VARCHAR" property="createUserId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    rec_uid,corp_id, guarantor_name, guarantee_money, guarantee_type, create_time, create_user_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from external_guarantee
+    where rec_uid = #{recUid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from external_guarantee
+    where rec_uid = #{recUid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="hashmap">
+    insert into external_guarantee (rec_uid,corp_id, guarantor_name, guarantee_money, 
+      guarantee_type, create_time, create_user_id
+      )
+    values (#{recUid,jdbcType=VARCHAR},#{corpId,jdbcType=VARCHAR}, #{guarantorName,jdbcType=VARCHAR}, #{guaranteeMoney,jdbcType=DECIMAL}, 
+      #{guaranteeType,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="hashmap">
+    insert into external_guarantee
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="recUid != null">
+        rec_uid,
+      </if>
+      <if test="corpId != null">
+        corp_id,
+      </if>
+      <if test="guarantorName != null">
+        guarantor_name,
+      </if>
+      <if test="guaranteeMoney != null">
+        guarantee_money,
+      </if>
+      <if test="guaranteeType != null">
+        guarantee_type,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="recUid != null">
+        #{recUid,jdbcType=VARCHAR},
+      </if>
+      <if test="corpId != null">
+        #{corpId,jdbcType=VARCHAR},
+      </if>
+      <if test="guarantorName != null">
+        #{guarantorName,jdbcType=VARCHAR},
+      </if>
+      <if test="guaranteeMoney != null">
+        #{guaranteeMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="guaranteeType != null">
+        #{guaranteeType,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="hashmap">
+    update external_guarantee
+    <set>
+      <if test="corpId != null">
+        corp_id = #{corpId,jdbcType=VARCHAR},
+      </if>
+      <if test="guarantorName != null">
+        guarantor_name = #{guarantorName,jdbcType=VARCHAR},
+      </if>
+      <if test="guaranteeMoney != null">
+        guarantee_money = #{guaranteeMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="guaranteeType != null">
+        guarantee_type = #{guaranteeType,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where rec_uid = #{recUid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="hashmap">
+    update external_guarantee
+    set corp_id = #{corpId,jdbcType=VARCHAR},
+      guarantor_name = #{guarantorName,jdbcType=VARCHAR},
+      guarantee_money = #{guaranteeMoney,jdbcType=DECIMAL},
+      guarantee_type = #{guaranteeType,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{createUserId,jdbcType=VARCHAR}
+    where rec_uid = #{recUid,jdbcType=VARCHAR}
+  </update>
+  <select id="selectExternalGuaranteeList" parameterType="hashmap" resultType="hashmap">
+  	select rec_uid "recUid", corp_id "corpId", guarantor_name "guarantorName", 
+  	guarantee_money "guaranteeMoney", guarantee_type "guaranteeType",
+    create_time "createTime", create_user_id "createUserId"
+  	from external_guarantee
+  	where 1=1
+  	<if test="corpId != null">
+        and corp_id = #{corpId,jdbcType=VARCHAR}
+    </if>
+    order by create_time desc
+  </select>
+</mapper>

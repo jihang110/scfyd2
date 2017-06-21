@@ -1,0 +1,91 @@
+$(function () {
+	"use strict";
+    setForm();
+    //getAllHisVal();
+    numFormat();
+ });
+function setForm(){
+	var data = {};
+	data.taskId = taskId;
+	 var options = {
+		url : '../../activiti/getTaskDataByTaskId',
+		data : JSON.stringify(data),
+		callBackFun : function(data) {
+			if (data.result == 0) {
+				var jsonData =  eval("(" + data.str + ")");
+				CloudUtils.setForm(jsonData,"addForm");
+			} else {
+				return false;
+			}
+		},
+		errorCallback : function(data) {
+			bootbox.alert(data.resultNote);
+			return false;
+		}
+	};
+	 console.log();
+	 CloudUtils.ajax(options);
+}
+
+
+function getInfo(type){
+	var data = CloudUtils.convertStringJson('addForm');
+	data = eval("(" + data + ")");
+	data.agree = type;
+	data.advice = $("#advice").val();
+	data.taskId = taskId;
+	var jsonString = null;
+	var options = {
+				url : '../../loanInfo/doAgree',
+				data : JSON.stringify(data),
+				callBackFun : function(data) {
+					jsonString = data.str;
+					bootbox.alert(data.resultNote,function(){
+						if(type==1){
+							bootbox.alert(data.resultNote,function(){
+								window.location.href='../../agencyTask/agencyTask.html';
+							});
+						}
+					});
+				},
+				errorCallback : function(data) {
+					bootbox.alert(data.resultNote);
+					return false;
+				}
+			};
+	 CloudUtils.ajax(options);
+}
+
+
+function saveFun(){
+	 var advice = $.trim($("#advice").val());
+	 var type = $("#agree").val();
+	 if(type==1){
+		if(advice){
+			getInfo(type);
+		}
+	}else{
+		getInfo(type);
+		 if(taskDefKey == "cwbz_allow"){
+			if(type ==0){
+				var guaranteeData = eval("(" + jsonString + ")");
+				var payActGuarantee = CloudUtils.Math(guaranteeData.payActGuarantee,guaranteeData.returnGuaranteeAmt,"sub");
+				var guaranteeBalance = CloudUtils.Math(guaranteeData.guaranteeBalance,guaranteeData.returnGuaranteeAmt,"sub");
+				var options = {
+						url : '../../../loanInfo/add',
+						data : '{"financeId":"'+guaranteeData.financeId+'","payActGuarantee":"'+payActGuarantee+'","guaranteeBalance":"'+guaranteeBalance+'"}',
+						callBackFun : function(data) {
+							bootbox.alert(data.resultNote,function(){
+								window.location.href='../../agencyTask/agencyTask.html';
+							});
+						},
+						errorCallback : function(data) {
+							bootbox.alert(data.resultNote);
+							return false;
+						}
+					};
+				CloudUtils.ajax(options);
+			} 
+		 }
+	}
+}

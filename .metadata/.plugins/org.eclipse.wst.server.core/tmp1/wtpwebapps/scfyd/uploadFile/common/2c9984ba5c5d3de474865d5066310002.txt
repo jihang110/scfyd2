@@ -1,0 +1,16 @@
+1.数据字典缓存
+2.webserivce
+3.python
+4.工作流
+5.正则表达式
+6.轮询和推送 ------->webSocket
+7.ngnix
+8.node.js
+9.vue.js
+10.小程序
+
+starutian\jih
+
+https://github.com/jihang110/pingAnBankDemo.git
+
+/\??([\w\d%]+)=([\w\d%]*)&?/g; //分离参数的正则表达式

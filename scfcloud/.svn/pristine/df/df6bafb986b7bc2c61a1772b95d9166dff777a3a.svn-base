@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ut.scf.dao.bpm.FlowProTuningMapper">
+    
+  <delete id="deleteFlowProTuning" parameterType="java.lang.String">
+    delete from flow_pro_tuning
+    where rec_uid = #{recUid}
+  </delete>
+  
+
+  <select id="selectFlowProTuning" parameterType="hashmap" resultType="hashmap">
+  	select 
+	rec_uid recUid, corp_id corpId, create_user_id createUserId, create_time createTime, oper_year operYear,
+	pro_name proName, factor_type factorType, pro_guarant_note proGuarantNote, cust_no custNo, 
+	oper_mode_note operModeNote, core_corp_no coreCorpNo, pro_expect_profit proExpectProfit, 
+	conclu_suggestion concluSuggestion, pro_make_date proMakeDate, apl_factor_limit aplFactorLimit, 
+	fac_base_doc_anly facBaseDocAnly, core_corp_name coreCorpName, his_trans_anly hisTransAnly, 
+    loan_rt loanRt, factor_rate factorRate, risk_prev_mth riskPrevMth, fac_loan_note facLoanNote, 
+    advice_limit adviceLimit, apl_amt aplAmt, cust_name custName, pro_no proNo, fac_payment_from facPaymentFrom, 
+    apl_dead_line aplDeadLine, profit_anly profitAnly, factor_busi_note factorBusiNote, payment_method paymentMethod
+    from flow_pro_tuning
+    where pro_no = #{proNo}
+    order by create_time desc
+  </select>
+  
+  <insert id="insertFlowProTuning" parameterType="hashmap">
+    
+    insert into flow_pro_tuning (rec_uid, corp_id, create_user_id, 
+      create_time, oper_year, pro_name, 
+      factor_type, pro_guarant_note, cust_no, 
+      oper_mode_note, core_corp_no, pro_expect_profit, 
+      conclu_suggestion, pro_make_date, apl_factor_limit, 
+      fac_base_doc_anly, core_corp_name, his_trans_anly, 
+      loan_rt, factor_rate, risk_prev_mth, 
+      fac_loan_note, advice_limit, apl_amt, 
+      cust_name, pro_no, fac_payment_from, 
+      apl_dead_line, profit_anly, factor_busi_note, 
+      payment_method)
+    values (#{recUid}, #{corpId}, #{createUserId}, 
+      now(), #{operYear}, #{proName}, 
+      #{factorType}, #{proGuarantNote}, #{custNo}, 
+      #{operModeNote}, #{coreCorpNo}, #{proExpectProfit}, 
+      #{concluSuggestion}, #{proMakeDate}, #{aplFactorLimit}, 
+      #{facBaseDocAnly}, #{coreCorpName}, #{hisTransAnly}, 
+      #{loanRt}, #{factorRate}, #{riskPrevMth}, 
+      #{facLoanNote}, #{adviceLimit}, #{aplAmt}, 
+      #{custName}, #{proNo}, #{facPaymentFrom}, 
+      #{aplDeadLine}, #{profitAnly}, #{factorBusiNote}, 
+      #{paymentMethod})
+  </insert>
+  
+  <update id="updateFlowProTuning" parameterType="hashmap">
+    update flow_pro_tuning
+    <set>
+      <if test="corpId != null">
+        corp_id = #{corpId},
+      </if>
+      <if test="operYear != null">
+        oper_year = #{operYear},
+      </if>
+      <if test="proName != null">
+        pro_name = #{proName},
+      </if>
+      <if test="factorType != null">
+        factor_type = #{factorType},
+      </if>
+      <if test="proGuarantNote != null">
+        pro_guarant_note = #{proGuarantNote},
+      </if>
+      <if test="custNo != null">
+        cust_no = #{custNo},
+      </if>
+      <if test="operModeNote != null">
+        oper_mode_note = #{operModeNote},
+      </if>
+      <if test="coreCorpNo != null">
+        core_corp_no = #{coreCorpNo},
+      </if>
+      <if test="proExpectProfit != null">
+        pro_expect_profit = #{proExpectProfit},
+      </if>
+      <if test="concluSuggestion != null">
+        conclu_suggestion = #{concluSuggestion},
+      </if>
+      <if test="proMakeDate != null">
+        pro_make_date = #{proMakeDate},
+      </if>
+      <if test="aplFactorLimit != null">
+        apl_factor_limit = #{aplFactorLimit},
+      </if>
+      <if test="facBaseDocAnly != null">
+        fac_base_doc_anly = #{facBaseDocAnly},
+      </if>
+      <if test="coreCorpName != null">
+        core_corp_name = #{coreCorpName},
+      </if>
+      <if test="hisTransAnly != null">
+        his_trans_anly = #{hisTransAnly},
+      </if>
+      <if test="loanRt != null">
+        loan_rt = #{loanRt},
+      </if>
+      <if test="factorRate != null">
+        factor_rate = #{factorRate},
+      </if>
+      <if test="riskPrevMth != null">
+        risk_prev_mth = #{riskPrevMth},
+      </if>
+      <if test="facLoanNote != null">
+        fac_loan_note = #{facLoanNote},
+      </if>
+      <if test="adviceLimit != null">
+        advice_limit = #{adviceLimit},
+      </if>
+      <if test="aplAmt != null">
+        apl_amt = #{aplAmt},
+      </if>
+      <if test="custName != null">
+        cust_name = #{custName},
+      </if>
+      <if test="proNo != null">
+        pro_no = #{proNo},
+      </if>
+      <if test="facPaymentFrom != null">
+        fac_payment_from = #{facPaymentFrom},
+      </if>
+      <if test="aplDeadLine != null">
+        apl_dead_line = #{aplDeadLine},
+      </if>
+      <if test="profitAnly != null">
+        profit_anly = #{profitAnly},
+      </if>
+      <if test="factorBusiNote != null">
+        factor_busi_note = #{factorBusiNote},
+      </if>
+      <if test="paymentMethod != null">
+        payment_method = #{paymentMethod},
+      </if>
+    </set>
+    where rec_uid = #{recUid}
+  </update>
+</mapper>

@@ -1,0 +1,126 @@
+package com.ut.scf.reqbean.bpm;
+
+
+import com.ut.scf.reqbean.BaseReqBean;
+
+public class CheckReqBean extends BaseReqBean {
+
+	/**
+	 * 流程实例ID
+	 */
+	private Long procInsId;
+	
+	/**
+	 * 授信方式：0首笔，1增额，2置换续期，3循环额度，4其他
+	 */
+	
+	private String creditMode;
+	/**
+	 * 项目名称
+	 */
+	private String projectName;
+	/**
+	 * 工作项ID
+	 */
+	private Long workItemId;
+	
+	/**
+	 * 是否同意(0--不同意,1--同意)
+	 */
+	private String agreeFlg;
+	
+	/**
+	 * 项目意见
+	 */
+	private String proAdvice;
+	
+	/**
+	 * 步骤ID
+	 */
+	private String stepId;
+	
+	/**
+	 * corpId
+	 */
+	private String custNo;
+	
+	/**
+	 * 项目id
+	 */
+	private String proId;
+	
+	
+	public String getProId() {
+		return proId;
+	}
+
+	public void setProId(String proId) {
+		this.proId = proId;
+	}
+
+	public Long getProcInsId() {
+		return procInsId;
+	}
+
+	public void setProcInsId(Long procInsId) {
+		this.procInsId = procInsId;
+	}
+	
+	public String getCreditMode() {
+		return creditMode;
+	}
+
+	public void setCreditMode(String creditMode) {
+		this.creditMode = creditMode;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+	public Long getWorkItemId() {
+		return workItemId;
+	}
+
+	public void setWorkItemId(Long workItemId) {
+		this.workItemId = workItemId;
+	}
+
+	public String getAgreeFlg() {
+		return agreeFlg;
+	}
+
+	public void setAgreeFlg(String agreeFlg) {
+		this.agreeFlg = agreeFlg;
+	}
+
+	public String getProAdvice() {
+		return proAdvice;
+	}
+
+	public void setProAdvice(String proAdvice) {
+		this.proAdvice = proAdvice;
+	}
+
+	public String getStepId() {
+		return stepId;
+	}
+
+	public void setStepId(String stepId) {
+		this.stepId = stepId;
+	}
+
+	public String getCustNo() {
+		return custNo;
+	}
+
+	public void setCustNo(String custNo) {
+		this.custNo = custNo;
+	}
+
+	
+	
+}

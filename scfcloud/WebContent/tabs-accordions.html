@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+  
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="ThemeBucket">
+    <link rel="shortcut icon" href="#" type="image/png">
+    <title>Blank Page</title>
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/style-responsive.css" rel="stylesheet">
+    <link href="css/common.css" rel="stylesheet">
+   <!--  <link href="css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="js/fullcalendar/bootstrap-fullcalendar.css" rel="stylesheet" />
+    <link href="css/bootstrap-table.css" rel="stylesheet">
+   <!--  <link href="css/sysfun.css" rel="stylesheet" /> -->
+    <script src="js/jquery-3.0.0.min.js" type="text/javascript"></script>
+    <script src="js/jquery-ui-1.9.2.custom.min.js" type="text/javascript" ></script>
+    <script src="js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="js/modernizr.min.js"></script>
+    <script src="js/fullcalendar/fullcalendar.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-table.js" type="text/javascript"></script>
+    <script src="js/CloudUtils.js"></script>
+    <script src="js/store.js" type="text/javascript"></script>
+    <script src="js/jquery.nicescroll.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/scripts.js"></script>
+    <script type="text/javascript" src="js/jquery.validate.min.js"></script>
+    <script src="js/validation-init.js"></script>
+    <script src="js/bootbox-4.4.0/bootbox.js" type="text/javascript" ></script>
+    <script src="js/sysManager/tab-accord/tabs-accordions.js"></script>
+	<style type="text/css">
+	.tableTitleCss {
+		text-align: left;
+		word-break: keep-all;
+		white-space: nowrap; /* 不换行 */
+		overflow: hidden; /* 内容超出宽度时隐藏超出部分的内容 */
+		text-overflow: ellipsis;
+		height: 26px;
+		font-family: "华文细黑";
+		font-size: 16px;
+		padding: 0 10px 0 10px;
+	}
+	.btn-add{
+	    display: inline-block;
+    margin-bottom: 0;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+  border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 4px 12px;
+    font-size: 14px;
+    /* line-height: 1.42857143; */
+    border-radius: 4px;
+    -webkit-user-select: none;
+    /* font-family: 华文细黑; font-color: #ffffff; font-size: 10px; */
+    color: #ffffff;
+    background-color: #2582e3;
+    border-color: #ccc;
+    margin: -3px;
+	}
+	.bootbox .modal-header{
+	padding-bottom: 30px;
+	}
+	
+	.btn-default1{
+	background-color:#cccccc;
+	color:#ffffff;
+	border:0px;
+	width:120px;
+	text-align:center;
+}                                                                                                                                                                                                                                                     
+	                                                                                                                       
+	
+	a {
+		text-decoration: none;
+		color: #8e9197;
+	}
+	
+	a:hover {
+		text-decoration: underline;
+		color: #2582e3
+	}
+	
+	.modal-title{
+		font-family: Verdana,'华文细黑';
+	}
+	/*-----分页样式-----*/
+	
+	/*解决分页页尾不在水平线上*/
+	ul.pagination{
+		margin:0px !important;
+	}
+	
+	li.page-number.active a{
+		background-color:#2582e2;
+	}
+	
+	/*
+	分页页数宽度
+	*/
+	span.page-list  ul.dropdown-menu{
+    	width: 48px;
+	} 
+	.dropdown-menu{
+		min-width: 0px;
+	}
+	</style>
+</head>
+  
+  <body class="iframeBody">
+    <!-- left side start-->
+    <!-- left side end-->
+    <!-- main content start-->
+    <div class="main-content-child">
+      <div>
+        <div id="adds" class="row">
+          <div class="block col-sm-12">
+            <div class="panel">
+              <div class="panel-heading title">保理视野
+                <!-- <span class="tools pull-right">
+                  <a id="addsbutton" class="fa fa-times clickJudge" aria-hidden="true" href="javascript:;"></a></span> -->
+              </div>
+              <div class="panel-body">
+                <img src="images/ad/aa.jpg" style="width:100%" alt=""></div>
+            </div>
+          </div>
+        </div>
+        <div class="row rowmag">
+<!--           <div class=" col-sm-4">
+             <div class="block mag contentpad" style="height:100px;background-color:#2582e3">
+              <i class="fa fa-clock-o icon pull-left"></i>
+              <div class="pull-right center">
+                <span class="number">117</span>
+                <br/>
+                <a class="character">代办任务</a></div>
+            </div> 
+          </div> -->
+          <div class=" col-sm-4">
+            <div class="block mag contentpad" style="height:100px;background-color:#f08300">
+              <i class="fa fa-pencil-square-o icon pull-left" style="color:#ffffff"></i>
+              <div class="pull-right center">
+                <a class="character"><span class="number" id="notFlowCount">0</span></a>
+                <br/>
+                <a class="character" id="toNotFlow">未结任务</a></div>
+            </div>
+          </div>
+          <div class=" col-sm-4">
+            <div class="block mag contentpad" style="height:100px;background-color:#7af305">
+              <i class="fa fa-check-square-o icon pull-left" style="color:#ffffff"></i>
+              <div class="pull-right center">
+                <a class="character"><span class="number" id="overFlowCount">0</span></a>
+                <br/>
+                <a class="character" id="toOverFlow">已结任务</a></div>
+            </div>
+          </div>
+          <div class=" col-sm-4">
+            <div class="block mag contentpad" style="height:100px;background-color:#ff0000">
+              <i class="fa fa-bell icon pull-left"></i>
+              <div class="pull-right center">
+                <a href="#calendar"><span class="number" id="expenseExpireCount"></span></a>
+                <br/>
+                <a class="character" href="#calendar">预警通知</a></div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- page end--></div>
+    </div>
+    <form class="form-horizontal" role="form" id="addForm" data-toggle="validator">
+    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel">
+		    <div class="modal-dialog" role="document">
+		      <div class="modal-content" style="font-family: Verdana,'华文细黑';">
+		        <div class="modal-header">
+		          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span> </button> 
+		          <h4 class="modal-title" id="addModalLabel"></h4>
+		        </div>
+		        <div class="modal-body">
+				<fieldset id="field">	        
+		          <input type="hidden" id="recUid" name="recUid" />
+		          <div class="form-group">
+		            <label class="col-sm-2 control-label" for="markName" style="font-family: 华文细黑; font-size: 16px;padding-top:5px;">新建事项</label>
+		            <div class="col-sm-10">
+		            	<input type="text" name="markName" class="form-control" id="markName" placeholder="事项管理" style="display:inline-block;width:310px;">
+                		<a onclick="addmark()" class="btn btn-primary"
+						style="background-color: #eaeaec; color:#2583e3; display:inline-block;float:right; width: 105px; height: 34px;  font-family: 华文细黑; font-color: #ffffff; font-size: 14px;">确认添加</a>
+		            </div>
+		          </div>
+		          <div class="form-group" style="display:none;">
+		            <label class="col-sm-4 control-label"  for="markDesc">标签详细</label>
+		            <div class="col-sm-6">
+		            	<input type="text" name="markDesc" class="form-control" id="markDesc" placeholder="真实姓名">
+		         	</div>
+		          </div>
+		          <div class="form-group" style="display:none;">
+		            <label class="col-sm-4 control-label"  for="note">备注</label>
+		            <div class="col-sm-6">
+		            	<input type="text" name="note" class="form-control" id="note" placeholder="备注">
+		         	</div>
+		          </div>
+		          </fieldset>
+		        </div>
+		     <div class="panel-body">
+				<table id="userMarkListTable" class="table" cellspacing="0"
+					width="100%"></table>
+			</div>
+		       <div class="modal-footer">
+				  <div class="form-group">
+				  	<div class="col-sm-4"></div>
+					<div class="col-sm-3"  style="width: 30%;">
+						<button type="button" class="btn btn-default1"
+							data-dismiss="modal">取消
+						</button>
+					</div>
+				</div>
+			</div>
+	      </div>
+	    </div>
+	  </div>
+	  </form>
+    <!--body wrapper end-->
+    <!--footer section start-->
+    <!--footer section end--></div>
+    <!-- main content end--></section>
+  </body>
+
+</html>

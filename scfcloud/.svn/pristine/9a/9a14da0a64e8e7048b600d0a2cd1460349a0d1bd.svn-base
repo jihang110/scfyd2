@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ut.scf.dao.crm.ICorpInfoDao">
+  
+  <select id="selectByCorpId" parameterType="hashmap" resultType="hashmap">
+    select corp_name corpName,core_corp_name coreCorpName,orgn_credit_num orgnCreditNum,
+    	app_num appNum,open_account_licence openAccountLicence,	
+    	customer_app_serial_num customerAppSerialNum,orgn_num orgnNum,
+    	business_license businessLicense,applicant_name applicantName,
+    	loan_card_no loanCardNo,applicant_phone applicantPhone,	
+    	fixed_phone fixedPhone,apply_amt applyAmt			   
+    from corp_info
+    where corp_id = #{corpId}
+  </select>
+
+  
+  <update id="updateByCorpId" parameterType="hashmap">
+    update corp_info
+    <set>
+      <if test="corpName  != null">
+        corp_name = #{corpName},
+      </if>
+      <if test="coreCorpName != null">
+        core_corp_name = #{coreCorpName},
+      </if>
+      <if test="orgnCreditNum != null">
+        orgn_credit_num = #{orgnCreditNum},
+      </if>
+      <if test="appNum != null">
+        app_num = #{appNum},
+      </if>
+      <if test="openAccountLicence != null">
+        open_account_licence = #{openAccountLicence},
+      </if>
+      <if test="customerAppSerialNum != null">
+        customer_app_serial_num = #{customerAppSerialNum},
+      </if>
+      <if test="orgnNum != null">
+        orgn_num = #{orgnNum},
+      </if>
+      <if test="businessLicense != null">
+        business_license = #{businessLicense},
+      </if>
+      <if test="applicantName != null">
+        applicant_name = #{applicantName},
+      </if>
+      <if test="loanCardNo != null">
+        loan_card_no = #{loanCardNo},
+      </if>
+      <if test="applicantPhone != null">
+        applicant_phone = #{applicantPhone},
+      </if>
+      <if test="fixedPhone != null">
+        fixed_phone = #{fixedPhone},
+      </if>
+      <if test="applyAmt != null">
+        apply_amt = #{applyAmt}
+      </if>
+    </set>
+    where corp_id = #{corpId}
+  </update>
+  
+</mapper>

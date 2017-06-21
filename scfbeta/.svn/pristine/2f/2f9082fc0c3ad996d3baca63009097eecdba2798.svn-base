@@ -1,0 +1,105 @@
+package com.ut.scf.service.bpm.impl;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.activiti.engine.RepositoryService;
+import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
+import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.ut.scf.respbean.BaseRespBean;
+import com.ut.scf.respbean.ListRespBean;
+import com.ut.scf.service.bpm.IActFlowService;
+
+@Service("actFlowService")
+public class ActFlowServiceImpl implements IActFlowService{
+
+	
+	@Override
+	@Transactional(readOnly = true)
+	public BaseRespBean getActDefinitionList(RepositoryService repositoryService) {
+		ListRespBean respBean = new ListRespBean();
+		List<Map<String, String>> list = new ArrayList<Map<String,String>>();
+		for (ProcessDefinition processDefinition : repositoryService.createProcessDefinitionQuery().list()) {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("definitionKey", processDefinition.getKey());
+			map.put("definitionName", processDefinition.getName());
+			map.put("definitionId", processDefinition.getId());
+			list.add(map);
+		}
+		respBean.setDataList(list);
+		return respBean;
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public BaseRespBean getActProcessInstanceList(RuntimeService runtimeService) {
+		ListRespBean respBean = new ListRespBean();
+		List<Map<String, String>> list = new ArrayList<Map<String,String>>();
+		for (ProcessInstance processInstance : runtimeService.createProcessInstanceQuery().list()) {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("processInstanceId", processInstance.getId());
+			map.put("processDefinitionId", processInstance.getProcessDefinitionId());
+			list.add(map);
+		}
+		respBean.setDataList(list);
+		return respBean;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public BaseRespBean getActTaskList(TaskService taskService) {
+		ListRespBean respBean = new ListRespBean();
+		List<Map<String, String>> list = new ArrayList<Map<String,String>>();
+		for (Task task : taskService.createTaskQuery().list()) {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("taskId", task.getId());
+			map.put("taskName", task.getName());
+			map.put("assignee", task.getAssignee());
+			list.add(map);
+		}
+		respBean.setDataList(list);
+		return respBean;
+	}
+
+	@Override
+	public BaseRespBean startActFlow(RuntimeService runtimeService,String processDefinitionId) {
+		ListRespBean respBean = new ListRespBean();
+		runtimeService.startProcessInstanceById(processDefinitionId);
+		return respBean;
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public BaseRespBean  completeTask(TaskService taskService,String taskId,String taskName,String agreeStr){
+		ListRespBean respBean = new ListRespBean();
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("superior", "superior");
+		boolean agree;
+		if(agreeStr.equals("true")){
+			agree = true;
+		}else{
+			agree = false;
+		}
+		//taskService.setAssignee(taskId, "ywjl");
+		//taskService.claim(taskId, "ywjl");//申领任务 
+		String agree2 = " ";
+		if (taskName.equals("业务总负责人")) {
+			agree2 = "agree2";
+		}
+		if (taskName.equals("风控经理")) {
+			agree2 = "agree3";
+		}
+		taskService.setVariable(taskId, agree2, agree);//true批准，false不批准
+		taskService.complete(taskId);
+		return respBean;
+	}
+}

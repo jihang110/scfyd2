@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>资产包设立</title>
+<scfCSS>
+<link rel="stylesheet" href="/scfcloud/css/bootstrap-table.css">
+<link rel="stylesheet" href="/scfcloud/css/validator/bootstrapValidator.css">
+<link rel="stylesheet" href="/scfcloud/js/bootstrap-datetimepicker/css/datetimepicker.css">
+<link rel="stylesheet" href="/scfcloud/js/autocompleter/jquery.autocompleter.css">
+<link rel="stylesheet" href="/scfcloud/css/sysfun.css">
+</scfCSS>
+<scfScript>
+<script type="text/javascript" src="/scfcloud/js/jquery.number.js"></script>
+<script type="text/javascript" src="/scfcloud/js/autocompleter/jquery.autocompleter.js"></script>
+<script type="text/javascript" src="/scfcloud/js/ajaxfileupload.js"></script>
+<script type="text/javascript" src="/scfcloud/js/bootstrap-table.js"></script>
+<script type="text/javascript" src="/scfcloud/js/bootstrap-validator/bootstrapValidator.js"></script>
+<script type="text/javascript" src="/scfcloud/js/bootstrap-validator/zh_CN.js"></script>
+<script type="text/javascript" src="/scfcloud/js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="/scfcloud/js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="/scfcloud/js/asset/packageManager/packageManager.js"></script>
+</scfScript>
+</head>
+
+<body>
+	<section class="iframeBody">
+		<div class="row">
+			<div class="title">
+				<span>资产包设立</span>
+			</div>
+		</div>
+		<div class="panel-body">
+			<div class="container-fluid">
+				<div class="row" style="margin-bottom: 10px;">
+					<div class="col-sm-12" style="line-height: 40px;">
+						<strong class="text-muted">资产信息</strong>
+					</div>
+					<form class="form-horizontal" id="packageForm">
+<!-- 						<input id="apAmountTemp" type="hidden"/> -->
+<!-- 						<input type="hidden" id="recUid" name="recUid"/> -->
+						<div class="col-sm-12" style="margin-top: 30px">
+<!-- 							<div class="form-group col-sm-6" style="display: none"> -->
+<!-- 								<label for="recUid" class="col-sm-4 control-label">主键</label> -->
+<!-- 								<div class="col-sm-8"> -->
+<!-- 									<input type="text" class="form-control" id="recUid" name="recUid" -->
+<!-- 										 placeholder="主键"> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+							<div class="form-group">
+								<label for="corpName" class="col-sm-2 control-label">券商名称</label>
+								<div class="col-sm-3 scf_valid">
+									<input type="hidden" class="form-control" id="corpId"
+										name="corpId" placeholder="券商编号" AUTOCOMPLETE="off">
+									<input type="text" class="form-control" id="corpName"
+										name="corpName" placeholder="券商名称" onkeyup="changeName()" AUTOCOMPLETE="off">
+								</div>
+								<label for="apNo" class="col-sm-2 control-label">资产包编号</label>
+								<div class="col-sm-3 scf_valid">
+									<input type="text" class="form-control" id="apNo"
+										name="apNo"  placeholder="资产包编号" AUTOCOMPLETE="off">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="apAmount" class="col-sm-2 control-label">资产包金额</label>
+								<div class="col-sm-3 scf_valid">
+									<input type="text" class="form-control" id="apAmount"
+										name="apAmount" placeholder="0.00" readonly>
+								</div>
+								<label for="packetTime" class="col-sm-2 control-label">封包日期</label>
+								<div class="col-sm-3 scf_valid">
+									<span style="position: relative; z-index: 9999;">
+										<input id="packetTime" name="packetTime" class="form-control"
+										style="cursor: pointer;" type="text" AUTOCOMPLETE="off">
+									</span> 
+									<span class="add-on" style="margin-top: -31px; margin-right: 10px;">
+										<i class="glyphicon glyphicon-calendar"></i>
+									</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="assetRating" class="col-sm-2 control-label">资产评级</label>
+								<div class="col-sm-3 scf_valid">
+									<input type="text" class="form-control" id="assetRating" name="assetRating"
+										 placeholder="资产评级" AUTOCOMPLETE="off">
+								</div>
+							</div>
+						</div>
+						
+						<div class="col-sm-12" style="line-height: 40px;margin-bottom: 10px;">
+							<strong class="text-muted">项目信息</strong>
+						</div>
+						
+						<table id="flowProjectList" class="table table-bordered"></table>
+						
+						<div class="form-group" style="margin-top: 30px;">
+							<div class="col-sm-offset-9 col-sm-2" style="margin-right: 0px;">
+								<button type="submit" class="btn btn-info" style="margin-left: 70px;">
+									&nbsp;&nbsp;<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存&nbsp;&nbsp;
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
+
+</html>

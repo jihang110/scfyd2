@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+  <!-- classPathEntry:数据库的JDBC驱动,换成你自己的驱动位置 -->
+  <classPathEntry location="E:\baoliyun\scfbeta\lib\ojdbc7-12.1.0.2.jar" />
+  <context id="context1">
+  
+  	<!-- 去除生成文件里面的注释 -->
+	<commentGenerator>
+		<property name="suppressDate" value="false"/>
+		<property name="suppressAllComments" value="true"/>
+	</commentGenerator>
+    <jdbcConnection connectionURL="jdbc:oracle:thin:@172.25.1.56:1521:scfcloud" driverClass="oracle.jdbc.driver.OracleDriver" password="scfcloud" userId="scfcloud" />
+    <javaModelGenerator targetPackage="com.ut.scf.pojo.auto" targetProject="scfbeta" />
+    <sqlMapGenerator targetPackage="com.ut.scf.mybatis.oraclemapping.auto" targetProject="scfbeta" />
+    <javaClientGenerator targetPackage="com.ut.scf.dao.auto" targetProject="scfbeta" type="XMLMAPPER" />
+	<table schema="scfcloud" tableName="sys_biz_log"> </table>
+	<table schema="scfcloud" tableName="sys_config"> </table>
+	<table schema="scfcloud" tableName="sys_func_interface"> </table>
+	<table schema="scfcloud" tableName="sys_interface_log"> </table>
+	<table schema="scfcloud" tableName="sys_menu"> </table>
+	<table schema="scfcloud" tableName="sys_role"> </table>
+	<table schema="scfcloud" tableName="sys_role_interface"> </table>
+	<table schema="scfcloud" tableName="sys_role_menu"> </table>
+	<table schema="scfcloud" tableName="sys_type"> </table>
+	<table schema="scfcloud" tableName="sys_user"> </table>
+	<table schema="scfcloud" tableName="sys_user_role"> </table>
+	<table schema="scfcloud" tableName="user_corp_jurisdiction"> </table>
+	<table schema="scfcloud" tableName="corp_dept"> </table> 
+	<table schema="scfcloud" tableName="corp_info"> </table>
+	<table schema="scfcloud" tableName="upload_file_path"> </table>
+  </context>
+</generatorConfiguration>

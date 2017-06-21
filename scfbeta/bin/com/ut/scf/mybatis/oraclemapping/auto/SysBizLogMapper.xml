@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ut.scf.dao.auto.SysBizLogMapper">
+  <resultMap id="BaseResultMap" type="com.ut.scf.pojo.auto.SysBizLog">
+    <id column="LOG_ID" jdbcType="NVARCHAR" property="logId" />
+    <result column="USER_ID" jdbcType="NVARCHAR" property="userId" />
+    <result column="INTERFACE_ID" jdbcType="NVARCHAR" property="interfaceId" />
+    <result column="IP" jdbcType="NVARCHAR" property="ip" />
+    <result column="CONTENT" jdbcType="NVARCHAR" property="content" />
+    <result column="OPER_TIME" jdbcType="TIMESTAMP" property="operTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    LOG_ID, USER_ID, INTERFACE_ID, IP, CONTENT, OPER_TIME
+  </sql>
+  <select id="selectByExample" parameterType="com.ut.scf.pojo.auto.SysBizLogExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from SCFCLOUD.SYS_BIZ_LOG
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from SCFCLOUD.SYS_BIZ_LOG
+    where LOG_ID = #{logId,jdbcType=NVARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from SCFCLOUD.SYS_BIZ_LOG
+    where LOG_ID = #{logId,jdbcType=NVARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ut.scf.pojo.auto.SysBizLogExample">
+    delete from SCFCLOUD.SYS_BIZ_LOG
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ut.scf.pojo.auto.SysBizLog">
+    insert into SCFCLOUD.SYS_BIZ_LOG (LOG_ID, USER_ID, INTERFACE_ID, 
+      IP, CONTENT, OPER_TIME
+      )
+    values (#{logId,jdbcType=NVARCHAR}, #{userId,jdbcType=NVARCHAR}, #{interfaceId,jdbcType=NVARCHAR}, 
+      #{ip,jdbcType=NVARCHAR}, #{content,jdbcType=NVARCHAR}, #{operTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ut.scf.pojo.auto.SysBizLog">
+    insert into SCFCLOUD.SYS_BIZ_LOG
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="logId != null">
+        LOG_ID,
+      </if>
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="interfaceId != null">
+        INTERFACE_ID,
+      </if>
+      <if test="ip != null">
+        IP,
+      </if>
+      <if test="content != null">
+        CONTENT,
+      </if>
+      <if test="operTime != null">
+        OPER_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="logId != null">
+        #{logId,jdbcType=NVARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=NVARCHAR},
+      </if>
+      <if test="interfaceId != null">
+        #{interfaceId,jdbcType=NVARCHAR},
+      </if>
+      <if test="ip != null">
+        #{ip,jdbcType=NVARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=NVARCHAR},
+      </if>
+      <if test="operTime != null">
+        #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ut.scf.pojo.auto.SysBizLogExample" resultType="java.lang.Integer">
+    select count(*) from SCFCLOUD.SYS_BIZ_LOG
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update SCFCLOUD.SYS_BIZ_LOG
+    <set>
+      <if test="record.logId != null">
+        LOG_ID = #{record.logId,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.userId != null">
+        USER_ID = #{record.userId,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.interfaceId != null">
+        INTERFACE_ID = #{record.interfaceId,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.ip != null">
+        IP = #{record.ip,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.content != null">
+        CONTENT = #{record.content,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.operTime != null">
+        OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update SCFCLOUD.SYS_BIZ_LOG
+    set LOG_ID = #{record.logId,jdbcType=NVARCHAR},
+      USER_ID = #{record.userId,jdbcType=NVARCHAR},
+      INTERFACE_ID = #{record.interfaceId,jdbcType=NVARCHAR},
+      IP = #{record.ip,jdbcType=NVARCHAR},
+      CONTENT = #{record.content,jdbcType=NVARCHAR},
+      OPER_TIME = #{record.operTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ut.scf.pojo.auto.SysBizLog">
+    update SCFCLOUD.SYS_BIZ_LOG
+    <set>
+      <if test="userId != null">
+        USER_ID = #{userId,jdbcType=NVARCHAR},
+      </if>
+      <if test="interfaceId != null">
+        INTERFACE_ID = #{interfaceId,jdbcType=NVARCHAR},
+      </if>
+      <if test="ip != null">
+        IP = #{ip,jdbcType=NVARCHAR},
+      </if>
+      <if test="content != null">
+        CONTENT = #{content,jdbcType=NVARCHAR},
+      </if>
+      <if test="operTime != null">
+        OPER_TIME = #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where LOG_ID = #{logId,jdbcType=NVARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ut.scf.pojo.auto.SysBizLog">
+    update SCFCLOUD.SYS_BIZ_LOG
+    set USER_ID = #{userId,jdbcType=NVARCHAR},
+      INTERFACE_ID = #{interfaceId,jdbcType=NVARCHAR},
+      IP = #{ip,jdbcType=NVARCHAR},
+      CONTENT = #{content,jdbcType=NVARCHAR},
+      OPER_TIME = #{operTime,jdbcType=TIMESTAMP}
+    where LOG_ID = #{logId,jdbcType=NVARCHAR}
+  </update>
+</mapper>

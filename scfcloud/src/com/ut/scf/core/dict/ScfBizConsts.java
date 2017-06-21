@@ -1,0 +1,56 @@
+package com.ut.scf.core.dict;
+
+/**
+ * scf业务公共常量
+ * 
+ * @author sll
+ */
+public interface ScfBizConsts
+{
+    
+    /**
+     * 删除状态
+     */
+    public final static int STATUS_DELETE = 0;
+    
+    /**
+     * 正常状态
+     */
+    public final static int STATUS_NORMAL = 1;
+    
+    /**
+     * 平台角色类型
+     */
+    public final static int ROLE_TYPE_PLAT = 1;
+    
+    /**
+     * 保理商角色类型
+     */
+    public final static int ROLE_TYPE_FACTOR = 2;
+    
+    /**
+     * 系统管理员角色Id
+     */
+    public final static String ROLE_ID_ROOT = "ROLE000001";
+    
+    /**
+     * 保理商总经理角色Id
+     */
+    public final static String ROLE_ID_FACTOR_OFFICIAL = "ROLE000003";
+    
+    /**
+     * 保理商总负责人角色Id
+     */
+    public final static String ROLE_ID_FACTOR_MANAGER = "ROLE000007";
+    
+    /**
+     * 保理商管理员角色Id
+     */
+    public final static String ROLE_ID_FACTOR_ADMIN = "ROLE000011";
+    
+    /**
+     * 供应商报名编号前缀
+     */
+    public final static String REG_SUPPLIER_ID_PREFIX = "REG";
+
+}

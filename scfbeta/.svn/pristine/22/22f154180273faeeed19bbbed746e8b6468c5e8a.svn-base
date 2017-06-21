@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>角色管理</title>
+<scfCSS>
+<link href="/scfbeta/css/bootstrap-table.css" rel="stylesheet">
+<link href="/scfbeta/css/validator/bootstrapValidator.css" rel="stylesheet">
+<link href="/scfbeta/106/css/selectordie_theme_03.css" rel="stylesheet">
+<link href="/scfbeta/css/sysfun.css" rel="stylesheet">
+</scfCSS>
+<scfScript>
+<script type="text/javascript" src="/scfbeta/js/password.js"></script>
+<script type="text/javascript" src="/scfbeta/106/js/selectordie.min.js"></script>
+<script type="text/javascript" src="/scfbeta/js/bootstrap-table.js"></script>
+<script type="text/javascript" src="/scfbeta/js/bootstrap-validator/bootstrapValidator.js"></script>
+<script type="text/javascript" src="/scfbeta/js/bootstrap-validator/zh_CN.js"></script>
+<script type="text/javascript" src="/scfbeta/js/sysManager/sysRoleManager/roleManager.js"></script>
+</scfScript>
+</head>
+<body>
+  <section class="iframeBody">
+    <div class="main-content-child">
+      <div class="row">
+        <div class="title">
+          <span>角色管理</span></div>
+      </div>
+      <fieldset>
+        <div class="row">
+          <div class="form-group">
+             <form class="form-horizontal" role="form" id="roleForm" style="margin-top:15px;">
+			<div class="row">
+				  <div class="col-sm-4 col-sm-offset-4 input-group pull-left">
+				      <input type="text" class="form-control" id="r_roleName" name="r_roleName" placeholder="角色名称">
+				      <div class="input-group-addon searchIcon" onclick="selectRole()">
+				       <a class="glyphicon glyphicon-search icon-white" style="color:#ffffff;padding:0px 5px;" title="搜索" href="javascript:void(0)"></a>
+				      </div>
+				      <div class="input-group-addon searchIcon" onclick="ResetBtn()">
+				       <a class="fa fa-rotate-left reset icon-white" style="color:#ffffff;padding:0px 5px;" title="重置搜索信息" href="javascript:void(0)"></a>
+				      </div>
+			     </div>
+				<div class="col-sm-4" style="line-height:40px;">
+					<a id="searchMore"><span>更多筛选条件 </span><i class="glyphicon glyphicon-chevron-down"></i></a>
+				</div>
+			</div>
+			<!-- 隐藏内容 -->
+			<div id="isHidden" class="row" style="display:none;margin-top:20px">
+				<div class="col-sm-12">
+				  <div class="form-group">
+		            <label class="col-sm-1 col-sm-offset-3 control-label" for="r_roleType"></label>
+		            <div class="col-sm-4">
+		            	<select class="form-control" name="r_roleType" id="r_roleType"></select>
+		            </div> 
+		          </div>
+		        </div>
+			</div>
+			
+		</form>
+            
+          </div>
+        </div>
+      </fieldset>
+      <form class="form-horizontal" role="form" id="addForm" data-toggle="validator">
+        <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="addModalLabel">添加</h4></div>
+              <div class="modal-body">
+				<input type="hidden" id="roleId" name="roleId" />
+				<input type="hidden" id="corpId" name="corpId" />
+				<input type="hidden" id="isEdit" name="isEdit" />
+                <div class="form-group">
+                  <label class="col-sm-4 control-label" for="roleName"><span class="required">*</span>角色名称</label>
+                  <div class="col-sm-6">
+                    <input class="form-control" placeholder="角色名" name="roleName" id="roleName" type="text" autofocus /></div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label" for="roleType">角色类型</label>
+                  <div class="col-sm-6">
+                    <select class="form-control" data-placeholder="类型" name="roleType" id="roleType"></select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label" for="note">备注</label>
+                  <div class="col-sm-6">
+                    <input class="form-control" placeholder="备注" name="note" id="note" type="text" /></div>
+                </div>
+                <div class="form-group" id="menuList">
+                  <label class="col-sm-4 control-label" for="">菜单列表</label>
+                  <div class="col-sm-6">
+                    <div id="treeview12" class=""></div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <div class="form-group">
+                  <div class="col-sm-4"></div>
+                  <div class="col-sm-3">
+                    <button type="button" class="btn btn-default cancel" data-dismiss="modal">取消</button></div>
+                  <div class="col-sm-3">
+                    <button type="submit" id="btn_save" class="btn btn-default add" onclick="saveRole()">保存</button></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="panel-body">
+       	<button id="btn_add" type="button" class="btn btn-link" data-toggle="modal" onclick="addRole()">
+           <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
+        </button>
+        <table id="roleListTable" class="table"></table>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>	

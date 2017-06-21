@@ -1,0 +1,49 @@
+let corpId = null;
+$(function(){
+	showTabs();
+	show();
+})
+
+function showTabs(){
+	CloudUtils.getTab("../../tabs/bmp/flowManager/projectTuning/proInfoPanel.html","proInfoPanel");
+/*	CloudUtils.getTab("../../tabs/bmp/flowManager/projectTuning/proAnlyPanel.html","proAnlyPanel");
+	CloudUtils.getTab("../../tabs/bmp/flowManager/projectTuning/splInfoPanel.html","splInfoPanel");
+	CloudUtils.getTab("../../tabs/bmp/flowManager/projectTuning/splFinInfoPanel.html","splFinInfoPanel");
+	CloudUtils.getTab("../../tabs/bmp/flowManager/projectTuning/creditLtgInfoPanel.html","creditLtgInfoPanel");
+	CloudUtils.getTab("../../tabs/bmp/flowManager/projectTuning/busiInfoPanel.html","busiInfoPanel");*/
+}
+
+function show(){
+	$('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+		  var idStr = e.target.id;
+		  var path=idStr.substring(0,idStr.length-3);
+		  switch(path)
+		  {
+		  case "proAnlyPanel":
+			  jQuery.getScript("/scfcloud/js/bpm/flowManager/financeViladManager.js");
+			  jQuery.getScript("/scfcloud/js/bpm/flowManager/proAnlyPanel.js");
+		    break;
+		  case "splInfoPanel":
+			  jQuery.getScript("/scfcloud/js/bpm/flowManager/financeViladManager.js");
+			 jQuery.getScript("/scfcloud/js/bpm/flowManager/financeInfoManager.js");
+		    break;
+		  case "splFinInfoPanel":
+			  jQuery.getScript("/scfcloud/js/bpm/flowManager/financeViladManager.js");
+			  jQuery.getScript("/scfcloud/js/bpm/flowManager/financeCountManager.js");
+			    break;
+		  case "creditLtgInfoPanel":
+			  jQuery.getScript("/scfcloud/js/bpm/flowManager/financeViladManager.js");
+			  jQuery.getScript("/scfcloud/js/bpm/flowManager/creditInfoManager.js");
+			    break;
+		  case "busiInfoPanel":
+			  jQuery.getScript("/scfcloud/js/bpm/flowManager/financeViladManager.js");
+			  jQuery.getScript("/scfcloud/js/bpm/flowManager/contractInfoManager.js");
+			    break;
+		  default:
+		   break;
+		  }
+		  jQuery.getScript("/scfcloud/js/bpm/flowManager/flowAttachment.js");
+		  jQuery.getScript("/scfcloud/js/bpm/flowManager/projectBase.js");
+		  CloudUtils.getTab("../../tabs/bmp/flowManager/projectTuning/"+path+".html",path);
+	})
+}

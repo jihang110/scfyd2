@@ -1,0 +1,1850 @@
+$(function(){
+	initTable();
+	$('#btn_search').click(function() {
+		initTable();
+	});
+	$('#btn_add').click(function () {
+		window.location.href = '../../asset/packageManager/packageManager.html';
+	});
+	$("#div_detail").load("../../bpm/flowManager/FlowMngCommon.html");
+});
+
+//重置按钮事件
+function ResetBtn(){
+	$("#corpName").val("");
+}
+
+function initTable(){
+	$("#packageListTable").bootstrapTable('destroy');
+	$("#packageListTable").bootstrapTable({
+		method : "post",
+		url : '../../package/list',
+		striped : true, //表格显示条纹  
+		pagination : true, //启动分页  
+		pageSize : 10, //每页显示的记录数  
+		pageNumber : 1, //当前第几页  
+		pageList : [ 5, 10, 15, 20, 25 ], //记录数可选列表  
+		search : false, //是否启用查询  
+		showColumns : false, //显示下拉框勾选要显示的列  
+		showRefresh : false, //显示刷新按钮  
+		sidePagination : "server", //表示服务端请求  
+		//设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder  
+		//设置为limit可以获取limit, offset, search, sort, order  
+		queryParamsType : "undefined",
+		queryParams : function queryParams(params) { //设置查询参数  
+			var data = CloudUtils.convertStringJson('searchForm');
+			var jsonData = eval("(" + data + ")");
+			var param = {
+				pageNumber : params.pageNumber,
+				pageSize : params.pageSize,
+				corpName: jsonData.corpName
+			};
+			return JSON.stringify(param);
+		},
+		responseHandler : function responseHandler(res) {
+			if (res.result == 0) {
+				return {
+					"rows" : res.dataList,
+					"total" : res.records
+				};
+
+			} else {
+				bootbox.alert(res.resultNote);
+				return {
+					"rows" : [],
+					"total" : 0
+				};
+			}
+		},
+		columns : [
+		    {
+		    	field : 'recUid',
+		    	title : '主键',
+		    	align : 'center',
+		    	valign : 'middle',
+		    	visible : false
+		    }, 
+		    {
+				field : 'corpId',
+				title : '券商ID',
+				align : 'center',
+				valign : 'middle',
+				visible : false
+			},
+			{
+				field : 'corpName',
+				title : '券商名称',
+				align : 'center',
+				valign : 'middle'
+			},
+			{
+				field : 'apNo',
+				title : '资产包编号',
+				align : 'center',
+				valign : 'middle'
+			},
+			{
+				field : 'apAmount',
+				title : '资产包金额',
+				align : 'center',
+				formatter:function(value,row,index){
+		 	    	return $.number(value,2);
+			        },
+				valign : 'middle'
+			},
+			{
+				field : 'packetTime',
+				title : '封包日期',
+				align : 'center',
+				valign : 'middle',
+				formatter:function(value,row,index){
+	        		if(row.packetTime!=null&&row.packetTime!=''){
+	        			return CloudUtils.dateFormat(row.packetTime, 'yyyy-MM-dd')
+	        		}
+	 	        }
+			},
+			{
+				field : 'assetRating',
+				title : '资产包评级',
+				align : 'center',
+				valign : 'middle'
+			},
+			{
+				field : 'operation',
+				title : '操作',
+				align : 'center',
+				valign : 'middle',
+				formatter : function(value, row, index) {
+					//var s = '<a class = "fa fa-edit modify" style="color:#d864fd;padding:0px 5px;" title="编辑" href="javascript:void(0)"></a>';
+					//var r = '<a class = "fa fa-trash-o remove" style="color:#fa8564;padding:0px 5px;" title="删除" href="javascript:void(0)"></a>';
+					var t = '<a class="fa fa-list-ul detail" style="color:#fa8564;padding:0px 5px;" title="详情" href="javascript:void(0)"></a>'
+					return t;
+				},
+				events : 'operateEvents'
+			}
+		]
+	});
+}
+
+window.operateEvents = {
+//	'click .modify' : function(e, value, row, index) {
+//		window.location.href = '../../asset/packageManager/packageManager.html?corpId='+row.corpId;
+//	},
+//	'click .remove' : function(e, value, row, index) {
+//		bootbox.confirm("确定删除此条记录?", function(result) {
+//			if (result) {
+//				var data = {"recUid":row.recUid};
+//				var options = {
+//					url : '../../package/delete',
+//					data : JSON.stringify(data),
+//					callBackFun : function(data) {
+//						if (data.result == 0) {
+//							initTable();
+//							window.location.reload();
+//						} else {
+//							bootbox.alert(data.resultNote);
+//							return false;
+//						}
+//					},
+//					errorCallback : function(data) {
+//						bootbox.alert("error");
+//					}
+//				};
+//				CloudUtils.ajax(options);
+//			}
+//		});
+//	},
+	'click .detail' : function(e, value, row, index) {
+		initProjectTable(row.recUid);
+		$('#detailModal').modal({backdrop: 'static', keyboard: false});
+	},
+	'click .info' : function(e, value, row, index) {
+		detail(row);
+	}
+};
+
+function initProjectTable(id) {
+	$('#flowProjectList').bootstrapTable('destroy');  
+	$("#flowProjectList").bootstrapTable({  
+		method: "post", 
+		url: "../../flowProject/list",
+		striped: false,  // 表格显示条纹
+		pagination: false, // 启动分页
+		pageSize: 5,  // 每页显示的记录数
+		pageNumber:1, // 当前第几页
+		pageList: [5, 10, 15, 20, 25],  // 记录数可选列表
+		search: false,  // 是否启用查询
+		showColumns: false,  // 显示下拉框勾选要显示的列
+		showRefresh: false,  // 显示刷新按钮
+		clickToSelect: true,  // 是否启用点击选中行
+		sidePagination: "server", // 表示服务端请求
+		queryParamsType : "undefined",
+		queryParams: function queryParams(params) {   // 设置查询参数
+			var param = {
+				pageNumber: params.pageNumber,
+				pageSize: params.pageSize,
+				apId: id,
+				proStatus: 4,
+				isPage: 0
+			};
+			return JSON.stringify(param);
+		},
+		responseHandler:function responseHandler(res) {
+			if (res.result==0) {
+				return {
+					"rows": res.dataList,
+					"total": res.records
+				};
+				} else {
+					bootbox.alert(res.resultNote);
+					return {
+						"rows": [],
+						"total": 0
+					};
+				}
+			},
+         columns: [{
+ 	        field: 'proId',
+ 	        title: 'Item ID',
+ 	        align: 'center',
+            valign: 'middle',
+            visible: false
+ 	    }, {
+ 	        field: 'corpId',
+ 	        title: '企业Id',
+ 	        align: 'center',
+            valign: 'middle',
+            visible: false
+ 	    },{
+			field: 'apId',
+			title: '资产包名称',
+			align: 'center',
+			valign: 'middle',
+			visible: false
+		},{
+ 	        field: 'projectName',
+ 	        title: '项目名称',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    },{
+ 	    	field: 'custName',
+ 	        title: '供应商名称',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    },{
+ 	    	field: 'coreCorpName',
+ 	        title: '核心企业名称',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    },{
+ 	    	field : 'loanAmt',
+			title : '放款金额',
+			align : 'center',
+			formatter : function (value, row, index){
+				return $.number(value, 2);
+			},
+			valign : 'middle'
+ 	    },{
+ 	    	field : 'operation',
+			title : '操作',
+			align : 'center',
+			valign : 'middle',
+			formatter : function(value, row, index) {
+				console.log(row);
+				return '<a class="fa fa-list-ul info" style="color:#fa8564;padding:0px 5px;" title="详情" href="javascript:;"></a>'
+			},
+			events : 'operateEvents'
+ 	    }]
+	});
+}
+
+function detail(row) {
+	$('#projectTuningModal').modal({backdrop: 'static', keyboard: false});
+	$("#detailModal").modal("hide");
+	setProjectInfo(row.proId);//加载项目详情
+	setSupplierBaseInfo(row.custNo);//加载供应商基本信息的数据
+	initDetTable(row.custNo);//加载表格的数据
+	$('#projectTuningModal').on('hide.bs.modal',function(){
+		$("#detailModal").modal("show");
+	});
+}
+
+function setProjectInfo(proId) {
+	var options = {
+		url : '../../package/listByProId',
+		data : JSON.stringify({
+			proId : proId
+		}),
+		callBackFun : function(data) {
+			if (data.result == 0) {
+				// 项目尽调中的项目简介详情
+				CloudUtils.setForm(data, "infoForm");
+				// 项目分析加上详情
+				CloudUtils.setForm(data, "addProAnlyForm");
+				return true;
+			} else {
+				bootbox.alert(data.resultNote);
+				return false;
+			}
+		},
+		errorCallback:function(data){
+			bootbox.alert("error");
+		}
+	};
+	CloudUtils.ajax(options);
+}
+
+//供应商基本信息的加载
+function setSupplierBaseInfo(corpId){
+	var data = {};
+	data.sysType = 5;
+	data.corpId = corpId;
+	data = JSON.stringify(data);
+	var options = {
+			url : '../../corp/list',
+			data : data,
+			callBackFun : function(data) {
+				if(data.result==0){
+					 CloudUtils.setForm(data.dataList[0],"splinfoForm");
+					return true;
+				}else{
+					bootbox.alert(data.resultNote);
+					return false;
+				}
+			},
+			errorCallback:function(data){
+				bootbox.alert("error");
+			}
+		};
+	CloudUtils.ajax(options);
+}
+
+//初始化表查询
+function initDetTable(corpId){
+	initSupplierBaseTable(corpId);
+	initSplFinInfoTable(corpId);
+	initCreditLtgInfoTable(corpId);
+	initBusiInfoTable(corpId);
+	initAttachmentDetails(corpId);
+}
+
+//初始化供应商信息的表------------------------------------------------------------------------
+function initSupplierBaseTable(corpId){
+	initTableEnterprise(corpId);//初始化关联企业信息表  
+	initTableShareHolder(corpId);//初始化股东信息表
+	initTableCorpAccount(corpId);//初始化账户信息表 
+	initReceiveAccountTable(corpId)//放款审批中的表格
+}
+
+function initTableEnterprise(corpId) { 
+	$('#tableEnterprise').bootstrapTable('destroy');  
+	$("#tableEnterprise").bootstrapTable({  
+         method: "post", 
+         url: "../../affiliatedEnterprise/list", 
+         striped: true,  //表格显示条纹  
+         pagination: true, //启动分页  
+         pageSize: 5,  //每页显示的记录数  
+         pageNumber:1, //当前第几页  
+         pageList: [5, 10, 15, 20, 25],  //记录数可选列表  
+         search: false,  //是否启用查询  
+         showColumns: false,  //显示下拉框勾选要显示的列  
+         showRefresh: false,  //显示刷新按钮  
+         sidePagination: "server", //表示服务端请求  
+         //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder  
+         //设置为limit可以获取limit, offset, search, sort, order  
+         queryParamsType : "undefined",   
+         queryParams: function queryParams(params) {   //设置查询参数  
+           var param = {    
+               pageNumber: params.pageNumber,    
+               pageSize: params.pageSize,
+               isPage : 1,
+               corpId: corpId ? corpId : 0
+           };    
+           return JSON.stringify(param);                   
+         },  
+         responseHandler:function responseHandler(res) {
+        	 if (res.result==0) {
+	        	 return {
+	        		 "rows": res.dataList,
+	        		 "total": res.records
+	        	 };
+
+        	 } else {
+        		 bootbox.alert(res.resultNote);
+        		 return {
+			        	 "rows": [],
+			        	 "total": 0
+			        	 };
+        	 }
+         },
+         columns: [{
+	 	        field: 'recUid',
+	 	        title: '关联企业Id',
+	 	        align: 'center',
+	            valign: 'middle',
+	            visible: false
+	 	}, {
+ 	        field: 'enterpriseName',
+ 	        title: '关联企业名称',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }, {
+ 	        field: 'corpName',
+ 	        title: '所属企业',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    },{
+	 		field: 'industry',
+	 		title: '所属行业',
+	 		align: 'center',
+            valign: 'middle'
+	 	},{
+ 	        field: 'relationType',
+ 	        title: '关系类型',
+ 	        align: 'center',
+            valign: 'middle',
+            formatter:function(value,row,index){
+ 	        	if(value==1){
+ 	        		return "子公司";
+ 	        	}else if(value==2){
+ 	        		return "母公司";
+ 	        	}else if(value==3){
+ 	        		return "兄弟公司";
+ 	        	}else{
+ 	        		return "其他";
+ 	        	}
+ 	        }
+ 	    }, {
+ 	        field: 'enterpriseCorporation',
+ 	        title: '企业法人',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }]
+       });  
+}
+
+function initTableShareHolder(corpId) {
+	$('#tableShareHolder').bootstrapTable('destroy');  
+	$("#tableShareHolder").bootstrapTable({  
+         method: "post", 
+         url: "../../shareHolder/list", 
+         striped: true,  //表格显示条纹  
+         pagination: true, //启动分页  
+         pageSize: 5,  //每页显示的记录数  
+         pageNumber:1, //当前第几页  
+         pageList: [5, 10, 15, 20, 25],  //记录数可选列表  
+         search: false,  //是否启用查询  
+         showColumns: false,  //显示下拉框勾选要显示的列  
+         showRefresh: false,  //显示刷新按钮  
+         sidePagination: "server", //表示服务端请求  
+         //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder  
+         //设置为limit可以获取limit, offset, search, sort, order  
+         queryParamsType : "undefined",   
+         queryParams: function queryParams(params) {   //设置查询参数  
+           var param = {    
+               pageNumber: params.pageNumber,    
+               pageSize: params.pageSize,
+               corpId: corpId ? corpId : 0
+           };    
+           return JSON.stringify(param);                   
+         },  
+         responseHandler:function responseHandler(res) {
+        	 if (res.result==0) {
+	        	 return {
+	        		 "rows": res.dataList,
+	        		 "total": res.records
+	        	 };
+
+        	 } else {
+        		 bootbox.alert(res.resultNote);
+        		 return {
+			        	 "rows": [],
+			        	 "total": 0
+			        	 };
+        	 }
+         },
+         columns: [{
+ 	        field: 'shareHolderId',
+ 	        title: 'Item ID',
+ 	        align: 'center',
+            valign: 'middle',
+            visible: false
+ 	    }, {
+ 	        field: 'corpId',
+ 	        title: '所属企业',
+ 	        align: 'center',
+            valign: 'middle',
+            visible: false
+ 	    },{
+ 	        field: 'shareName',
+ 	        title: '股东名称',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }, {
+ 	        field: 'shareType',
+ 	        title: '股东性质',
+ 	        align: 'center',
+            valign: 'middle',
+            formatter:function(value,row,index){
+              	if(value==1){
+              		return "个人";
+              	}else if(value==2){
+              		return "法人";
+              	}else{
+              		return "其他";
+              	}
+              } 
+ 	    }, {
+ 	        field: 'subscribedCapital',
+ 	        title: '认缴资本',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }, {
+ 	        field: 'paidInCapital',
+ 	        title: '实缴资本',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }, {
+ 	        field: 'shareProportion',
+ 	        title: '持股比例',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    },{
+ 	        field: 'note',
+ 	        title: '变动情况',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    },{
+ 	        field: 'corpName',
+ 	        title: '企业名称',
+ 	        align: 'center',
+            valign: 'middle',
+            visible: false
+ 	    }]
+       });  
+}
+
+function initTableCorpAccount(corpId) { 
+	$('#tableCorpAccount').bootstrapTable('destroy');  
+	$("#tableCorpAccount").bootstrapTable({  
+         method: "post", 
+         url: "../../corpAccount/list", 
+         striped: false,  //表格显示条纹  
+         pagination: true, //启动分页  
+         pageSize: 5,  //每页显示的记录数  
+         pageNumber:1, //当前第几页  
+         pageList: [5, 10, 15, 20, 25],  //记录数可选列表  
+         search: false,  //是否启用查询  
+         showColumns: false,  //显示下拉框勾选要显示的列  
+         showRefresh: false,  //显示刷新按钮  
+         sidePagination: "server", //表示服务端请求  
+         //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder  
+         //设置为limit可以获取limit, offset, search, sort, order  
+         queryParamsType : "undefined",   
+         queryParams: function queryParams(params) {   //设置查询参数  
+           var param = {    
+               pageNumber: params.pageNumber,    
+               pageSize: params.pageSize,
+               corpId: corpId ? corpId : 0
+           };    
+           return JSON.stringify(param);                   
+         },  
+         responseHandler:function responseHandler(res) {
+        	 if (res.result==0) {
+	        	 return {
+	        		 "rows": res.dataList,
+	        		 "total": res.records
+	        	 };
+        	 } else {
+        		 bootbox.alert(res.resultNote);
+        		 return {
+			        	 "rows": [],
+			        	 "total": 0
+			        	 };
+        	 }
+         },
+         columns: [{
+ 	        field: 'recUid',
+ 	        title: 'Item ID',
+ 	        align: 'center',
+            valign: 'middle',
+            visible: false
+ 	    }, {
+ 	        field: 'corpId',
+ 	        title: '付款企业',
+ 	        align: 'center',
+            valign: 'middle',
+             visible: false
+ 	    },{
+ 	        field: 'accountType',
+ 	        title: '账号类型',
+ 	        align: 'center',
+            valign: 'middle',
+            formatter:function(value,row,index){
+              	if(value==1){
+              		return "买方";
+              	}else if(value==2){
+              		return "卖方";
+              	}else{
+              		return "其他";
+              	}
+              } 
+ 	    },{
+ 	        field: 'accountName',
+ 	        title: '户名',
+ 	        align: 'center',
+             valign: 'middle'
+ 	    },{
+ 	        field: 'currency',
+ 	        title: '币种',
+ 	        align: 'center',
+             valign: 'middle',
+                 formatter:function(value,row,index){
+                 	if(value=="人民币"){
+                 		return "人民币";
+                 	}else if(value=="美元"){
+                 		return "美元";
+                 	}
+                 } 
+ 	    },{
+ 	        field: 'accountBank',
+ 	        title: '开户银行',
+ 	        align: 'center',
+             valign: 'middle'
+ 	    }, {
+ 	        field: 'bankLocation',
+ 	        title: '开户网点',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }]
+       });  
+}
+
+function initReceiveAccountTable(corpId){
+	$('#receiveAccountManagerList').bootstrapTable('destroy');  
+	$("#receiveAccountManagerList").bootstrapTable({  
+		method: "post", 
+		url: "../../receiveAccount/list", 
+		striped: false,  //表格显示条纹  
+		pagination: true, //启动分页  
+		pageSize: 5,  //每页显示的记录数  
+		pageNumber:1, //当前第几页  
+		pageList: [5, 10, 15, 20, 25],  //记录数可选列表  
+		search: false,  //是否启用查询  
+		showColumns: false,  //显示下拉框勾选要显示的列  
+		showRefresh: false,  //显示刷新按钮  
+		sidePagination: "server", //表示服务端请求  
+		//设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder  
+		//设置为limit可以获取limit, offset, search, sort, order  
+		queryParamsType : "undefined",   
+		queryParams: function queryParams(params) {   //设置查询参数  
+			var data = CloudUtils.convertStringJson('searchForm');
+			var jsonData = eval("(" + data + ")");
+			 if(jsonData.txt_corpId ==""){
+	        	   jsonData.txt_corpId = null;
+	           }
+			var param = {    
+					pageNumber: params.pageNumber,    
+					pageSize: params.pageSize,
+					corpId: null,
+					invoiceNo:null
+			};    
+			return JSON.stringify(param);                   
+		},  
+		responseHandler:function responseHandler(res) {
+			if (res.result==0) {
+				return {
+					"rows": res.dataList,
+					"total": res.records
+				};
+			} else {
+				bootbox.alert(res.resultNote);
+				return {
+					"rows": [],
+					"total": 0
+				};
+			}
+		},
+		columns: [{
+			field: 'recUid',
+			title: 'Item ID',
+			align: 'center',
+			valign: 'middle',
+			visible: false
+		}, {
+			field: 'invoiceNo',
+			title: '发票编号',
+			align: 'center',
+			valign: 'middle'
+		}, {
+			field: 'invoiceAmount',
+			title: '应收账款金额',
+			align: 'center',
+			valign: 'middle'
+		}, {
+			field: 'invoiceDate',
+			title: '单据日期',
+			align: 'center',
+			valign: 'middle'
+		}, {
+			field: 'netDay',
+			title: '账期',
+			align: 'center',
+			valign: 'middle'
+		}, {
+			field: 'overdueDays',
+			title: '补充说明',
+			align: 'center',
+			valign: 'middle'
+		}]
+	});  
+}
+
+//初始化供应商财务信息表
+function initSplFinInfoTable(corpId) {
+	negativeInitTable(corpId);//资产负债表
+	profitInitTable(corpId);//利润表
+	cashflowInitTable(corpId);//现金流量表
+	bankRecInitTable(corpId);//银行对账单
+	taxReturnsInitTable(corpId);//纳税申请表
+}
+
+function negativeInitTable(corpId) {
+	$('#negativeList').bootstrapTable('destroy');
+	$('#negativeList').bootstrapTable({
+		method: "post",
+        url: "../../negative/list",
+        striped: true,  //表格显示条纹 
+        pagination: true, //启动分页 
+        pageSize: 5,  //每页显示的记录数 
+        pageNumber:1, //当前第几页 
+        pageList: [5, 10, 15, 20, 25],  //记录数可选列表 
+        search: false,  //是否启用查询 
+        showColumns: false,  //显示下拉框勾选要显示的列 
+        showRefresh: false,  //显示刷新按钮 
+        sidePagination: "server", //表示服务端请求 
+        //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
+        //设置为limit可以获取limit, offset, search, sort, order
+        queryParamsType : "undefined",
+		queryParams: function queryParams(params) {   //设置查询参数  
+			var param = {
+				pageNumber: params.pageNumber,
+				pageSize: params.pageSize,
+				corpId: corpId ? corpId : 0
+			};
+			return JSON.stringify(param);
+		},
+        responseHandler:function responseHandler(res) {
+        	if (res.result == 0) {
+				return {
+					"rows": res.dataList,
+					"total": res.records
+				};
+        	} else {
+        		bootbox.alert(res.resultNote);
+        		return {
+        			"rows": [],
+        			"total": 0
+        		};
+        	}
+        },
+        columns: [{
+	        field: 'negId',
+	        title: 'Item ID',
+	        align: 'center',
+	        valign: 'middle',
+	        visible: false
+	    }, {
+	        field: 'corpName',
+	        title: '企业名称',
+	        align: 'center',
+	        valign: 'middle',
+	        visible: false
+	    }, {
+	        field: 'operYear',
+	        title: '年份',
+	        align: 'center',
+	        valign: 'middle'
+	    }, {
+	        field: 'totalCurrentAssets',
+	        title: '流动资产合计',
+	        align: 'center',
+	        valign: 'middle'
+	    }, {
+	        field: 'totalNonCurrentAssets',
+	        title: '非流动资产合计',
+	        align: 'center',
+	        valign: 'middle'
+	    }, {
+	        field: 'totalAssets',
+	        title: '资产总计',
+	        align: 'center',
+	        valign: 'middle'
+	    }, {
+	        field: 'totalCurrentLiabilities',
+	        title: '流动负债合计',
+	        align: 'center',
+	        valign: 'middle'
+	    }, {
+	        field: 'totalNonCurrentLiabilities',
+	        title: '非流动负债合计',
+	        align: 'center',
+	        valign: 'middle'
+	    }, {
+	        field: 'totalLiabilities',
+	        title: '负债合计',
+	        align: 'center',
+	        valign: 'middle'
+	    }, {
+	        field: 'totalOwnersEquity',
+	        title: '所有者权益（或股东权益）合计',
+	        align: 'center',
+	        valign: 'middle'
+	    }, {
+	        field: 'totalLiabilitiesAndOwnersEquity',
+	        title: '负债和所有者权益（或股东权益）总计',
+	        align: 'center',
+	        valign: 'middle'
+	    }]
+	});
+}
+
+function profitInitTable(corpId) {
+	$('#profitList').bootstrapTable('destroy');
+	$("#profitList").bootstrapTable({
+		method: "post",
+        url: "../../profit/list",
+        striped: true,  //表格显示条纹 
+        pagination: true, //启动分页 
+        pageSize: 5,  //每页显示的记录数 
+        pageNumber:1, //当前第几页 
+        pageList: [5, 10, 15, 20, 25],  //记录数可选列表 
+        search: false,  //是否启用查询 
+        showColumns: false,  //显示下拉框勾选要显示的列 
+        showRefresh: false,  //显示刷新按钮 
+        sidePagination: "server", //表示服务端请求 
+        //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
+        //设置为limit可以获取limit, offset, search, sort, order
+        queryParamsType : "undefined",
+		queryParams: function queryParams(params) {   //设置查询参数  
+			var param = {    
+				pageNumber: params.pageNumber,
+				pageSize: params.pageSize,
+				corpId: corpId ? corpId : 0
+			};
+			return JSON.stringify(param);
+		},
+        responseHandler:function responseHandler(res) {
+	    	if (res.result == 0) {
+//	    		var size = res.records;
+//	    		canExp = size <= 50000;//限制5w条不允许导出
+				return {
+					"rows": res.dataList,
+					"total": res.records
+				};
+	    	} else {
+	    		bootbox.alert(res.resultNote);
+	    		return {
+	    			"rows": [],
+	    			"total": 0
+	    		};
+	    	}
+	    },
+	    columns: [{
+	    	field: 'recUid',
+ 	        title: 'Item ID',
+ 	        align: 'center',
+ 	        valign: 'middle',
+ 	        visible: false
+ 	    }, {
+ 	        field: 'corpName',
+ 	        title: '企业名称',
+ 	        align: 'center',
+            valign: 'middle',
+            visible: false
+ 	    }, {
+ 	        field: 'operYear',
+ 	        title: '时间(年)',
+ 	        align: 'center',
+            valign: 'middle',
+ 	    }, {
+ 	        field: 'grossProfitRate',
+ 	        title: '毛利率(%)',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }, {
+ 	        field: 'expenseRate',
+ 	        title: '费用率(%)',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }, {
+ 	        field: 'totalProfit',
+ 	        title: '利润总额',
+ 	        align: 'center',
+ 	        valign: 'middle'
+ 	    }, {
+ 	        field: 'netProfit',
+ 	        title: '净利润',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }, {
+ 	        field: 'netProfitGrowthRate',
+ 	        title: '净利润增长率(%)',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }, {
+ 	        field: 'mainCostRate',
+ 	        title: '主营业务成本率(%)',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }]
+	});
+}
+
+function cashflowInitTable(corpId) {
+	$('#cashflowList').bootstrapTable('destroy');
+	$("#cashflowList").bootstrapTable({
+		method : "post",
+		url : "../../cashflow/list",
+		striped : false, // 表格显示条纹
+		pagination : true, // 启动分页
+		pageSize : 5, // 每页显示的记录数
+		pageNumber : 1, // 当前第几页
+		pageList : [ 5, 10, 15, 20, 25 ], // 记录数可选列表
+		search : false, // 是否启用查询
+		showColumns : false, // 显示下拉框勾选要显示的列
+		showRefresh : false, // 显示刷新按钮
+		sidePagination : "server", // 表示服务端请求
+		// 设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
+		// 设置为limit可以获取limit, offset, search, sort, order
+		queryParamsType : "undefined",
+		queryParams : function queryParams(params) { // 设置查询参数
+			var param = {
+				pageNumber : params.pageNumber,
+				pageSize : params.pageSize,
+				corpId : corpId ? corpId : 0
+			};
+			return JSON.stringify(param);
+		},
+		responseHandler : function responseHandler(res) {
+			if (res.result == 0) {
+//				 var size = res.records;
+//				 canExp = size <= 50000;//限制5w条不允许导出
+				 return {
+					 "rows" : res.dataList,
+					 "total" : res.records
+				 };
+			} else {
+        		 bootbox.alert(res.resultNote);
+        		 return {
+        			 "rows" : [],
+        			 "total" : 0
+        		 };
+			}
+		},
+		columns : [{
+			field : 'recUid',
+			title : 'Item ID',
+			align : 'center',
+			valign : 'middle',
+			visible : false
+		}, {
+			field : 'corpName',
+			title : '企业名称',
+			align : 'center',
+			valign : 'middle',
+			visible : false
+		}, {
+			field : 'operYear',
+			title : '时间(年)',
+			align : 'center',
+			valign : 'middle'
+		}, {
+			field : 'netAmountOfCashFlow',
+			title : '经营活动产生的现金流量净额',
+			align : 'center',
+			valign : 'middle'
+		}, {
+			field : 'investmentAmountOfCashFlow',
+			title : '投资活动产生的现金流量净额',
+			align : 'center',
+			valign : 'middle'
+		}, {
+			field : 'financingAmountOfCashFlow',
+			title : '筹资活动产生的现金流量净额',
+			align : 'center',
+			valign : 'middle'
+		}, {
+			field : 'increaseCashEquivalent',
+			title : '现金及现金等价物净增加额',
+			align : 'center',
+			valign : 'middle'
+		}, {
+			field : 'cashAndCashEquivalents',
+			title : '现金及现金等价物净增加额(补充)',
+			align : 'center',
+			valign : 'middle',
+			visible : false
+		}, {
+			field: 'otherAmountOfCashFlow', 
+			title: '其他经营活动产生的现金流量净额', 
+			align : 'center',
+			valign : 'middle'
+		}]
+	});
+}
+
+function bankRecInitTable(corpId) { 
+	$('#bankRecList').bootstrapTable('destroy');  
+	$('#bankRecList').bootstrapTable({  
+         method: "post", 
+         url: "../../bankRec/list", 
+         striped: true,  //表格显示条纹  
+         pagination: true, //启动分页  
+         pageSize: 5,  //每页显示的记录数  
+         pageNumber:1, //当前第几页  
+         pageList: [5, 10, 15, 20, 25],  //记录数可选列表  
+         search: false,  //是否启用查询  
+         showColumns: false,  //显示下拉框勾选要显示的列  
+         showRefresh: false,  //显示刷新按钮  
+         sidePagination: "server", //表示服务端请求  
+         //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder  
+         //设置为limit可以获取limit, offset, search, sort, order  
+         queryParamsType : "undefined",   
+         queryParams: function queryParams(params) {   //设置查询参数  
+           var param = {    
+               pageNumber: params.pageNumber,    
+               pageSize: params.pageSize,
+               corpId: corpId ? corpId : 0
+           };    
+           return JSON.stringify(param);                   
+         },  
+         responseHandler:function responseHandler(res) {
+        	 if (res.result==0) {
+	        	 return {
+	        		 "rows": res.dataList,
+	        		 "total": res.records
+	        	 };
+
+        	 } else {
+        		 bootbox.alert(res.resultNote);
+        		 return {
+			        	 "rows": [],
+			        	 "total": 0
+			        	 };
+        	 }
+         },
+         columns: [{
+ 	        field: 'recId',
+ 	        title: 'Item ID',
+ 	        align: 'center',
+            valign: 'middle',
+            visible: false
+ 	    },{
+ 	    	field: 'corpId',
+	        title: 'Item ID',
+	        align: 'center',
+	        valign: 'middle',
+	        visible: false
+	       },{
+ 	        field: 'accountBank',
+ 	        title: '开户行',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }, {
+ 	        field: 'accountName',
+ 	        title: '户名',
+ 	        align: 'center',
+            valign: 'middle',
+ 	    }, {
+ 	        field: 'account',
+ 	        title: '账号',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    },{
+ 	    	field:'currency',
+ 	    	title:'币种',
+ 	    	align:'center',
+ 	    	valign:'middle',
+ 	    	formatter:function(value,row,index) {
+				if (value == "人民币") {
+					return "人民币";
+				} else if (value == "美元") {
+					return "美元";
+				}
+ 	    	}
+ 	    }, {
+ 	        field: 'startDate',
+ 	        title: '起始日',
+ 	        align: 'center',
+            valign: 'middle',
+            formatter:function(value,row,index){
+        		if(row.startDate!=null&&row.startDate!=''){
+        			return CloudUtils.dateFormat(row.startDate, 'yyyy-MM-dd')
+        		}
+ 	        }
+ 	    }, {
+ 	        field: 'endDate',
+ 	        title: '到期日',
+ 	        align: 'center',
+            valign: 'middle',
+            formatter:function(value,row,index){
+        		if(row.endDate!=null&&row.endDate!=''){
+        			return CloudUtils.dateFormat(row.endDate, 'yyyy-MM-dd')
+        		}
+ 	        }
+ 	    }, {
+ 	        field: 'debitAmount',
+ 	        title: '借方发生金额(汇总)',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }, {
+ 	        field: 'creditAmount',
+ 	        title: '贷方发生金额(汇总)',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    },{
+ 	    	field: 'accountAmount',
+ 	        title: '金额(汇总)',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }]
+       }); 
+}
+
+function taxReturnsInitTable(corpId) { 
+	$('#taxReturnsList').bootstrapTable('destroy');
+	$("#taxReturnsList").bootstrapTable({  
+         method: "post", 
+         url: "../../taxReturns/list", 
+         striped: true,  //表格显示条纹  
+         pagination: true, //启动分页  
+         pageSize: 5,  //每页显示的记录数  
+         pageNumber:1, //当前第几页  
+         pageList: [5, 10, 15, 20, 25],  //记录数可选列表  
+         search: false,  //是否启用查询  
+         showColumns: false,  //显示下拉框勾选要显示的列  
+         showRefresh: false,  //显示刷新按钮  
+         sidePagination: "server", //表示服务端请求  
+         //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder  
+         //设置为limit可以获取limit, offset, search, sort, order  
+         queryParamsType : "undefined",   
+         queryParams: function queryParams(params) {   //设置查询参数  
+           var param = {    
+               pageNumber: params.pageNumber,    
+               pageSize: params.pageSize,
+               corpId: corpId ? corpId : 0
+           };    
+           return JSON.stringify(param);                   
+         },  
+         responseHandler:function responseHandler(res) {
+        	 if (res.result==0) {
+	        	 return {
+	        		 "rows": res.dataList,
+	        		 "total": res.records
+	        	 };
+        	 } else {
+        		 bootbox.alert(res.resultNote);
+        		 return {
+			        	 "rows": [],
+			        	 "total": 0
+			        	 };
+        	 }
+         },
+        columns: [{
+ 	        field: 'vatId',
+ 	        title: '主键',
+ 	        align: 'center',
+ 	        valign: 'middle',
+ 	        visible:false
+ 	    },{
+ 	        field: 'corpId',
+ 	        title: '企业所属id',
+ 	        align: 'center',
+ 	        valign: 'middle',
+ 	        visible:false
+ 	    },{
+ 	        field: 'operYear',
+ 	        title: '年度',
+ 	        align: 'center',
+ 	        valign: 'middle'
+ 	    },{
+ 	        field: 'purchasesTax',
+ 	        title: '进项税额',
+ 	        align: 'center',
+ 	        valign: 'middle'
+ 	    },{
+ 	        field: 'salesTax',
+ 	        title: '销项税额',
+ 	        align: 'center',
+ 	        valign: 'middle'
+ 	    }]
+       });  
+	
+}
+
+//初始化信用及诉讼信息表------------------------------------------------------------
+function initCreditLtgInfoTable(corpId){
+	corpInitTable(corpId);//企业征信
+	shareInitTable(corpId);//个人征信
+	orgnInitTable(corpId);//机构借款统计表
+	guaranteeInitTable(corpId);//对外担保明细
+	litigantInitTable(corpId);//诉讼情况表
+}
+
+function corpInitTable(corpId) { 
+	$('#corpListTable').bootstrapTable('destroy');
+	$("#corpListTable").bootstrapTable({
+		method : "post",
+		url : "../../creditReport/list",
+		striped : true, // 表格显示条纹
+		pagination : true, // 启动分页
+		pageSize : 5, // 每页显示的记录数
+		pageNumber : 1, // 当前第几页
+		pageList : [ 5, 10, 15, 20, 25 ], // 记录数可选列表
+		search : false, // 是否启用查询
+		showColumns : false, // 显示下拉框勾选要显示的列
+		showRefresh : false, // 显示刷新按钮
+		sidePagination : "server", // 表示服务端请求
+		// 设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
+		// 设置为limit可以获取limit, offset, search, sort, order
+		queryParamsType : "undefined",
+		queryParams : function queryParams(params) { // 设置查询参数
+			var param = {
+				pageNumber : params.pageNumber,
+				pageSize : params.pageSize,
+				creditType : 0,
+				corpId : corpId ? corpId : 0
+			};
+			return JSON.stringify(param);
+		},
+		responseHandler : function responseHandler(res) {
+			if (res.result == 0) {
+				return {
+					"rows" : res.dataList,
+					"total" : res.records
+				};
+	
+			} else {
+				bootbox.alert(res.resultNote);
+				return {
+					"rows" : [],
+					"total" : 0
+				};
+			}
+		},
+		columns : [
+				{
+					field : 'creditId',
+					title : 'Item ID',
+					align : 'center',
+					valign : 'middle',
+					visible : false
+				},
+				{
+					field : 'corpName',
+					title : '企业名称',
+					align : 'center',
+					valign : 'middle',
+					formatter : function(value, row, index) {
+						if (row.enterpriseName != null
+								&& row.enterpriseName != '') {
+							return row.enterpriseName
+						} else {
+							return row.corpName
+						}
+					}
+				},
+				{
+					field : 'inquiryTime',
+					title : '查询时间',
+					align : 'center',
+					valign : 'middle',
+					formatter : function(value, row, index) {
+						if (row.inquiryTime != null
+								&& row.inquiryTime != '') {
+							return CloudUtils.dateFormat(row.inquiryTime, 'yyyy-MM-dd')
+						}
+					}
+				}
+			]
+	});  
+}
+
+function shareInitTable(corpId) { 
+	$('#shareListTable').bootstrapTable('destroy');  
+	$("#shareListTable").bootstrapTable({  
+		method : "post",
+		url : "../../creditReport/list",
+		striped : true, // 表格显示条纹
+		pagination : true, // 启动分页
+		pageSize : 5, // 每页显示的记录数
+		pageNumber : 1, // 当前第几页
+		pageList : [ 5, 10, 15, 20, 25 ], // 记录数可选列表
+		search : false, // 是否启用查询
+		showColumns : false, // 显示下拉框勾选要显示的列
+		showRefresh : false, // 显示刷新按钮
+		sidePagination : "server", // 表示服务端请求
+		// 设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
+		// 设置为limit可以获取limit, offset, search, sort, order
+		queryParamsType : "undefined",
+		queryParams : function queryParams(params) { // 设置查询参数
+			var param = {
+				pageNumber : params.pageNumber,
+				pageSize : params.pageSize,
+				creditType : 1,
+				corpId : corpId ? corpId : 0
+			};
+			return JSON.stringify(param);
+		},
+		responseHandler : function responseHandler(res) {
+			if (res.result == 0) {
+				return {
+					"rows" : res.dataList,
+					"total" : res.records
+				};
+
+			} else {
+				bootbox.alert(res.resultNote);
+				return {
+					"rows" : [],
+					"total" : 0
+				};
+			}
+		},
+		columns : [
+				{
+					field : 'creditId',
+					title : 'Item ID',
+					align : 'center',
+					valign : 'middle',
+					visible : false
+				},
+				{
+					field : 'shareName',
+					title : '查询人名称',
+					align : 'center',
+					valign : 'middle'
+				},
+				{
+					field : 'inquiryTime',
+					title : '查询时间',
+					align : 'center',
+					valign : 'middle',
+					formatter : function(value, row, index) {
+						if (row.inquiryTime != null
+								&& row.inquiryTime != '') {
+							return CloudUtils.dateFormat(row.inquiryTime,
+									'yyyy-MM-dd')
+						}
+					}
+				},
+				{
+					field : 'operation',
+					title : '操作',
+					align : 'center',
+					valign : 'middle',
+					formatter : function(value, row, index) {
+						var s = '<a class = "fa fa-edit modify" style="color:#d864fd;padding:0px 5px;" data-type="share" title="编辑" href="javascript:void(0)"></a>';
+						var r = '<a class = "fa fa-trash-o remove" style="color:#fa8564;padding:0px 5px;" data-type="share" title="删除" href="javascript:void(0)"></a>';
+						return s + ' ' + r;
+					},
+					events : 'operateCreditEvents'
+				}
+			]
+	});  
+}
+
+function orgnInitTable(corpId) { 
+	$('#orgnListTable').bootstrapTable('destroy');
+	$("#orgnListTable").bootstrapTable({  
+         method: "post", 
+         url: "../../orgnLoanCount/list", 
+         striped: true,  //表格显示条纹  
+         pagination: true, //启动分页  
+         pageSize: 5,  //每页显示的记录数  
+         pageNumber:1, //当前第几页  
+         pageList: [5, 10, 15, 20, 25],  //记录数可选列表  
+         search: false,  //是否启用查询  
+         showColumns: false,  //显示下拉框勾选要显示的列  
+         showRefresh: false,  //显示刷新按钮  
+         sidePagination: "server", //表示服务端请求  
+         //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder  
+         //设置为limit可以获取limit, offset, search, sort, order  
+         queryParamsType : "undefined",   
+         queryParams: function queryParams(params) {   //设置查询参数  
+           var param = {    
+               pageNumber: params.pageNumber,    
+               pageSize: params.pageSize,
+               corpId: corpId ? corpId : 0
+           };    
+           return JSON.stringify(param);                   
+         },  
+         responseHandler:function responseHandler(res) {
+        	 if (res.result==0) {
+	        	 return {
+	        		 "rows": res.dataList,
+	        		 "total": res.records
+	        	 };
+        	 } else {
+        		 bootbox.alert(res.resultNote);
+        		 return {
+			        	 "rows": [],
+			        	 "total": 0
+			        	 };
+        	 }
+         },
+         columns: [{
+ 	        field: 'recUid',
+ 	        title: '主键',
+ 	        align: 'center',
+ 	        valign: 'middle',
+ 	        visible:false
+ 	    },{
+ 	        field: 'corpId',
+ 	        title: '企业所属id',
+ 	        align: 'center',
+ 	        valign: 'middle',
+ 	        visible:false
+ 	    },{
+ 	        field: 'loanDate',
+ 	        title: '贷款时间',
+ 	        align: 'center',
+ 	        valign: 'middle',
+ 	       formatter:function(value,row,index){
+       		if(row.loanDate!=null&&row.loanDate!=''){
+       			return CloudUtils.dateFormat(row.loanDate, 'yyyy-MM-dd')
+       		}
+	        }
+ 	    },{
+ 	        field: 'dueDate',
+ 	        title: '到期日',
+ 	        align: 'center',
+ 	        valign: 'middle',
+ 	        formatter:function(value,row,index){
+       		if(row.dueDate!=null&&row.dueDate!=''){
+       			return CloudUtils.dateFormat(row.dueDate, 'yyyy-MM-dd')
+       		}
+	        }
+ 	    },{
+ 	        field: 'loanBank',
+ 	        title: '借款银行',
+ 	        align: 'center',
+ 	        valign: 'middle'
+ 	    },{
+ 	        field: 'assureCompany',
+ 	        title: '担保公司',
+ 	        align: 'center',
+ 	        valign: 'middle'
+ 	    },{
+ 	        field: 'cautionMoney',
+ 	        title: '保证金(担保公司)',
+ 	        align: 'center',
+ 	        valign: 'middle'
+ 	    },{
+ 	        field: 'loanMoney',
+ 	        title: '金额(元)',
+ 	        align: 'center',
+ 	        valign: 'middle'
+ 	    },{
+ 	        field: 'profitRate',
+ 	        title: '利率(%)',
+ 	        align: 'center',
+ 	        valign: 'middle'
+ 	    },{
+ 	        field: 'pawn',
+ 	        title: '抵押物',
+ 	        align: 'center',
+ 	        valign: 'middle'
+ 	    }]
+       });  
+}
+
+function guaranteeInitTable(corpId) { 
+	$('#guaranteeListTable').bootstrapTable('destroy');  
+	$("#guaranteeListTable").bootstrapTable({  
+         method: "post", 
+         url: "../../externalGuarantee/list", 
+         striped: false,  //表格显示条纹  
+         pagination: true, //启动分页  
+         pageSize: 5,  //每页显示的记录数  
+         pageNumber:1, //当前第几页  
+         pageList: [5, 10, 15, 20, 25],  //记录数可选列表  
+         search: false,  //是否启用查询  
+         showColumns: false,  //显示下拉框勾选要显示的列  
+         showRefresh: false,  //显示刷新按钮  
+         sidePagination: "server", //表示服务端请求  
+         //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder  
+         //设置为limit可以获取limit, offset, search, sort, order  
+         queryParamsType : "undefined",   
+         queryParams: function queryParams(params) {   //设置查询参数  
+           var param = {    
+               pageNumber: params.pageNumber,    
+               pageSize: params.pageSize,
+               corpId: corpId ? corpId : 0
+           };    
+           return JSON.stringify(param);                   
+         },  
+         responseHandler:function responseHandler(res) {
+        	 if (res.result==0) {
+	        	 return {
+	        		 "rows": res.dataList,
+	        		 "total": res.records
+	        	 };
+
+        	 } else {
+        		 bootbox.alert(res.resultNote);
+        		 return {
+			        	 "rows": [],
+			        	 "total": 0
+			        	 };
+        	 }
+         },
+         columns: [{
+ 	        field: 'recUid',
+ 	        title: 'Item ID',
+ 	        align: 'center',
+             valign: 'middle',
+             visible: false
+ 	    } , {
+ 	        field: 'corpId',
+ 	        title: '企业ID',
+ 	        align: 'center',
+            valign: 'middle',
+            visible: false
+ 	    }, {
+ 	        field: 'guarantorName',
+ 	        title: '被担保方名称',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    },  {
+ 	        field: 'guaranteeMoney',
+ 	        title: '担保金额',
+ 	        align: 'center',
+            valign: 'middle',
+            formatter:function(value,row,index){
+ 	 	    	return $.number(value,2);
+ 		        }
+ 	    }, {
+ 	        field: 'guaranteeType',
+ 	        title: '担保类型',
+ 	        align: 'center',
+            valign: 'middle',
+            formatter:function(value,row,index){
+               	if(value==0){
+               		return "保证";
+               	}else if(value==1){
+               		return "抵押";
+               	}else if(value==2){
+               		return "质押";
+               	}else if(value==3){
+               		return "留置";
+               	}else{
+               		return "定金";
+               	}
+            }
+ 	    }]
+       });  
+}
+
+function litigantInitTable(corpId) { 
+	$('#litigantListTable').bootstrapTable('destroy');
+	$("#litigantListTable").bootstrapTable({  
+         method: "post", 
+         url: "../../litigantSituation/list", 
+         striped: true,  //表格显示条纹  
+         pagination: true, //启动分页  
+         pageSize: 5,  //每页显示的记录数  
+         pageNumber:1, //当前第几页  
+         pageList: [5, 10, 15, 20, 25],  //记录数可选列表  
+         search: false,  //是否启用查询  
+         showColumns: false,  //显示下拉框勾选要显示的列  
+         showRefresh: false,  //显示刷新按钮  
+         sidePagination: "server", //表示服务端请求  
+         //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder  
+         //设置为limit可以获取limit, offset, search, sort, order  
+         queryParamsType : "undefined",   
+         queryParams: function queryParams(params) {   //设置查询参数  
+           var param = {    
+               pageNumber: params.pageNumber,    
+               pageSize: params.pageSize,
+               corpId: corpId ? corpId : 0
+           };    
+           return JSON.stringify(param);                   
+         },  
+         responseHandler:function responseHandler(res) {
+        	 if (res.result==0) {
+	        	 return {
+	        		 "rows": res.dataList,
+	        		 "total": res.records
+	        	 };
+        	 } else {
+        		 bootbox.alert(res.resultNote);
+        		 return {
+			        	 "rows": [],
+			        	 "total": 0
+			        	 };
+        	 }
+         },
+         columns: [{
+ 	        field: 'recUid',
+ 	        title: 'Item ID',
+ 	        align: 'center',
+            valign: 'middle',
+            visible: false
+ 	    },{
+ 	        field: 'corpId',
+ 	        title: '企业ID',
+ 	        align: 'center',
+            valign: 'middle',
+            visible: false
+ 	    },{
+ 	    	field: 'litigantName',
+ 	        title: '诉讼方名称',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }, {
+ 	    	field: 'litigantMoney',
+ 	        title: '诉讼金额',
+ 	        align: 'center',
+ 	       formatter:function(value,row,index){
+	 	    	return $.number(value,2);
+		        },
+            valign: 'middle'
+ 	    },{
+ 	        field: 'querySource',
+ 	        title: '查询来源',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }]
+       });  
+}
+
+//初始化业务信息中的表--------------------------------------------------------
+function initBusiInfoTable(corpId){
+	initTableBid(corpId);//初始化招/投标合同表
+	initTableSale(corpId);//初始化贸易/销售合同表
+}
+
+function initTableBid(corpId) { 
+	$('#userListBidTablel').bootstrapTable('destroy');
+	$("#userListBidTablel").bootstrapTable({  
+         method: "post", 
+         url: "../../corpContract/list", 
+         striped: true,  //表格显示条纹  
+         pagination: true, //启动分页  
+         pageSize: 5,  //每页显示的记录数  
+         pageNumber:1, //当前第几页  
+         pageList: [5, 10, 15, 20, 25],  //记录数可选列表  
+         search: false,  //是否启用查询  
+         showColumns: false,  //显示下拉框勾选要显示的列  
+         showRefresh: false,  //显示刷新按钮  
+         sidePagination: "server", //表示服务端请求  
+         //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder  
+         //设置为limit可以获取limit, offset, search, sort, order  
+         queryParamsType : "undefined",   
+         queryParams: function queryParams(params) {   //设置查询参数  
+           var param = {    
+               pageNumber: params.pageNumber,    
+               pageSize: params.pageSize,
+               contractType: 1,
+               corpId: corpId ? corpId : 0
+           };    
+           return JSON.stringify(param);                   
+         },  
+         responseHandler:function responseHandler(res) {
+        	 if (res.result==0) {
+	        	 return {
+	        		 "rows": res.dataList,
+	        		 "total": res.records
+	        	 };
+        	 } else {
+        		 bootbox.alert(res.resultNote);
+        		 return {
+		        	 "rows": [],
+		        	 "total": 0
+        		 };
+        	 }
+         },
+         columns: [{
+ 	        field: 'corpId',
+ 	        title: 'corpId',
+ 	        align: 'center',
+            valign: 'middle',
+            visible: false
+ 	    }, {
+ 	        field: 'projectName',
+ 	        title: '项目名称',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }, {
+ 	        field: 'amount',
+ 	        title: '项目金额',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }]
+       });  
+}
+
+function initTableSale(corpId) { 
+	$('#userListSaleTablel').bootstrapTable('destroy');
+	$("#userListSaleTablel").bootstrapTable({  
+         method: "post", 
+         url: "../../corpContract/list", 
+         striped: true,  //表格显示条纹  
+         pagination: true, //启动分页  
+         pageSize: 5,  //每页显示的记录数  
+         pageNumber:1, //当前第几页  
+         pageList: [5, 10, 15, 20, 25],  //记录数可选列表  
+         search: false,  //是否启用查询  
+         showColumns: false,  //显示下拉框勾选要显示的列  
+         showRefresh: false,  //显示刷新按钮  
+         sidePagination: "server", //表示服务端请求  
+         //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder  
+         //设置为limit可以获取limit, offset, search, sort, order  
+         queryParamsType : "undefined",   
+         queryParams: function queryParams(params) {   //设置查询参数  
+           var param = {    
+               pageNumber: params.pageNumber,    
+               pageSize: params.pageSize,
+               contractType: 2,
+               corpId: corpId ? corpId : 0
+           };    
+           return JSON.stringify(param);                   
+         },  
+         responseHandler:function responseHandler(res) {
+        	 if (res.result==0) {
+	        	 return {
+	        		 "rows": res.dataList,
+	        		 "total": res.records
+	        	 };
+        	 } else {
+        		 bootbox.alert(res.resultNote);
+        		 return {
+			        	 "rows": [],
+			        	 "total": 0
+			        	 };
+        	 }
+         },
+         columns: [{
+ 	        field: 'corpId',
+ 	        title: 'corpId',
+ 	        align: 'center',
+            valign: 'middle',
+            visible: false
+ 	    }, {
+ 	        field: 'projectUser',
+ 	        title: '交易对手名称',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }, {
+ 	        field: 'startDate',
+ 	        title: '合同起始日',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }, {
+ 	        field: 'endDate',
+ 	        title: '合同到期日',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }]
+       });  
+}
+
+//附件信息的----------------------------------------------------------------------
+function initAttachmentDetails(corpId){
+	initAttachment('base',corpId);
+	initAttachment('finance',corpId);
+	initAttachment('credit',corpId);
+	initAttachment('contract',corpId);
+}
+
+let moduleType;
+let initAttachment = function(type,corpId) {
+	$('#' + type + 'Attachment').bootstrapTable('destroy');
+	$('#' + type + 'Attachment').bootstrapTable({
+		method : "post",
+		url : "../../uploadFile/list",
+		striped : false, //表格显示条纹  
+		pagination : true, //启动分页  
+		pageSize : 5, //每页显示的记录数  
+		pageNumber : 1, //当前第几页  
+		pageList : [ 5, 10, 15, 20, 25 ], //记录数可选列表  
+		search : false, //是否启用查询  
+		showColumns : false, //显示下拉框勾选要显示的列  
+		showRefresh : false, //显示刷新按钮  
+		sidePagination : "server", //表示服务端请求  
+		//设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder  
+		//设置为limit可以获取limit, offset, search, sort, order  
+		queryParamsType : "undefined",
+		queryParams : function queryParams(params) { //设置查询参数 
+			switch(type) {
+				case 'base': moduleType = 1;break;
+				case 'finance': moduleType = 2;break;
+				case 'credit': moduleType = 3;break;
+				case 'contract': moduleType = 4;break;
+			}
+			var param = {
+				pageNumber : params.pageNumber,
+				pageSize : params.pageSize,
+				moduleType : moduleType,
+				corpId : corpId ? corpId : 0
+			};
+			return JSON.stringify(param);
+		},
+		responseHandler : function responseHandler(res) {
+			if (res.result == 0) {
+				return {
+					"rows" : res.dataList,
+					"total" : res.records
+				};
+
+			} else {
+				bootbox.alert(res.resultNote);
+				return {
+					"rows" : [],
+					"total" : 0
+				};
+			}
+		},
+		columns : [
+			{
+				field : 'fileName',
+				title : '上传文件名',
+				align : 'center',
+				valign : 'middle',
+				formatter : function(value, row, index) {
+					var m = '<a href="' + "../../" + row.fileUrl + '" download="'
+							+ row.fileName + '">' + row.fileName + '</a>';
+					return m;
+				}
+			}
+		]
+	});
+}
+
+window.operateAttachmentEvents = {
+	'click .removeAttachment' : function(e, value, row, index) {
+		let type = $(e.target).data('type');
+		bootbox.confirm("确定删除此条记录?", function(result) {
+			if (result) {
+				var options = {
+					url : '../../uploadFile/delete',
+					data : '{"fileId":"' + row.fileId + '"}',
+					callBackFun : function(data) {
+						if (data.result == 0) {
+							initAttachment(type);
+						} else {
+							bootbox.alert(data.resultNote);
+							return false;
+						}
+					},
+					errorCallback : function(data) {
+						bootbox.alert("error");
+					}
+				};
+				CloudUtils.ajax(options);
+			}
+		});
+	}
+};

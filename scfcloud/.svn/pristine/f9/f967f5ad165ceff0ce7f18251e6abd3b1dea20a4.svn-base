@@ -1,0 +1,124 @@
+<div class="panel-body">
+	<div class="container-fluid">
+		<div class="row">
+			<form class="form-horizontal" id="infoForm">
+				<div class="col-sm-12" style="margin-top: 30px">
+					<input type="hidden" id="workflowNm" name="workflowNm" value="项目尽调">
+					<input type="hidden" id="custNo" name="custNo">
+					<input type="hidden" id="coreCorpNo" name="coreCorpNo">
+					<input type="hidden" id="corpId" name="corpId">
+					<input type="hidden" id="proNo" name="proNo" placeholder="项目编号">
+					<div class="form-group">
+						<label for="proNameS" class="col-sm-4 control-label">项目名称查询</label>
+						<div class="col-sm-5">
+							<input type="text" class="form-control" onkeyup="changeName()" id="proNameS" name="proNameS" placeholder="项目名称查询">
+						</div>
+					</div>
+					<div class="form-group nonepadding">
+						<label for="proName" class="col-sm-2 control-label">项目名称</label>
+						<div class="col-sm-3 scf_valid">
+							<input type="text" class="form-control" id="proName" name="proName" readonly placeholder="项目名称">
+						</div>
+						<label for="custName" class="col-sm-2 control-label">供应商名称</label>
+						<div class="col-sm-3 scf_valid">
+							<input type="text" class="form-control" id="custName" name="custName" readonly placeholder="供应商名称">
+						</div>
+					</div>
+					<div class="form-group nonepadding">
+						<label for="coreCorpName" class="col-sm-2 control-label">核心企业名称</label>
+						<div class="col-sm-3 scf_valid">
+							<input type="text" class="form-control" id="coreCorpName" readonly name="coreCorpName" placeholder="核心企业名称">
+						</div>
+						<label for="factorType" class="col-sm-2 control-label">保理类型</label>
+						<div class="col-sm-3 scf_valid">
+							<select class="form-control setReadonly" id="factorType" name="factorType">
+								<option value="有追索权">有追索权</option>
+								<option value="无追索权">无追索权</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group nonepadding">
+						<label for="aplFactorLimit" class="col-sm-2  control-label">申请保理额度</label>
+						<div class="col-sm-3 scf_valid">
+							<input type="text" class="form-control setReadonly" id="aplFactorLimit" name="aplFactorLimit" placeholder="申请保理额度">
+						</div>
+						<label for="aplAmt" class="col-sm-2 control-label">申请金额</label>
+						<div class="col-sm-3 scf_valid">
+							<input type="text" class="form-control setReadonly" id="aplAmt" name="aplAmt" placeholder="申请金额">
+						</div>
+					</div>
+					<div class="form-group nonepadding">
+						<label for="aplDeadLine" class="col-sm-2 control-label">申请期限(天)</label>
+						<div class="col-sm-3 scf_valid">
+							<input type="text" class="form-control setReadonly" id="aplDeadLine" name="aplDeadLine" placeholder="申请期限">
+						</div>
+						<label for="factorRate" class="col-sm-2 control-label">保理综合费率(%)</label>
+						<div class="col-sm-3 scf_valid">
+							<input type="text" class="form-control setReadonly" id="factorRate" name="factorRate" placeholder="保理综合费率">
+						</div>
+					</div>
+					<div class="form-group nonepadding"> 
+						<label for="loanRt" class="col-sm-2 control-label">融资比例(%)</label>
+						<div class="col-sm-3 scf_valid">
+							<input type="text" class="form-control setReadonly" id="loanRt" name="loanRt" placeholder="融资比例">
+						</div>
+						<label for="paymentMethod" class="col-sm-2 control-label">回款方式</label>
+						<div class="col-sm-3 scf_valid">
+							<select class="form-control setReadonly" id="paymentMethod" name="paymentMethod">
+								<option value="电汇">电汇</option>
+								<option value="电子商票">电子商票</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group nonepadding">
+						<label for="proExpectProfit" class="col-sm-2 control-label">项目预计收益</label>
+						<div class="col-sm-3 scf_valid">
+							<input type="text" class="form-control setReadonly" id="proExpectProfit" name="proExpectProfit" placeholder="项目预计收益">
+						</div>
+					</div>
+					<div class="form-group col-sm-12 nonepadding">
+						<label for="factorBusiNote" class="col-sm-2 control-label">保理业务情况简述</label>
+						<div class="col-sm-10">
+							<textarea class="form-control setReadonly" rows="3" id="factorBusiNote" name="factorBusiNote"></textarea>
+						</div>
+					</div>
+					<div class="form-group col-sm-12 nonepadding">
+						<label for="operModeNote" class="col-sm-2 control-label">操作模式简介</label>
+						<div class="col-sm-10">
+							<textarea class="form-control setReadonly" rows="3" id="operModeNote" name="operModeNote"></textarea>
+						</div>
+					</div>
+					<div class="form-group col-sm-12 nonepadding">
+						<label for="facLoanNote" class="col-sm-2 control-label">保理融资用途</label>
+						<div class="col-sm-10">
+							<textarea class="form-control setReadonly" rows="3" id="facLoanNote" name="facLoanNote"></textarea>
+						</div>
+					</div>
+					<div class="form-group col-sm-12 nonepadding riskAdvices">
+						<label for="facLoanNoteAdvice" class="col-sm-2 control-label">风险意见</label>
+						<div class="col-sm-10">
+							<textarea class="form-control" rows="2" id="facLoanNoteAdvice" name="facLoanNoteAdvice"></textarea>
+						</div>
+					</div>
+					<div class="form-group col-sm-12 nonepadding">
+						<label for="facPaymentFrom" class="col-sm-2 control-label">保理融资还款来源</label>
+						<div class="col-sm-10">
+							<textarea class="form-control setReadonly" rows="3" id="facPaymentFrom" name="facPaymentFrom"></textarea>
+						</div>
+					</div>
+					<div class="form-group col-sm-12 nonepadding riskAdvices">
+						<label for="facPaymentFromAdvice" class="col-sm-2 control-label">风险意见</label>
+						<div class="col-sm-10">
+							<textarea class="form-control" rows="2" id="facPaymentFromAdvice" name="facPaymentFromAdvice"></textarea>
+						</div>
+					</div>
+					<div class="col-sm-offset-9 col-sm-2" style="margin-top: 80px;">
+						<button type="submit" class="btn btn-info" style="margin-left: 70px;" >&nbsp;
+						<!-- <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> -->下一步&nbsp;
+					</button>
+				</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

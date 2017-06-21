@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ut.scf.dao.auto.SysUserMapper">
+  <resultMap id="BaseResultMap" type="com.ut.scf.pojo.auto.SysUser">
+    <id column="USER_ID" jdbcType="NVARCHAR" property="userId" />
+    <result column="USERNAME" jdbcType="NVARCHAR" property="username" />
+    <result column="PASSWORD" jdbcType="NVARCHAR" property="password" />
+    <result column="REALNAME" jdbcType="NVARCHAR" property="realname" />
+    <result column="EMAIL" jdbcType="NVARCHAR" property="email" />
+    <result column="MOBILEPHONE" jdbcType="NVARCHAR" property="mobilephone" />
+    <result column="FIXED_PHONE" jdbcType="NVARCHAR" property="fixedPhone" />
+    <result column="CORP_ID" jdbcType="NVARCHAR" property="corpId" />
+    <result column="DEPT_ID" jdbcType="NVARCHAR" property="deptId" />
+    <result column="PHOTO_URL" jdbcType="NVARCHAR" property="photoUrl" />
+    <result column="NOTE" jdbcType="NVARCHAR" property="note" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="STATUS" jdbcType="DECIMAL" property="status" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    USER_ID, USERNAME, PASSWORD, REALNAME, EMAIL, MOBILEPHONE, FIXED_PHONE, CORP_ID, 
+    DEPT_ID, PHOTO_URL, NOTE, CREATE_TIME, STATUS
+  </sql>
+  <select id="selectByExample" parameterType="com.ut.scf.pojo.auto.SysUserExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from SCFCLOUD.SYS_USER
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from SCFCLOUD.SYS_USER
+    where USER_ID = #{userId,jdbcType=NVARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from SCFCLOUD.SYS_USER
+    where USER_ID = #{userId,jdbcType=NVARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ut.scf.pojo.auto.SysUserExample">
+    delete from SCFCLOUD.SYS_USER
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ut.scf.pojo.auto.SysUser">
+    insert into SCFCLOUD.SYS_USER (USER_ID, USERNAME, PASSWORD, 
+      REALNAME, EMAIL, MOBILEPHONE, 
+      FIXED_PHONE, CORP_ID, DEPT_ID, 
+      PHOTO_URL, NOTE, CREATE_TIME, 
+      STATUS)
+    values (#{userId,jdbcType=NVARCHAR}, #{username,jdbcType=NVARCHAR}, #{password,jdbcType=NVARCHAR}, 
+      #{realname,jdbcType=NVARCHAR}, #{email,jdbcType=NVARCHAR}, #{mobilephone,jdbcType=NVARCHAR}, 
+      #{fixedPhone,jdbcType=NVARCHAR}, #{corpId,jdbcType=NVARCHAR}, #{deptId,jdbcType=NVARCHAR}, 
+      #{photoUrl,jdbcType=NVARCHAR}, #{note,jdbcType=NVARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ut.scf.pojo.auto.SysUser">
+    insert into SCFCLOUD.SYS_USER
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="username != null">
+        USERNAME,
+      </if>
+      <if test="password != null">
+        PASSWORD,
+      </if>
+      <if test="realname != null">
+        REALNAME,
+      </if>
+      <if test="email != null">
+        EMAIL,
+      </if>
+      <if test="mobilephone != null">
+        MOBILEPHONE,
+      </if>
+      <if test="fixedPhone != null">
+        FIXED_PHONE,
+      </if>
+      <if test="corpId != null">
+        CORP_ID,
+      </if>
+      <if test="deptId != null">
+        DEPT_ID,
+      </if>
+      <if test="photoUrl != null">
+        PHOTO_URL,
+      </if>
+      <if test="note != null">
+        NOTE,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=NVARCHAR},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=NVARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=NVARCHAR},
+      </if>
+      <if test="realname != null">
+        #{realname,jdbcType=NVARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=NVARCHAR},
+      </if>
+      <if test="mobilephone != null">
+        #{mobilephone,jdbcType=NVARCHAR},
+      </if>
+      <if test="fixedPhone != null">
+        #{fixedPhone,jdbcType=NVARCHAR},
+      </if>
+      <if test="corpId != null">
+        #{corpId,jdbcType=NVARCHAR},
+      </if>
+      <if test="deptId != null">
+        #{deptId,jdbcType=NVARCHAR},
+      </if>
+      <if test="photoUrl != null">
+        #{photoUrl,jdbcType=NVARCHAR},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=NVARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ut.scf.pojo.auto.SysUserExample" resultType="java.lang.Integer">
+    select count(*) from SCFCLOUD.SYS_USER
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update SCFCLOUD.SYS_USER
+    <set>
+      <if test="record.userId != null">
+        USER_ID = #{record.userId,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.username != null">
+        USERNAME = #{record.username,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.password != null">
+        PASSWORD = #{record.password,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.realname != null">
+        REALNAME = #{record.realname,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.email != null">
+        EMAIL = #{record.email,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.mobilephone != null">
+        MOBILEPHONE = #{record.mobilephone,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.fixedPhone != null">
+        FIXED_PHONE = #{record.fixedPhone,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.corpId != null">
+        CORP_ID = #{record.corpId,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.deptId != null">
+        DEPT_ID = #{record.deptId,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.photoUrl != null">
+        PHOTO_URL = #{record.photoUrl,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.note != null">
+        NOTE = #{record.note,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null">
+        STATUS = #{record.status,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update SCFCLOUD.SYS_USER
+    set USER_ID = #{record.userId,jdbcType=NVARCHAR},
+      USERNAME = #{record.username,jdbcType=NVARCHAR},
+      PASSWORD = #{record.password,jdbcType=NVARCHAR},
+      REALNAME = #{record.realname,jdbcType=NVARCHAR},
+      EMAIL = #{record.email,jdbcType=NVARCHAR},
+      MOBILEPHONE = #{record.mobilephone,jdbcType=NVARCHAR},
+      FIXED_PHONE = #{record.fixedPhone,jdbcType=NVARCHAR},
+      CORP_ID = #{record.corpId,jdbcType=NVARCHAR},
+      DEPT_ID = #{record.deptId,jdbcType=NVARCHAR},
+      PHOTO_URL = #{record.photoUrl,jdbcType=NVARCHAR},
+      NOTE = #{record.note,jdbcType=NVARCHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      STATUS = #{record.status,jdbcType=DECIMAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ut.scf.pojo.auto.SysUser">
+    update SCFCLOUD.SYS_USER
+    <set>
+      <if test="username != null">
+        USERNAME = #{username,jdbcType=NVARCHAR},
+      </if>
+      <if test="password != null">
+        PASSWORD = #{password,jdbcType=NVARCHAR},
+      </if>
+      <if test="realname != null">
+        REALNAME = #{realname,jdbcType=NVARCHAR},
+      </if>
+      <if test="email != null">
+        EMAIL = #{email,jdbcType=NVARCHAR},
+      </if>
+      <if test="mobilephone != null">
+        MOBILEPHONE = #{mobilephone,jdbcType=NVARCHAR},
+      </if>
+      <if test="fixedPhone != null">
+        FIXED_PHONE = #{fixedPhone,jdbcType=NVARCHAR},
+      </if>
+      <if test="corpId != null">
+        CORP_ID = #{corpId,jdbcType=NVARCHAR},
+      </if>
+      <if test="deptId != null">
+        DEPT_ID = #{deptId,jdbcType=NVARCHAR},
+      </if>
+      <if test="photoUrl != null">
+        PHOTO_URL = #{photoUrl,jdbcType=NVARCHAR},
+      </if>
+      <if test="note != null">
+        NOTE = #{note,jdbcType=NVARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where USER_ID = #{userId,jdbcType=NVARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ut.scf.pojo.auto.SysUser">
+    update SCFCLOUD.SYS_USER
+    set USERNAME = #{username,jdbcType=NVARCHAR},
+      PASSWORD = #{password,jdbcType=NVARCHAR},
+      REALNAME = #{realname,jdbcType=NVARCHAR},
+      EMAIL = #{email,jdbcType=NVARCHAR},
+      MOBILEPHONE = #{mobilephone,jdbcType=NVARCHAR},
+      FIXED_PHONE = #{fixedPhone,jdbcType=NVARCHAR},
+      CORP_ID = #{corpId,jdbcType=NVARCHAR},
+      DEPT_ID = #{deptId,jdbcType=NVARCHAR},
+      PHOTO_URL = #{photoUrl,jdbcType=NVARCHAR},
+      NOTE = #{note,jdbcType=NVARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      STATUS = #{status,jdbcType=DECIMAL}
+    where USER_ID = #{userId,jdbcType=NVARCHAR}
+  </update>
+</mapper>

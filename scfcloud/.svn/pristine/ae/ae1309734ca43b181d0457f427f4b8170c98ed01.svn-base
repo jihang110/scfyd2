@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>用户管理</title>
+<scfCSS>
+<link rel="stylesheet" href="/scfcloud/css/bootstrap-table.css">
+<link rel="stylesheet" href="/scfcloud/css/validator/bootstrapValidator.css">
+<link rel="stylesheet" href="/scfcloud/css/sysfun.css">
+<link rel="stylesheet" href="/scfcloud/106/css/selectordie_theme_03.css">
+</scfCSS>
+<scfScript>
+<script type="text/javascript" src="/scfcloud/106/js/selectordie.min.js"></script>
+<script type="text/javascript" src="/scfcloud/js/password.js"></script>
+<script type="text/javascript" src="/scfcloud/js/advanced-datatable/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="/scfcloud/js/bootstrap-table.js"></script>
+<script type="text/javascript" src="/scfcloud/js/bootstrap-validator/bootstrapValidator.js"></script>
+<script type="text/javascript" src="/scfcloud/js/bootstrap-validator/zh_CN.js"></script>
+<!--dynamic table initialization -->
+<script type="text/javascript" src="/scfcloud/js/sysManager/userManager/userManager.js"></script>
+</scfScript>
+</head>
+
+<body>
+<section class="iframeBody">
+    <div class="main-content-child">
+    	<div class="row">
+    	<div class="title"><span>用户管理</span></div>
+    	</div>
+      <form class="form-horizontal" role="form" id="searchForm">
+			<div class="row">
+				  <div class="col-sm-4 col-sm-offset-4 input-group pull-left">
+				      <input type="text" class="form-control" id="txt_roleName" name="txt_roleName" placeholder="用户角色">
+				      <div class="input-group-addon searchIcon" onclick="searchFun()">
+				       <a class="glyphicon glyphicon-search icon-white" style="color:#ffffff;padding:0px 5px;" title="搜索" href="javascript:void(0)"></a>
+				      </div>
+				      <div class="input-group-addon searchIcon" onclick="ResetBtn()">
+				       <a class="fa fa-rotate-left reset icon-white" style="color:#ffffff;padding:0px 5px;" title="重置搜索信息" href="javascript:void(0)"></a>
+				      </div>
+			     </div>
+				<div class="col-sm-4" style="line-height:40px;">
+					<a id="searchMore"><span>更多筛选条件 </span><i class="glyphicon glyphicon-chevron-down"></i></a>
+				</div>
+			</div>
+			<!-- 隐藏内容 -->
+			<div id="isHidden" class="row" style="display:none;margin-top:20px">
+				<div class="col-sm-12">
+				  <div class="form-group">
+		            <label class="col-sm-1 col-sm-offset-3 control-label" for="txt_mobilephone"></label>
+		            <div class="col-sm-4">
+		            	<input  class="form-control"  id="txt_mobilephone" name="txt_mobilephone" type="text" placeholder="手机号码">
+		            </div>
+		            <!-- <label class="col-sm-2 control-label" for="txt_roleName">角色类型</label>
+		            <div class="col-sm-3">
+		            	<select id="txt_roleName" name="txt_roleName" class="form-control">
+                   </select>
+		            </div> -->
+		            <!-- <label class="col-sm-2 control-label" for="txt_company">企业名称</label>
+		            <div class="col-sm-3">
+		            	<select id="txt_company" name="txt_company" class="form-control" onchange="changeTxtCompany(this)">
+		            	</select>
+		            </div> -->
+		          </div>
+		          <!-- <div class="form-group">
+		            
+		            <label class="col-sm-2 control-label" for="username">企业类型</label>
+		            <div class="col-sm-3">
+		            	<select id="txt_sysType" name="txt_sysType"  class="form-control" onchange="changeTxtType(this)">
+					          <option value="2">保理商</option>
+					          <option value="5">卖方</option>
+				        </select>
+		            </div>
+		          </div> -->
+		         </div>
+			</div>
+		</form>
+        </div>
+        <form class="form-horizontal" role="form" id="addForm"  data-toggle="validator">
+        	<input type="hidden" id="userId" name="userId">
+        	<input type="hidden" id="isEdit" name="isEdit">
+	        <div class="modal fade" id="addModal" aria-hidden="true" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="addModalLabel">
+		    <div class="modal-dialog" role="document">
+		      <div class="modal-content">
+		        <div class="modal-header">
+		          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span> </button> 
+		          <h4 class="modal-title" id="addModalLabel">添加</h4>
+		        </div>
+		        <div class="modal-body">
+		 
+		          <div class="form-group">
+		            <label class="col-sm-4 control-label" for="username"><span class="required">*</span>用户名称</label>
+		            <div class="col-sm-6">
+		            	<input type="text" name="username" class="form-control" id="username" placeholder="用户名称" required>
+		            </div>
+		          </div>
+		          <div class="form-group">
+		            <label class="col-sm-4 control-label"  for="realname"><span class="required">*</span>真实姓名</label>
+		            <div class="col-sm-6">
+		            	<input type="text" name="realname" class="form-control" id="realname" placeholder="真实姓名">
+		         	</div>
+		          </div>
+		          <div class="form-group" id="divPassword">
+		            <label class="col-sm-4 control-label"  for="password"><span class="required">*</span>密码</label>
+		            <div class="col-sm-6">
+		            	<input type="password" name="password" class="form-control" id="password" placeholder="密码" required>
+		            	<div class="help-block with-errors"></div>
+		            </div>
+		          </div>
+		          <div class="form-group" id="divConfirmPassword">
+		            <label class="col-sm-4 control-label"  for="confirmPassword"><span class="required">*</span>密码确认</label>
+		            <div class="col-sm-6">
+		            	<input type="password" name="confirmPassword" data-match="#password" class="form-control" placeholder="确认密码" id="confirmPassword" data-match-error="Not match" required>
+		            </div>
+		          </div>
+		          <div class="form-group">
+		            <label class="col-sm-4 control-label" for="corpId">所属企业</label>
+		            <div class="col-sm-6">
+			            <select id="corpId" name="corpId" class="form-control" onchange="changeCorp(this)">
+		                </select>
+	                </div>
+		          </div>
+		         <div class="form-group">
+                    <label class="col-sm-4 control-label" for="parentId">所属部门</label>
+                    <div class="col-sm-6">
+                      <div id="parentId" name="parentId" class=""></div>
+                      <input type="hidden" id="deptId" name="deptId">
+                    </div>
+                  </div>
+		          <div class="form-group">
+		            <label class="col-sm-4 control-label"  for="mobilephone"><span class="required">*</span>手机号码</label>
+		            <div class="col-sm-6">
+		            	<input type="text" name="mobilephone" class="form-control" id="mobilephone" data-minlength="11" placeholder="手机号码" required>
+		          	</div>
+		          </div>
+		          <div class="form-group">
+		            <label class="col-sm-4 control-label"  for="fixedPhone"><span class="required">*</span>固定电话</label>
+		            <div class="col-sm-6">
+		            	<input type="text" name="fixedPhone" class="form-control" id="fixedPhone" placeholder="固定电话">
+		         	</div>
+		          </div>
+		          <div class="form-group"  style="display: none">
+		            <label class="col-sm-4 control-label"  for="photoUrl">头像路径</label>
+		            <div class="col-sm-6">
+		            	<input type="text" name="photoUrl" class="form-control" id="photoUrl" placeholder="头像路径">
+		         	</div>
+		          </div>
+		          <div class="form-group">
+		            <label class="col-sm-4 control-label" for="email">邮箱</label>
+		            <div class="col-sm-6">
+		            	<input type="text" name="email" class="form-control" id="email" placeholder="邮箱" data-error="邮箱格式不正确">
+		          	</div>
+		          </div>
+		          <div class="form-group">
+		            <label class="col-sm-4 control-label"  for="roleId"><span class="required">*</span>用户角色</label>
+		          	<div class="col-sm-6">
+		            	<select id="roleId" name="roleId" class="form-control" required>
+	                	</select>
+	                </div>
+		          </div>
+		          <div class="form-group">
+		            <label class="col-sm-4 control-label"  for="note">用户描述</label>
+		            <div class="col-sm-6">
+		            	<input type="text" name="note" class="form-control" id="note" placeholder="描述">
+		         	</div>
+		          </div>
+		        </div>
+		       <div class="modal-footer">
+				  <div class="form-group">
+				  	<div class="col-sm-4"></div>
+					<div class="col-sm-3">
+						<button type="button" class="btn btn-default cancel"
+							data-dismiss="modal">取消
+						</button>
+					</div>
+					<div class="col-sm-3">
+						<button type="submit" id="btn_save" class="btn btn-default add">保存
+						</button>
+					</div>
+				</div>
+			</div>
+	      </div>
+	    </div>
+	  </div>
+  </form>
+     <div class="panel-body">
+     	<div class="row">
+     		<div class="col-sm-2">
+     			<button style="margin-left: 20px;" id="btn_add" type="button" class="btn btn-link" data-toggle="modal" onclick="addFun()"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加 </button> 
+    		</div>
+     	</div>
+        <table  id="userListTable" class="table"></table>
+     </div>
+</section>
+</body>
+</html>

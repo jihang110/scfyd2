@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ut.scf.dao.sys.IInterfaceLogDao">
+  <resultMap id="BaseResultMap" type="com.ut.scf.pojo.SysInterfaceLog">
+    <id column="rec_uid" jdbcType="VARCHAR" property="recUid" />
+    <result column="request_sn" jdbcType="VARCHAR" property="requestSn" />
+    <result column="cust_id" jdbcType="VARCHAR" property="custId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="tx_code" jdbcType="VARCHAR" property="txCode" />
+    <result column="language" jdbcType="VARCHAR" property="language" />
+    <result column="return_code" jdbcType="VARCHAR" property="returnCode" />
+    <result column="return_msg" jdbcType="VARCHAR" property="returnMsg" />
+    <result column="request_time" jdbcType="TIMESTAMP" property="requestTime" />
+    <result column="response_time" jdbcType="TIMESTAMP" property="responseTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="requset_param" jdbcType="LONGVARCHAR" property="requsetParam" />
+    <result column="response_param" jdbcType="LONGVARCHAR" property="responseParam" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    rec_uid, request_sn, cust_id, user_id, password, tx_code, language, return_code, 
+    return_msg, request_time, response_time, create_time
+  </sql>
+  <sql id="Blob_Column_List">
+    requset_param, response_param
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from sys_interface_log
+    where rec_uid = #{recUid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from sys_interface_log
+    where rec_uid = #{recUid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertSelective" parameterType="com.ut.scf.pojo.SysInterfaceLog">
+    insert into sys_interface_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="recUid != null">
+        rec_uid,
+      </if>
+      <if test="requestSn != null">
+        request_sn,
+      </if>
+      <if test="custId != null">
+        cust_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="txCode != null">
+        tx_code,
+      </if>
+      <if test="language != null">
+        language,
+      </if>
+      <if test="returnCode != null">
+        return_code,
+      </if>
+      <if test="returnMsg != null">
+        return_msg,
+      </if>
+      request_time,
+      <if test="requsetParam != null">
+        requset_param,
+      </if>
+      <if test="responseParam != null">
+        response_param,
+      </if>
+      create_time
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="recUid != null">
+        #{recUid,jdbcType=VARCHAR},
+      </if>
+      <if test="requestSn != null">
+        #{requestSn,jdbcType=VARCHAR},
+      </if>
+      <if test="custId != null">
+        #{custId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="txCode != null">
+        #{txCode,jdbcType=VARCHAR},
+      </if>
+      <if test="language != null">
+        #{language,jdbcType=VARCHAR},
+      </if>
+      <if test="returnCode != null">
+        #{returnCode,jdbcType=VARCHAR},
+      </if>
+      <if test="returnMsg != null">
+        #{returnMsg,jdbcType=VARCHAR},
+      </if>
+      sysdate,
+      <if test="requsetParam != null">
+        #{requsetParam,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="responseParam != null">
+        #{responseParam,jdbcType=LONGVARCHAR},
+      </if>
+      sysdate
+    </trim>
+  </insert>
+  <update id="updateByRequsetSnSelective" parameterType="com.ut.scf.pojo.SysInterfaceLog">
+    update sys_interface_log
+    <set>
+      <if test="requestSn != null">
+        request_sn = #{requestSn,jdbcType=VARCHAR},
+      </if>
+      <if test="custId != null">
+        cust_id = #{custId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="txCode != null">
+        tx_code = #{txCode,jdbcType=VARCHAR},
+      </if>
+      <if test="language != null">
+        language = #{language,jdbcType=VARCHAR},
+      </if>
+      <if test="returnCode != null">
+        return_code = #{returnCode,jdbcType=VARCHAR},
+      </if>
+      <if test="returnMsg != null">
+        return_msg = #{returnMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="requsetParam != null">
+        requset_param = #{requsetParam,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="responseParam != null">
+        response_param = #{responseParam,jdbcType=LONGVARCHAR},
+      </if>
+      response_time = sysdate
+    </set>
+    where request_sn = #{requestSn,jdbcType=VARCHAR}
+  </update>
+</mapper>

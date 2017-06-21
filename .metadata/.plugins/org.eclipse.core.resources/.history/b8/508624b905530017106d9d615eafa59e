@@ -1,0 +1,16 @@
+package com.ut.scf.reqbean.project;
+
+import com.ut.scf.reqbean.PageReqBean;
+
+public class RefGetFinanceReqbean extends PageReqBean{
+	private String financeType;
+
+	public String getFinanceType() {
+		return financeType;
+	}
+
+	public void setFinanceType(String financeType) {
+		this.financeType = financeType;
+	}
+	
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>资产包管理</title>
+<scfCSS>
+<link rel="stylesheet" href="/scfbeta/css/bootstrap-table.css">
+<link rel="stylesheet" href="/scfbeta/css/sysfun.css">
+</scfCSS>
+<scfScript>
+<script type="text/javascript" src="/scfbeta/js/jquery.number.js"></script>
+<script type="text/javascript" src="/scfbeta/js/bootstrap-table.js"></script>
+<script type="text/javascript" src="/scfbeta/js/bpm/flowManager/FlowMngCommon.js"></script>
+<script type="text/javascript" src="/scfbeta/js/asset/packageManager/packageInfoManager.js"></script>
+</scfScript>
+</head>
+
+<body>
+<section class="iframeBody">
+	<div class="main-content-child">
+		<div class="row">
+			<div class="title">
+				<span>资产包管理</span>
+			</div>
+		</div>
+		<fieldset>
+			<div class="row rowpad">
+				<div class="form-group">
+					<form id="searchForm" class="form-horizontal" role="form">
+						<div class="col-sm-4 col-sm-offset-4 input-group pull-left">
+<!-- 							<input type='hidden' class="form-control" placeholder="券商名称" name="corpId" id="corpId" AUTOCOMPLETE="off" /> -->
+							<input class="form-control" placeholder="券商名称" name='corpName' id="corpName" autofocus AUTOCOMPLETE="off"/>
+							<div class="input-group-addon searchIcon">
+								<a class="glyphicon glyphicon-search icon-white" style="color:#ffffff;padding:0px 5px;" title="搜索" href="javascript:void(0)"></a>
+						    </div>
+						    <div class="input-group-addon searchIcon" onclick="ResetBtn()">
+						      <a class="fa fa-rotate-left reset icon-white" style="color:#ffffff;padding:0px 5px;" title="重置搜索信息" href="javascript:void(0)"></a>
+						    </div>
+						</div>
+					</form>
+				</div>
+			 </div>
+		</fieldset>
+		<div class="panel-body">
+			<div class="row btnHide hidden" >
+	     		<div class="col-sm-2">
+	     			<button style="margin-left: 20px;" id="btn_add" type="button" class="btn btn-link" data-toggle="modal" > <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加 </button> 
+	    		</div>
+	     	</div>
+			<table id="packageListTable" class="table"></table>
+		</div>
+	</div>
+	<!-- 资产包详情 -->
+	<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="detailModalLabel">资产包详情</h4>
+				</div>
+				<div class="modal-body">
+					<div class="panel-body">
+						<div style="width: 100%; margin-top: -15px; margin-bottom: 5px;">项目流程</div>
+						<table id="flowProjectList" class="table"></table>
+					</div>
+				</div>
+				<div class="modal-footer" id="operateFooter">
+					<div class="form-group">
+						<div class="col-sm-2 col-sm-offset-10">
+							<button type="button" class="btn btn-default cancel"
+								data-dismiss="modal">取消</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="div_detail"></div>
+</section>
+</body>
+</html>

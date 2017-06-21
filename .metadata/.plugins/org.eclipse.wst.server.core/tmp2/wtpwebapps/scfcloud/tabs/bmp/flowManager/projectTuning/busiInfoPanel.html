@@ -1,0 +1,158 @@
+<div class="panel-body">
+	<div class="container-fluid new_hide">
+		<div class="row" style="margin-bottom: 10px;margin-top: 20px;">
+			<div class="col-sm-2" style="line-height: 40px;">
+				<strong class="text-muted">招/投标合同</strong>
+			</div>
+		</div>
+		<div class="pull-left">
+			<button class="btn btn-link" onclick="addBid()">
+				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
+			</button>
+		</div>
+	</div>
+	<table id="userListBidTablel" class="table table-bordered"></table>
+	
+	<div class="container-fluid new_hide">
+		<div class="row" style="margin-bottom: 10px;margin-top: 20px;">
+			<div class="col-sm-2" style="line-height: 40px;">
+				<strong class="text-muted">贸易/销售合同</strong>
+			</div>
+		</div>
+		<div class="pull-left">
+			<button class="btn btn-link" onclick="addSale()">
+				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
+			</button>
+		</div>
+	</div>
+	<table id="userListSaleTablel" class="table table-bordered"></table>
+	
+		<div class="container-fluid new_hide">
+		<div class="row" style="margin-bottom: 10px;margin-top: 20px;">
+			<div class="col-sm-2" style="line-height: 40px;">
+				<strong class="text-muted">附件上传</strong>
+			</div>
+		</div>
+			<div class="pull-left">
+				<button class="btn btn-link" onclick="uploadAttachment(4)">
+					<span class="glyphicon glyphicon-export" aria-hidden="true">&nbsp;</span>上传
+				</button>
+			</div>
+	</div>
+	<table id="contractAttachment" class="table table-bordered"></table>
+</div>
+
+<form class="form-horizontal" role="form" id="addFormBid" data-toggle="validator">
+	<input type="hidden" id="conId" name="conId">
+	<input type="hidden" name="contractType" value="1">
+	<div class="modal fade" id="addModalBid" tabindex="-1" role="dialog"
+		aria-labelledby="addModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="addModalLabelBid">新增</h4>
+				</div>
+				<div class="modal-body">
+					<fieldset id='field'>
+						<div class="form-group">
+							<label class="col-sm-5 control-label" for="projectName">项目名称</label>
+							<div class="col-sm-5">
+								<input type="text" name="projectName" id="projectName"
+									class="form-control" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-5 control-label" for="amount">项目金额</label>
+							<div class="col-sm-5">
+								<input type="text" name="amount" id="amount"
+									class="form-control" />
+							</div>
+						</div>
+					</fieldset>
+				</div>
+				<div class="modal-footer">
+					<div class="form-group">
+						<div class="col-sm-4"></div>
+						<div class="col-sm-3">
+							<button type="button" class="btn btn-default cancel"
+								data-dismiss="modal">取消</button>
+						</div>
+						<div class="col-sm-3">
+							<button type="submit" id="btn_save" class="btn btn-default add">保存</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
+<form class="form-horizontal" role="form" id="addFormSale" data-toggle="validator">
+	<input type="hidden" id="conId" name="conId">
+	<input type="hidden" name="contractType" value="2">
+	<div class="modal fade" id="addModalSale" tabindex="-1" role="dialog"
+		aria-labelledby="addModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="addModalLabelSale">新增</h4>
+				</div>
+				<div class="modal-body">
+					<fieldset id='field'>
+						<div class="form-group">
+							<label class="col-sm-5 control-label" for="projectUser">交易对手名称</label>
+							<div class="col-sm-5">
+								<input type="text" name="projectUser" id="projectUser"
+									class="form-control" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-5 control-label" for="startDate">合同起始日</label>
+							<div class="col-sm-5">
+								<span style="position: relative; z-index: 9999;"> <input
+									id="startDate" name="startDate" class="form-control time"
+									style="cursor: pointer;" type="text" readonly>
+								</span> <span class="add-on"
+									style="margin-top: -31px; margin-right: 10px;"><i
+									class="glyphicon glyphicon-calendar"></i></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-5 control-label" for="endDate">合同到期日</label>
+							<div class="col-sm-5">
+								<span style="position: relative; z-index: 9999;"> <input
+									id="endDate" name="endDate" class="form-control time"
+									style="cursor: pointer;" type="text" readonly>
+								</span> <span class="add-on"
+									style="margin-top: -31px; margin-right: 10px;"><i
+									class="glyphicon glyphicon-calendar"></i></span>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+
+				<div class="modal-footer">
+					<div class="form-group">
+						<div class="col-sm-4"></div>
+						<div class="col-sm-3">
+							<button type="button" class="btn btn-default cancel"
+								data-dismiss="modal">取消</button>
+						</div>
+						<div class="col-sm-3">
+							<button type="submit" id="btn_save" class="btn btn-default add">保存
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>

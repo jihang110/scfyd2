@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<typeInfoHistroy>
+<typeInfo handle="=scfyd/src&lt;com.ut.scf.reqbean{BaseReqBean.java[BaseReqBean" modifiers="1" timestamp="1494895538877"/>
+<typeInfo handle="=scfyd/src&lt;com.ut.scf.service.pub.impl{TaskListenerImpl.java[TaskListenerImpl" modifiers="1" timestamp="1497676963725"/>
+<typeInfo handle="=scfyd/src&lt;com.ut.scf.service.project{ICountAnalyseService.java[ICountAnalyseService" modifiers="513" timestamp="1496796100304"/>
+<typeInfo handle="=scfyd/src&lt;com.ut.scf.service.project{IRefundDepositService.java[IRefundDepositService" modifiers="513" timestamp="1496796359253"/>
+<typeInfo handle="=scfyd/src&lt;com.ut.scf.service.project{ICarInfoService.java[ICarInfoService" modifiers="513" timestamp="1496730676025"/>
+<typeInfo handle="=scfyd/src&lt;com.ut.scf.service.project{IOffsetDepositService.java[IOffsetDepositService" modifiers="513" timestamp="1496803699785"/>
+</typeInfoHistroy>

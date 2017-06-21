@@ -1,0 +1,26 @@
+$(function(){
+	getVariableByTaskId();
+});
+function getVariableByTaskId(){
+	var taskId = $("#chooseTaskId").val();
+	 var options = {
+				url : '../../activiti/findDataByTaskId',
+				data : '{"taskId":"'+taskId+'"}',
+				callBackFun : function(data) {
+					if (data.result == 0) {
+						 CloudUtils.getTab('../../pubManager/custManager/custHisDetail/custHisDetail.html', "taskInfo");
+						 $("#taskInfoModal").modal();
+						 var jsonData =  eval("(" + data.str + ")");
+						 CloudUtils.setForm(jsonData,"taskInfoModal form");
+					} else {
+						bootbox.alert(data.resultNote);
+						return false;
+					}
+				},
+				errorCallback : function(data) {
+					bootbox.alert(data.resultNote);
+					return false;
+				}
+			};
+	 CloudUtils.ajax(options);
+}

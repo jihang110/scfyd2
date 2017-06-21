@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ut.scf.dao.crm.ICashFlowDao">
+<select id="selectCashFlowList" resultType="hashmap" parameterType="hashmap">
+	select f.rec_uid "recUid", f.corp_id "corpId", f.oper_year "operYear", c.corp_name "corpName",
+	 f.net_amount_of_cash_flow "netAmountOfCashFlow", 
+	 f.inv_amt_cash_flow "investmentAmountOfCashFlow", 
+	 f.financing_amount_of_cash_flow "financingAmountOfCashFlow",
+	 f.increase_cash_equivalent "increaseCashEquivalent",
+	 f.other_amount_of_cash_flow "otherAmountOfCashFlow"
+	 from cash_flow f join corp_info c on f.corp_id = c.corp_id 
+	 where 1=1 and c.status=1
+    <if test="corpId != null">
+	  and f.corp_id = #{corpId}
+	</if>
+	<if test="userCorpList !=null">
+	  and f.corp_id in ${userCorpList}
+	</if>
+	<if test="createUserId != null">
+	  and f.create_user_id = #{createUserId}
+	</if>
+</select>
+	
+<insert id="insertCashFlow" parameterType="hashmap">
+	insert into cash_flow ( rec_uid, corp_id, oper_year,  ic_sell_offer,tax_be_returned,ot_cp_activity,
+	ic_sb_activity,expend_of_sell_commodity,expend_of_pay_to_staffs,payments_of_taxes,ther_expend_of_activity,ot_sb_activity,net_amount_of_cash_flow,
+	ic_wd_investment,fix_intag_oth_long,dsip_business,ic_sb_inv_activities,fix_intag_long,
+	expenditure_of_invest,paid_bsines_sub,exp_activ_investment,ot_sb_inv_activities,inv_amt_cash_flow,inc_absorb_investment,
+	inc_obt_bor_money,oth_inc_raise_money,inc_sub_finc_activities,expend_of_repayment_of_dept,cash_divdd_pro_interest,oth_exp_actv_raise_money,
+	out_dub_finc_activities,financing_amount_of_cash_flow,influence_fluctuation_cash,increase_cash_equivalent,margin,preparation_of_devaluation,depreciation_of_fixed,amortization_of_intangible,
+	amortization_of_long,loss_from_disposal,loss_of_fixed,change_in_fair_value_loss,financial_expenses,investment_loss,decrease_in_deferred_tax,inc_defer_tax_liabilities,
+	decrease_in_inventories,dec_oper_receivables,inc_opr_payables,debt_turn_into_capital,convertible_bonds,the_leased_assets,close_balance_of_cash,open_balance_of_cash,
+	close_blac_cash_equivalents,open_blac_cash_equivalents,cash_and_cash_equivalents,other,oht_cash_rec_inv_activity,other_amount_of_cash_flow,cash_from_invest_income, create_user_id, create_time)
+	 
+	 values ( 
+	 #{recUid}, 
+	 #{corpId}, 
+	 #{operYear}, 
+	 #{incomeFromSellingAndOffering}, 
+	 #{taxBeReturned}, 
+	 #{otherCapitalAboutTheActivity}, 
+	 #{incomeSubtotalOfOperatActivity},
+	 #{expendOfSellCommodity},
+	 #{expendOfPayToStaffs},
+	 #{paymentsOfTaxes},
+	 #{therExpendOfActivity},
+	 #{outcomeSubtotalOfOperatActivity},
+	 #{netAmountOfCashFlow},
+	 #{incomeFromWithdrawInvestment},
+	 #{cashOfFixedIntangibleOtherLong},
+	 #{cashFromDisposalOtherBusiness},
+	 #{incomeSubtotalOfInvestmentActivities},
+	 #{cashOfFixedIntangibleLong},
+	 #{expenditureOfInvest},
+	 #{cashPaidForBusinessSubsidiaries},
+	 #{expendOfActivityAboutInvestment},
+	 #{outcomeSubtotalOfInvestmentActivities},
+	 #{investmentAmountOfCashFlow},
+	 #{incomeFromAbsorbInvestment},
+	 #{incomeFromObtainBorrowMoney},
+	 #{otherIncomeFromRaiseMoney},
+	 #{incomeSubtotalOfFinanceActivities},
+	 #{expendOfRepaymentOfDept},
+	 #{cashOfDividendsProfitInterest},
+	 #{otherExpendActivityRaiseMoney},
+	 #{outcomeSubtotalOfFinancingActivities},
+	 #{financingAmountOfCashFlow},
+	 #{influenceFluctuationCash},
+	 #{increaseCashEquivalent},
+	 #{margin},
+	 #{preparationOfDevaluation},
+	 #{depreciationOfFixed},
+	 #{amortizationOfIntangible},
+	 #{amortizationOfLong},
+	 #{lossFromDisposal},
+	 #{lossOfFixed},
+	 #{changeInFairValueLoss},
+	 #{financialExpenses},
+	 #{investmentLoss},
+	 #{decreaseInDeferredTax},
+	 #{increaseInDeferredTaxLiabilities},
+	 #{decreaseInInventories},
+	 #{decreaseInOperatingReceivables},
+	 #{increaseInOperatingPayables},
+	 #{debtTurnIntoCapital},
+	 #{convertibleBonds},
+	 #{theLeasedAssets},
+	 #{closeBalanceOfCash},
+	 #{openBalanceOfCash},
+	 #{closeBalanceOfCashEquivalents},
+	 #{openBalanceOfCashEquivalents},
+	 #{cashAndCashEquivalents},
+	 #{other},
+	 #{otherCashReceivedInvestActivity},
+	 #{otherAmountOfCashFlow},
+	 #{cashFromInvestIncome},
+	 #{createUserId}, 
+	 sysdate)
+</insert>
+
+<delete id="deleteCashFlow" parameterType="java.lang.String">
+	delete from cash_flow where rec_uid = #{recUid}
+</delete>
+
+<update id="updateCashFlow" parameterType="hashmap">
+	update cash_flow
+	<set>
+      <if test="operYear != null">
+        oper_year = #{operYear,jdbcType=CHAR},
+      </if>
+      <if test="incomeFromSellingAndOffering != null">
+        ic_sell_offer = #{incomeFromSellingAndOffering,jdbcType=DECIMAL},
+      </if>
+      <if test="taxBeReturned != null">
+        tax_be_returned = #{taxBeReturned,jdbcType=DECIMAL},
+      </if>
+      <if test="otherCapitalAboutTheActivity != null">
+        ot_cp_activity = #{otherCapitalAboutTheActivity,jdbcType=DECIMAL},
+      </if>
+      <if test="incomeSubtotalOfOperatActivity != null">
+        ic_sb_activity = #{incomeSubtotalOfOperatActivity,jdbcType=DECIMAL},
+      </if>
+      <if test="expendOfSellCommodity != null">
+        expend_of_sell_commodity = #{expendOfSellCommodity,jdbcType=DECIMAL},
+      </if>
+      <if test="expendOfPayToStaffs != null">
+        expend_of_pay_to_staffs = #{expendOfPayToStaffs,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentsOfTaxes != null">
+        payments_of_taxes = #{paymentsOfTaxes,jdbcType=DECIMAL},
+      </if>
+      <if test="therExpendOfActivity != null">
+        ther_expend_of_activity = #{therExpendOfActivity,jdbcType=DECIMAL},
+      </if>
+      <if test="outcomeSubtotalOfOperatActivity != null">
+        ot_sb_activity = #{outcomeSubtotalOfOperatActivity,jdbcType=DECIMAL},
+      </if>
+      <if test="netAmountOfCashFlow != null">
+        net_amount_of_cash_flow = #{netAmountOfCashFlow,jdbcType=DECIMAL},
+      </if>
+      <if test="incomeFromWithdrawInvestment != null">
+        ic_wd_investment = #{incomeFromWithdrawInvestment,jdbcType=DECIMAL},
+      </if>
+      <if test="cashOfFixedIntangibleOtherLong != null">
+        fix_intag_oth_long = #{cashOfFixedIntangibleOtherLong,jdbcType=DECIMAL},
+      </if>
+      <if test="cashFromDisposalOtherBusiness != null">
+        dsip_business = #{cashFromDisposalOtherBusiness,jdbcType=DECIMAL},
+      </if>
+      <if test="incomeSubtotalOfInvestmentActivities != null">
+        ic_sb_inv_activities = #{incomeSubtotalOfInvestmentActivities,jdbcType=DECIMAL},
+      </if>
+      <if test="cashOfFixedIntangibleLong != null">
+        fix_intag_long = #{cashOfFixedIntangibleLong,jdbcType=DECIMAL},
+      </if>
+      <if test="expenditureOfInvest != null">
+        expenditure_of_invest = #{expenditureOfInvest,jdbcType=DECIMAL},
+      </if>
+      <if test="cashPaidForBusinessSubsidiaries != null">
+        paid_bsines_sub = #{cashPaidForBusinessSubsidiaries,jdbcType=DECIMAL},
+      </if>
+      <if test="expendOfActivityAboutInvestment != null">
+        exp_activ_investment = #{expendOfActivityAboutInvestment,jdbcType=DECIMAL},
+      </if>
+      <if test="outcomeSubtotalOfInvestmentActivities != null">
+        ot_sb_inv_activities = #{outcomeSubtotalOfInvestmentActivities,jdbcType=DECIMAL},
+      </if>
+      <if test="investmentAmountOfCashFlow != null">
+        inv_amt_cash_flow = #{investmentAmountOfCashFlow,jdbcType=DECIMAL},
+      </if>
+      <if test="incomeFromAbsorbInvestment != null">
+        inc_absorb_investment = #{incomeFromAbsorbInvestment,jdbcType=DECIMAL},
+      </if>
+      <if test="incomeFromObtainBorrowMoney != null">
+        inc_obt_bor_money = #{incomeFromObtainBorrowMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="otherIncomeFromRaiseMoney != null">
+        oth_inc_raise_money = #{otherIncomeFromRaiseMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="incomeSubtotalOfFinanceActivities != null">
+        inc_sub_finc_activities = #{incomeSubtotalOfFinanceActivities,jdbcType=DECIMAL},
+      </if>
+      <if test="expendOfRepaymentOfDept != null">
+        expend_of_repayment_of_dept = #{expendOfRepaymentOfDept,jdbcType=DECIMAL},
+      </if>
+      <if test="cashOfDividendsProfitInterest != null">
+        cash_divdd_pro_interest = #{cashOfDividendsProfitInterest,jdbcType=DECIMAL},
+      </if>
+      <if test="otherExpendActivityRaiseMoney != null">
+        oth_exp_actv_raise_money = #{otherExpendActivityRaiseMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="outcomeSubtotalOfFinancingActivities != null">
+        out_dub_finc_activities = #{outcomeSubtotalOfFinancingActivities,jdbcType=DECIMAL},
+      </if>
+      <if test="financingAmountOfCashFlow != null">
+        financing_amount_of_cash_flow = #{financingAmountOfCashFlow,jdbcType=DECIMAL},
+      </if>
+      <if test="influenceFluctuationCash != null">
+        influence_fluctuation_cash = #{influenceFluctuationCash,jdbcType=DECIMAL},
+      </if>
+      <if test="increaseCashEquivalent != null">
+        increase_cash_equivalent = #{increaseCashEquivalent,jdbcType=DECIMAL},
+      </if>
+      <if test="margin != null">
+        margin = #{margin,jdbcType=DECIMAL},
+      </if>
+      <if test="preparationOfDevaluation != null">
+        preparation_of_devaluation = #{preparationOfDevaluation,jdbcType=DECIMAL},
+      </if>
+      <if test="depreciationOfFixed != null">
+        depreciation_of_fixed = #{depreciationOfFixed,jdbcType=DECIMAL},
+      </if>
+      <if test="amortizationOfIntangible != null">
+        amortization_of_intangible = #{amortizationOfIntangible,jdbcType=DECIMAL},
+      </if>
+      <if test="amortizationOfLong != null">
+        amortization_of_long = #{amortizationOfLong,jdbcType=DECIMAL},
+      </if>
+       <if test="lossFromDisposal != null">
+        loss_from_disposal = #{lossFromDisposal,jdbcType=DECIMAL},
+      </if>
+       <if test="lossOfFixed != null">
+        loss_of_fixed = #{lossOfFixed,jdbcType=DECIMAL},
+      </if>
+       <if test="changeInFairValueLoss != null">
+        change_in_fair_value_loss = #{changeInFairValueLoss,jdbcType=DECIMAL},
+      </if>
+       <if test="financialExpenses != null">
+        financial_expenses = #{financialExpenses,jdbcType=DECIMAL},
+      </if>
+       <if test="investmentLoss != null">
+        investment_loss = #{investmentLoss,jdbcType=DECIMAL},
+      </if>
+       <if test="decreaseInDeferredTax != null">
+        decrease_in_deferred_tax = #{decreaseInDeferredTax,jdbcType=DECIMAL},
+      </if>
+       <if test="increaseInDeferredTaxLiabilities != null">
+        inc_defer_tax_liabilities = #{increaseInDeferredTaxLiabilities,jdbcType=DECIMAL},
+      </if>
+       <if test="decreaseInInventories != null">
+        decrease_in_inventories = #{decreaseInInventories,jdbcType=DECIMAL},
+      </if>
+       <if test="decreaseInOperatingReceivables != null">
+        dec_oper_receivables = #{decreaseInOperatingReceivables,jdbcType=DECIMAL},
+      </if>
+       <if test="increaseInOperatingPayables != null">
+        inc_opr_payables = #{increaseInOperatingPayables,jdbcType=DECIMAL},
+      </if>
+       <if test="debtTurnIntoCapital != null">
+        debt_turn_into_capital = #{debtTurnIntoCapital,jdbcType=DECIMAL},
+      </if>
+       <if test="convertibleBonds != null">
+        convertible_bonds = #{convertibleBonds,jdbcType=DECIMAL},
+      </if>
+       <if test="theLeasedAssets != null">
+        the_leased_assets = #{theLeasedAssets,jdbcType=DECIMAL},
+      </if>
+       <if test="closeBalanceOfCash != null">
+        close_balance_of_cash = #{closeBalanceOfCash,jdbcType=DECIMAL},
+      </if>
+       <if test="openBalanceOfCash != null">
+        open_balance_of_cash = #{openBalanceOfCash,jdbcType=DECIMAL},
+      </if>
+       <if test="closeBalanceOfCashEquivalents != null">
+        close_blac_cash_equivalents = #{closeBalanceOfCashEquivalents,jdbcType=DECIMAL},
+      </if>
+       <if test="openBalanceOfCashEquivalents != null">
+        open_blac_cash_equivalents = #{openBalanceOfCashEquivalents,jdbcType=DECIMAL},
+      </if>
+       <if test="cashAndCashEquivalents != null">
+        cash_and_cash_equivalents = #{cashAndCashEquivalents,jdbcType=DECIMAL},
+      </if>
+       <if test="other != null">
+        other = #{other,jdbcType=DECIMAL},
+       </if>
+       <if test="otherCashReceivedInvestActivity != null">
+        oht_cash_rec_inv_activity = #{otherCashReceivedInvestActivity,jdbcType=DECIMAL},
+       </if>
+       <if test="otherAmountOfCashFlow != null">
+        other_amount_of_cash_flow = #{otherAmountOfCashFlow,jdbcType=DECIMAL},
+       </if>
+       <if test="cashFromInvestIncome != null">
+        cash_from_invest_income = #{cashFromInvestIncome,jdbcType=DECIMAL},
+       </if>
+    </set>
+    where rec_uid = #{recUid,jdbcType=VARCHAR}
+</update>
+
+<select id="selectCashflowById" parameterType="java.lang.String" resultType="hashmap">
+	select cf.rec_uid recUid, cf.corp_id corpId, cf.oper_year operYear, c.corp_name corpName,  cf.ic_sell_offer incomeFromSellingAndOffering,cf.tax_be_returned taxBeReturned,cf.ot_cp_activity otherCapitalAboutTheActivity,
+	cf.ic_sb_activity incomeSubtotalOfOperatActivity,cf.expend_of_sell_commodity expendOfSellCommodity,cf.expend_of_pay_to_staffs expendOfPayToStaffs,cf.payments_of_taxes paymentsOfTaxes,cf.ther_expend_of_activity therExpendOfActivity,cf.ot_sb_activity outcomeSubtotalOfOperatActivity,cf.net_amount_of_cash_flow netAmountOfCashFlow,
+	cf.ic_wd_investment incomeFromWithdrawInvestment,cf.fix_intag_oth_long cashOfFixedIntangibleOtherLong,cf.dsip_business cashFromDisposalOtherBusiness,cf.ic_sb_inv_activities incomeSubtotalOfInvestmentActivities,cf.fix_intag_long cashOfFixedIntangibleLong,
+	cf.expenditure_of_invest expenditureOfInvest,cf.paid_bsines_sub cashPaidForBusinessSubsidiaries,cf.exp_activ_investment expendOfActivityAboutInvestment,cf.ot_sb_inv_activities outcomeSubtotalOfInvestmentActivities,cf.inv_amt_cash_flow investmentAmountOfCashFlow,cf.inc_absorb_investment incomeFromAbsorbInvestment,
+	cf.inc_obt_bor_money incomeFromObtainBorrowMoney,cf.oth_inc_raise_money otherIncomeFromRaiseMoney,cf.inc_sub_finc_activities incomeSubtotalOfFinanceActivities,cf.expend_of_repayment_of_dept expendOfRepaymentOfDept,cf.cash_divdd_pro_interest cashOfDividendsProfitInterest,cf.oth_exp_actv_raise_money otherExpendActivityRaiseMoney,
+	cf.out_dub_finc_activities outcomeSubtotalOfFinancingActivities,cf.financing_amount_of_cash_flow financingAmountOfCashFlow,cf.influence_fluctuation_cash influenceFluctuationCash,cf.increase_cash_equivalent increaseCashEquivalent,cf.margin margin,cf.preparation_of_devaluation preparationOfDevaluation,cf.depreciation_of_fixed depreciationOfFixed,cf.amortization_of_intangible amortizationOfIntangible,
+	cf.amortization_of_long amortizationOfLong,cf.loss_from_disposal lossFromDisposal,cf.loss_of_fixed lossOfFixed,cf.change_in_fair_value_loss changeInFairValueLoss,cf.financial_expenses financialExpenses,cf.investment_loss investmentLoss,cf.decrease_in_deferred_tax decreaseInDeferredTax,cf.inc_defer_tax_liabilities increaseInDeferredTaxLiabilities,
+	cf.decrease_in_inventories decreaseInInventories,cf.dec_oper_receivables decreaseInOperatingReceivables,cf.inc_opr_payables increaseInOperatingPayables,cf.debt_turn_into_capital debtTurnIntoCapital,cf.convertible_bonds convertibleBonds,cf.the_leased_assets theLeasedAssets,cf.close_balance_of_cash closeBalanceOfCash,cf.open_balance_of_cash openBalanceOfCash,
+	cf.close_blac_cash_equivalents closeBalanceOfCashEquivalents,cf.open_blac_cash_equivalents openBalanceOfCashEquivalents,cf.cash_and_cash_equivalents cashAndCashEquivalents,cf.other other,cf.oht_cash_rec_inv_activity otherCashReceivedInvestActivity,cf.other_amount_of_cash_flow otherAmountOfCashFlow,cf.cash_from_invest_income cashFromInvestIncome
+	 from cash_flow cf JOIN corp_info c ON cf.corp_id = c.corp_id 
+	 where cf.rec_uid = #{recUid} 
+</select>
+
+
+<select id="hasOneYear" parameterType="hashmap" resultType="java.lang.Integer">
+    select count(1)
+    from cash_flow ni
+    <where>
+        1=1
+        <if test="operYear!=null and operYear!='' ">  
+            and ni.oper_year = #{operYear}
+        </if>
+        <if test="corpId != null">
+		    and ni.corp_id = #{corpId}
+		</if>
+		<if test="createUserId != null">
+	  		and ni.create_user_id = #{createUserId}
+		</if>
+    </where>
+  </select>
+<insert id="addCashFlowRecordBatch" parameterType="java.util.List">
+	 insert into cash_flow (rec_uid, corp_id, 
+      create_user_id, create_time, oper_year, 
+      ic_sell_offer, tax_be_returned, 
+      ot_cp_activity, ic_sb_activity, 
+      expend_of_sell_commodity, expend_of_pay_to_staffs, 
+      payments_of_taxes, ther_expend_of_activity, 
+      ot_sb_activity, net_amount_of_cash_flow, 
+      ic_wd_investment, fix_intag_oth_long, 
+      dsip_business, ic_sb_inv_activities, 
+      fix_intag_long, expenditure_of_invest, 
+      paid_bsines_sub, exp_activ_investment, 
+      ot_sb_inv_activities, inv_amt_cash_flow, 
+      inc_absorb_investment, inc_obt_bor_money, 
+      oth_inc_raise_money, inc_sub_finc_activities, 
+      expend_of_repayment_of_dept, cash_divdd_pro_interest, 
+      oth_exp_actv_raise_money, out_dub_finc_activities, 
+      financing_amount_of_cash_flow, increase_cash_equivalent, 
+      margin, preparation_of_devaluation, depreciation_of_fixed, 
+      amortization_of_intangible, amortization_of_long, 
+      loss_from_disposal, loss_of_fixed, change_in_fair_value_loss, 
+      financial_expenses, investment_loss, decrease_in_deferred_tax, 
+      inc_defer_tax_liabilities, decrease_in_inventories, 
+      dec_oper_receivables, inc_opr_payables, 
+      debt_turn_into_capital, the_leased_assets, close_balance_of_cash, 
+      open_balance_of_cash, close_blac_cash_equivalents, 
+      open_blac_cash_equivalents, Cash_and_cash_equivalents, 
+      other, cash_from_invest_income, oht_cash_rec_inv_activity, 
+      other_amount_of_cash_flow, influence_fluctuation_cash, 
+      convertible_bonds)
+     values 
+     <foreach collection="list" item="item" index="index" separator="," > 
+      (REPLACE(UUID(), '-', ''), #{item.corpId,jdbcType=VARCHAR},
+      #{item.createUserId,jdbcType=VARCHAR}, sysdate, #{item.operYear,jdbcType=CHAR}, 
+      #{item.incomeFromSellingAndOffering,jdbcType=DECIMAL}, #{item.taxBeReturned,jdbcType=DECIMAL}, 
+      #{item.otherCapitalAboutTheActivity,jdbcType=DECIMAL}, #{item.incomeSubtotalOfOperatActivity,jdbcType=DECIMAL}, 
+      #{item.expendOfSellCommodity,jdbcType=DECIMAL}, #{item.expendOfPayToStaffs,jdbcType=DECIMAL}, 
+      #{item.paymentsOfTaxes,jdbcType=DECIMAL}, #{item.therExpendOfActivity,jdbcType=DECIMAL}, 
+      #{item.outcomeSubtotalOfOperatActivity,jdbcType=DECIMAL}, #{item.netAmountOfCashFlow,jdbcType=DECIMAL}, 
+      #{item.incomeFromWithdrawInvestment,jdbcType=DECIMAL}, #{item.cashOfFixedIntangibleOtherLong,jdbcType=DECIMAL}, 
+      #{item.cashFromDisposalOtherBusiness,jdbcType=DECIMAL}, #{item.incomeSubtotalOfInvestmentActivities,jdbcType=DECIMAL}, 
+      #{item.cashOfFixedIntangibleLong,jdbcType=DECIMAL}, #{item.expenditureOfInvest,jdbcType=DECIMAL}, 
+      #{item.cashPaidForBusinessSubsidiaries,jdbcType=DECIMAL}, #{item.expendOfActivityAboutInvestment,jdbcType=DECIMAL}, 
+      #{item.outcomeSubtotalOfInvestmentActivities,jdbcType=DECIMAL}, #{item.investmentAmountOfCashFlow,jdbcType=DECIMAL}, 
+      #{item.incomeFromAbsorbInvestment,jdbcType=DECIMAL}, #{item.incomeFromObtainBorrowMoney,jdbcType=DECIMAL}, 
+      #{item.otherIncomeFromRaiseMoney,jdbcType=DECIMAL}, #{item.incomeSubtotalOfFinanceActivities,jdbcType=DECIMAL}, 
+      #{item.expendOfRepaymentOfDept,jdbcType=DECIMAL}, #{item.cashOfDividendsProfitInterest,jdbcType=DECIMAL}, 
+      #{item.otherExpendActivityRaiseMoney,jdbcType=DECIMAL}, #{item.outcomeSubtotalOfFinancingActivities,jdbcType=DECIMAL}, 
+      #{item.financingAmountOfCashFlow,jdbcType=DECIMAL}, #{item.increaseCashEquivalent,jdbcType=DECIMAL}, 
+      #{item.margin,jdbcType=DECIMAL}, #{item.preparationOfDevaluation,jdbcType=DECIMAL}, #{item.depreciationOfFixed,jdbcType=DECIMAL}, 
+      #{item.amortizationOfIntangible,jdbcType=DECIMAL}, #{item.amortizationOfLong,jdbcType=DECIMAL}, 
+      #{item.lossFromDisposal,jdbcType=DECIMAL}, #{item.lossOfFixed,jdbcType=DECIMAL}, #{item.changeInFairValueLoss,jdbcType=DECIMAL}, 
+      #{item.financialExpenses,jdbcType=DECIMAL}, #{item.investmentLoss,jdbcType=DECIMAL}, #{item.decreaseInDeferredTax,jdbcType=DECIMAL}, 
+      #{item.increaseInDeferredTaxLiabilities,jdbcType=DECIMAL}, #{item.decreaseInInventories,jdbcType=DECIMAL}, 
+      #{item.decreaseInOperatingReceivables,jdbcType=DECIMAL}, #{item.increaseInOperatingPayables,jdbcType=DECIMAL}, 
+      #{item.debtTurnIntoCapital,jdbcType=DECIMAL}, #{item.theLeasedAssets,jdbcType=DECIMAL}, #{item.closeBalanceOfCash,jdbcType=DECIMAL}, 
+      #{item.openBalanceOfCash,jdbcType=DECIMAL}, #{item.closeBalanceOfCashEquivalents,jdbcType=DECIMAL}, 
+      #{item.openBalanceOfCashEquivalents,jdbcType=DECIMAL}, #{item.cashAndCashEquivalents,jdbcType=DECIMAL}, 
+      #{item.other,jdbcType=DECIMAL}, #{item.cashFromInvestIncome,jdbcType=DECIMAL}, #{item.otherCashReceivedInvestActivity,jdbcType=DECIMAL}, 
+      #{item.otherAmountOfCashFlow,jdbcType=DECIMAL}, #{item.influenceFluctuationCash,jdbcType=DECIMAL}, 
+      #{item.convertibleBonds,jdbcType=DECIMAL})
+      </foreach>
+</insert>
+</mapper>

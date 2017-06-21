@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ut.scf.dao.sys.IMenuDao" >
+  
+  <select id="menuListByRoleId" resultType="hashmap" parameterType="java.lang.String" >
+    select m.menu_id menuId, m.menu_name menuName, m.menu_level menuLevel,
+    m.parent_id parentId, m.menu_path menuPath, m.menu_order menuOrder
+    from scfnew.sys_role_menu rm join scfnew.sys_menu m on rm.menu_id=m.menu_id
+    where rm.role_id = #{roleId} and m.status=1
+    order by m.menu_level,m.menu_order
+  </select>
+  
+</mapper>

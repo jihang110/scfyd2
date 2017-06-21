@@ -1,0 +1,138 @@
+package com.ut.scf.service.sys.impl;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.ut.scf.core.dict.ErrorCodeEnum;
+import com.ut.scf.core.dict.PageInfoBean;
+import com.ut.scf.core.exception.BizException;
+import com.ut.scf.core.util.ScfUUID;
+import com.ut.scf.dao.sys.IRoleDao;
+import com.ut.scf.respbean.BaseRespBean;
+import com.ut.scf.respbean.PageRespBean;
+import com.ut.scf.respbean.sys.inner.Role;
+import com.ut.scf.service.sys.IRoleService;
+
+@Service("IRoleService")
+public class RoleServiceImpl implements IRoleService{
+
+	@Resource
+	private IRoleDao iroledao;
+	public List<Role> seletAll(Role roleinfo) {
+		return iroledao.selectAll(roleinfo);
+	}
+	@Override
+	@Transactional(readOnly=true)
+	public PageRespBean selectByExample(Map<String, Object> paramMap) {
+		List<Map<String, Object>> list = iroledao.selectbyexample(paramMap);
+/*		if (list == null) {
+			PageRespBean respBean = new PageRespBean();
+			respBean.setResult(ErrorCodeEnum.LOGIN_USERNAME_PASSWORD_ERROR);
+			return respBean;
+		}*/
+		
+		PageInfoBean pageInfo = new PageInfoBean();//分页工具
+		int records = list.size();
+		int isPage = (int)paramMap.get("isPage");
+		int pageSize = (int) paramMap.get("pageSize");
+		
+		PageRespBean respBean = new PageRespBean();
+		if(isPage == 1){
+			pageInfo.setTotalRecord(records);
+			pageInfo.setPageSize(pageSize);
+			respBean.setPages(pageInfo.getTotalPage());
+			respBean.setRecords(records);
+		}
+		respBean.setDataList(list);
+		return respBean;
+	}
+	@Override
+	public BaseRespBean insertRoleMenu(Map<String, Object> paramMap) {
+		List<String> list = (List<String>) paramMap.get("menuIdList");
+/*		for(int i=0;i<list.size();i++){
+			System.out.println(list.get(i));
+		}*/
+		Map<String, Object> paramMapRole = new HashMap<>();
+		Map<String, Object> paramMapRoleMenu = new HashMap<>();
+		String roleId = ScfUUID.generate();
+		paramMapRole.put("roleId", roleId);
+		paramMapRole.put("roleName",paramMap.get("roleName"));
+		paramMapRole.put("roleType",paramMap.get("roleType"));
+		paramMapRole.put("corpId",paramMap.get("corpId"));
+		paramMapRole.put("note",paramMap.get("note"));
+		//paramMapRole.put("createTime","2016-08-05 09:32:15");
+		paramMapRole.put("status",1);
+		int h = iroledao.insertIntoRole(paramMapRole);
+		int t = 0;
+		for(String s:list){
+			String recuid = ScfUUID.generate();
+			paramMapRoleMenu.put("recUid", recuid);
+			paramMapRoleMenu.put("roleId",roleId );
+			paramMapRoleMenu.put("menuId",s);
+			t = iroledao.insertIntoRoleMenu(paramMapRoleMenu);
+		}
+		if(h<=0||t<=0){
+			BaseRespBean respBean = new BaseRespBean();
+			respBean.setResult(ErrorCodeEnum.ADD_FAILED);
+			return respBean;
+		}
+		BaseRespBean respBean = new BaseRespBean();
+		return respBean;
+	}
+	@Override
+	public BaseRespBean deleteRoleMenu(String roleId){
+		String corpId1 = iroledao.selectByRoleId(roleId);
+		if(corpId1 == null){
+			 throw new BizException(ErrorCodeEnum.DELETE_SUPER_ROLEINFO_ERROR);
+		}else{
+		int deleterolenum = iroledao.updateRole(roleId);
+		int deleterolemenunum = iroledao.deleteRoleMenu(roleId);
+		if(deleterolenum<=0||deleterolemenunum<=0){
+			BaseRespBean respBean = new BaseRespBean();
+			respBean.setResult(ErrorCodeEnum.DELETE_FAILED);
+			return respBean;
+		}
+		BaseRespBean respBean = new BaseRespBean();
+		return respBean;
+		}
+	}
+	@Override
+	public BaseRespBean updateRoleMenu(Map<String, Object> paramMap) {
+		//删除sys_role_menu表
+		String roleId = (String) paramMap.get("roleId");
+		//int deleterolenum = iroledao.updateRole(roleId);
+		int deleterolemenunum = iroledao.deleteRoleMenu(roleId);
+		//修改
+		List<String> list = (List<String>) paramMap.get("menuIdList");
+		Map<String, Object> paramMapRole = new HashMap<>();
+		Map<String, Object> paramMapRoleMenu = new HashMap<>();
+		paramMapRole.put("roleId", roleId);
+		paramMapRole.put("note",paramMap.get("note"));
+		paramMapRole.put("roleName",paramMap.get("roleName"));
+		paramMapRole.put("roleType",paramMap.get("roleType"));
+		paramMapRole.put("corpId",paramMap.get("corpId"));
+		int h = iroledao.updateRoleAll(paramMapRole);
+		int t = 0;
+		for(String s:list){
+			String recuid = ScfUUID.generate();
+			paramMapRoleMenu.put("recUid", recuid);
+			paramMapRoleMenu.put("roleId",roleId );
+			paramMapRoleMenu.put("menuId",s);
+			t = iroledao.insertIntoRoleMenu(paramMapRoleMenu);
+		}
+		if(h<=0||t<=0){
+			BaseRespBean respBean = new BaseRespBean();
+			respBean.setResult(ErrorCodeEnum.UPDATE_FAILED);
+			return respBean;
+		}
+		BaseRespBean respBean = new BaseRespBean();
+		return respBean;
+	}	
+}

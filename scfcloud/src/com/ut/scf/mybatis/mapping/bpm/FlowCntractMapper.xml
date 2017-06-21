@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ut.scf.dao.bpm.FlowCntractMapper">
+  
+  <delete id="deleteCnt" parameterType="java.lang.String">
+    
+    delete from flow_cntract
+    where rec_uid = #{recUid}
+  </delete>
+  
+  <insert id="insertCnt" parameterType="hashmap">
+    
+    insert into flow_cntract (rec_uid, corp_id, cnt_no, 
+      pro_id, project_name, orgn_no, 
+      ccy, contract_serial_num, start_date, 
+      expiration_date, credit_limit, term, 
+      contract_check_result, term_unit_cd, factor_rate, 
+      handle_level_one_org_name, payment_method, loan_rt, 
+      create_user_id, create_time)
+    values (#{recUid}, #{corpId}, #{cntNo}, 
+      #{proId}, #{projectName}, #{orgnNo}, 
+      #{ccy}, #{contractSerialNum}, #{startDate}, 
+      #{expirationDate}, #{creditLimit}, #{term}, 
+      #{contractCheckResult}, #{termUnitCd}, #{factorRate}, 
+      #{handleLevelOneOrgName}, #{paymentMethod}, #{loanRt}, 
+      #{createUserId}, #{createTime})
+  </insert>
+  
+   <select id="selectExpenseList" parameterType="hashmap" resultType="hashmap">
+   	
+   </select>
+   
+  <update id="updateCnt" parameterType="hashmap">
+    
+    update flow_cntract
+    <set>
+      <if test="corpId != null">
+        corp_id = #{corpId},
+      </if>
+      <if test="cntNo != null">
+        cnt_no = #{cntNo},
+      </if>
+      <if test="proId != null">
+        pro_id = #{proId},
+      </if>
+      <if test="projectName != null">
+        project_name = #{projectName},
+      </if>
+      <if test="orgnNo != null">
+        orgn_no = #{orgnNo},
+      </if>
+      <if test="ccy != null">
+        ccy = #{ccy},
+      </if>
+      <if test="contractSerialNum != null">
+        contract_serial_num = #{contractSerialNum},
+      </if>
+      <if test="startDate != null">
+        start_date = #{startDate},
+      </if>
+      <if test="expirationDate != null">
+        expiration_date = #{expirationDate},
+      </if>
+      <if test="creditLimit != null">
+        credit_limit = #{creditLimit},
+      </if>
+      <if test="term != null">
+        term = #{term},
+      </if>
+      <if test="contractCheckResult != null">
+        contract_check_result = #{contractCheckResult},
+      </if>
+      <if test="termUnitCd != null">
+        term_unit_cd = #{termUnitCd},
+      </if>
+      <if test="factorRate != null">
+        factor_rate = #{factorRate},
+      </if>
+      <if test="handleLevelOneOrgName != null">
+        handle_level_one_org_name = #{handleLevelOneOrgName},
+      </if>
+      <if test="paymentMethod != null">
+        payment_method = #{paymentMethod},
+      </if>
+      <if test="loanRt != null">
+        loan_rt = #{loanRt},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime},
+      </if>
+    </set>
+    where rec_uid = #{recUid}
+  </update>
+  
+  <select id="getContractByPush" resultType="hashmap" parameterType="hashmap">
+  	SELECT fc.rec_uid recUid, ufr.file_name attachmentName, ufr.file_url attachmentUrl,
+  	fc.contract_serial_num contractSerialNum, fc.cnt_no contractNum, fc.orgn_no orgnNum, fc.handle_level_one_org_name handleLevelOneOrgName,
+	ci.corp_name customerName, fc.ccy currencyCd, fc.credit_limit creditLimit, fc.start_date startDate, fc.expiration_date expirationDate,
+	fc.term term, fc.term_unit_cd termUnitCd, fc.contract_check_result contractCheckResult 
+  	FROM flow_cntract fc, (
+  		SELECT corp_id, corp_name FROM corp_info WHERE sys_type = #{sysType}
+		AND core_corp_id = (SELECT corp_id FROM corp_info WHERE orgn_num = #{orgnNum})
+	) ci, (SELECT file_name, file_url, corp_id FROM upload_file_rela WHERE is_push = '1' ORDER BY create_time DESC LIMIT 1) ufr
+  	WHERE fc.corp_id = ci.corp_id AND ufr.corp_id = fc.corp_id AND fc.contract_serial_num IS NULL
+  	ORDER BY fc.create_time LIMIT 0, #{size}
+  </select>
+  
+  <update id="updateContractByPush" parameterType="list">
+  	UPDATE flow_cntract 
+  	SET contract_serial_num = CASE rec_uid
+  	<foreach collection="list" item="item" index="index">
+  		WHEN #{item.recUid} THEN #{item.contractSerialNum}
+  	</foreach>
+  	END WHERE rec_uid IN
+  	<foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+		#{item.recUid}
+	</foreach>
+  </update>
+</mapper>

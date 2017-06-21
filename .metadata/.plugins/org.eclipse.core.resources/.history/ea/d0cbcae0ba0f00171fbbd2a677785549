@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>放款审批</title>
+	</head>
+
+	<body>
+		<div class="row">
+					<div class="title">
+						<span>项目尽调</span>
+					</div>
+				</div>
+		<div class="container-fluid">
+			<div class="row" style="margin-bottom: 10px;">
+				<div class="col-sm-12" style="line-height: 40px;">
+					<strong class="">基本信息</strong>
+				</div>
+			</div>
+		</div>
+	</body>
+
+</html>

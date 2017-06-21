@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>券商维护</title>
+<scfCSS>
+<link href="/scfcloud/css/style.css" rel="stylesheet">
+<link href="/scfcloud/106/css/selectordie_theme_03.css" rel="stylesheet">
+<link href="/scfcloud/css/bootstrap-table.css" rel="stylesheet">
+<link href="/scfcloud/css/sysfun.css" rel="stylesheet">
+<link href="/scfcloud/js/autocompleter/jquery.autocompleter.css" rel="stylesheet" />
+</scfCSS>
+</head>
+
+<body>
+<section class="iframeBody">
+	<div class="main-content-child">
+		<div class="row">
+			<div class="title">
+				<span>券商维护</span>
+			</div>
+		</div>
+		<fieldset>
+			<div class="row rowpad">
+				<div class="form-group">
+					<form id="searchForm" class="form-horizontal" role="form">
+						<div class="col-sm-4 col-sm-offset-4 input-group pull-left">
+							<!-- <input type='hidden' class="form-control" placeholder="券商名称" name="corpId" id="corpId" AUTOCOMPLETE="off" /> -->
+							<input class="form-control" placeholder="券商名称" name='corpName' id="corpName" autofocus  AUTOCOMPLETE="off"
+							 />
+						   <div class="input-group-addon searchIcon">
+								<a id="btn_search" class="glyphicon glyphicon-search icon-white" style="color:#ffffff;padding:0px 5px;" title="搜索" href="javascript:void(0)"></a>
+						    </div>
+						    <div class="input-group-addon searchIcon" onclick="ResetBtn()">
+						      <a class="fa fa-rotate-left reset icon-white" style="color:#ffffff;padding:0px 5px;" title="重置搜索信息" href="javascript:void(0)"></a>
+						    </div> 
+						</div>
+					</form>
+				</div>
+			 </div>
+		</fieldset>
+		<div class="panel-body">
+			<div class="row btnHide hidden">
+	     		<div class="col-sm-2">
+	     			<button style="margin-left: 20px;" id="btn_add" type="button" class="btn btn-link" data-toggle="modal"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加 </button> 
+	    		</div>
+	     	</div>
+			<table id="corpListTable" class="table"></table>
+		</div>
+	</div>
+</section>
+<scfScript>
+
+<script type="text/javascript" src="/scfcloud/js/bootstrap.js"></script>
+<script type="text/javascript" src="/scfcloud/106/js/selectordie.min.js"></script>
+<script type="text/javascript" src="/scfcloud/js/bootstrap-table.js"></script>
+<script type="text/javascript" src="/scfcloud/js/autocompleter/jquery.autocompleter.js"></script>
+<script type="text/javascript" src="/scfcloud/js/asset/traderInfo/traderInfoManager.js"></script>
+</scfScript>
+</body>
+</html>

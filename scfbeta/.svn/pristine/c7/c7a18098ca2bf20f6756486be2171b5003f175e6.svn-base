@@ -1,0 +1,159 @@
+package com.ut.scf.core.util;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * bean工具类
+ * 
+ * @author sunll
+ * 
+ */
+public class BeanUtil {
+
+	private static final Logger log = LoggerFactory.getLogger(BeanUtil.class);
+
+	private static final String STR_GET = "get";
+
+	private static final String STR_SET = "set";
+	
+	
+	public static  String dataType;
+	
+	public static void setDataType(String str){
+		dataType = str;
+	}
+	/**
+	 * bean及其父类所有的属性转化为map，属性必须有set、get方法
+	 * 
+	 * @param bean
+	 * @return
+	 */
+	public static Map<String, Object> beanToMap(Object bean) {
+		
+		Map<String, Object> result = new HashMap<>();
+		Field[] fields = bean.getClass().getDeclaredFields();
+		System.out.println(BeanUtil.dataType+"--------------------------");
+		try {
+			String getMethodName;
+			for (Field field : fields) {
+				if (!field.getName().equals("serialVersionUID")) {
+					getMethodName = STR_GET
+							+ StringUtils.capitalize(field.getName());
+					result.put(field.getName(), bean.getClass()
+							.getDeclaredMethod(getMethodName).invoke(bean));
+				}
+			}
+
+			Class<?> superBeanClass = bean.getClass().getSuperclass();
+			if (superBeanClass != Object.class) {
+				fields = superBeanClass.getDeclaredFields();
+
+				for (Field field : fields) {
+					if (!field.getName().equals("serialVersionUID")) {
+						getMethodName = STR_GET
+								+ StringUtils.capitalize(field.getName());
+						result.put(field.getName(), superBeanClass
+								.getDeclaredMethod(getMethodName).invoke(bean));
+					}
+				}
+			}
+		} catch (Exception e) {
+			log.warn("beanToMap Exception: ", e);
+		}
+
+		return result;
+	}
+
+	/**
+	 * map转化为bean及其父类所有的属性，属性必须有set、get方法
+	 * 
+	 * @param map
+	 * @param bean
+	 * @return
+	 */
+	public static void mapToBean(Map<String, Object> map, Object bean) {
+		Field[] fields = bean.getClass().getDeclaredFields();
+		try {
+			
+			String setMethodName;
+			for (Field field : fields) {
+				String name = field.getName();
+				Object tempObj;// 根据查出来的类型set值 oracle寻找big类型的重载set方法
+				if (map.containsKey(name) && map.get(name) != null) {
+					tempObj = map.get(name);
+					setMethodName = STR_SET + StringUtils.capitalize(name);
+					Method method =  null;
+					if("oracle".equals(BeanUtil.dataType)){
+						 method = bean.getClass().getDeclaredMethod(
+								setMethodName, tempObj.getClass());
+					}else{
+						 method = bean.getClass().getDeclaredMethod(
+								setMethodName, field.getType());
+					}
+					
+					method.invoke(bean, map.get(name));
+				} else if (map.containsKey(name.toUpperCase())
+						&& map.get(name.toUpperCase()) != null) {
+					// oracle 字段为全大写
+					tempObj = map.get(name.toUpperCase());
+					setMethodName = STR_SET + StringUtils.capitalize(name);
+					Method method = bean.getClass().getDeclaredMethod(
+							setMethodName, tempObj.getClass());
+					method.invoke(bean, map.get(name.toUpperCase()));
+
+				}
+			}
+
+			Class<?> superBeanClass = bean.getClass().getSuperclass();
+			if (superBeanClass != null && superBeanClass != Object.class) {
+				fields = superBeanClass.getDeclaredFields();
+
+				for (Field field : fields) {
+					if (map.containsKey(field.getName())
+							&& map.get(field.getName()) != null) {
+						setMethodName = STR_SET
+								+ StringUtils.capitalize(field.getName());
+						Method method = superBeanClass.getDeclaredMethod(
+								setMethodName, field.getType());
+						method.invoke(bean, map.get(field.getName()));
+					}
+				}
+			}
+		} catch (Exception e) {
+			log.warn("mapToBean Exception: ", e);
+		}
+	}
+
+	/**
+	 * Bean与Bean之间同属性复制
+	 * 
+	 * @param destBean
+	 * @param origBean
+	 */
+	public static void BeanToBean(Object destBean, Object origBean) {
+		try {
+			BeanUtils.copyProperties(destBean, origBean);
+		} catch (Exception e) {
+			log.warn("BeanToBean Exception: ", e);
+		}
+	}
+
+	public static String getValue(Map<String, Object> map, String key) {
+		return map.containsKey(key) ? String.valueOf(map.get(key)) : "";
+	}
+
+	public static String getValue(Map<String, Object> map, String key,
+			String defaultValue) {
+		return map.containsKey(key) ? String.valueOf(map.get(key))
+				: defaultValue;
+	}
+
+}

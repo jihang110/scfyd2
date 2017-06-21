@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete 5 elements from project &apos;scfcloud&apos;&#x0D;&#x0A;- Original project: &apos;scfcloud&apos;&#x0D;&#x0A;- Original elements:&#x0D;&#x0A;     jquery.min.js&#x0D;&#x0A;     main.css&#x0D;&#x0A;     main.js&#x0D;&#x0A;     modernizr-2.8.0.min.js&#x0D;&#x0A;     normalize.css" description="Delete elements" element1="WebContent/js/autocompleter/main.js" element2="WebContent/js/autocompleter/normalize.css" element3="WebContent/js/autocompleter/jquery.min.js" element4="WebContent/js/autocompleter/modernizr-2.8.0.min.js" element5="WebContent/js/autocompleter/main.css" elements="0" flags="589830" id="org.eclipse.jdt.ui.delete" resources="5" stamp="1480907615132" subPackages="false" version="1.0"/>
+</session>

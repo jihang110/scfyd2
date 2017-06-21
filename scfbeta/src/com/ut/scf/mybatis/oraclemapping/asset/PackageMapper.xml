@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ut.scf.dao.asset.IPackageManagerDao">
+  
+  <sql id="Base_Column_List">
+    rec_uid, corp_id, corp_name, ap_no, ap_amount, packet_time, asset_rating, create_time, 
+    create_user_id
+  </sql>
+  
+  <select id="selectPackageList" parameterType="hashmap"
+		resultType="hashmap">
+		select
+			rec_uid recUid, corp_id corpId, corp_name corpName, ap_no apNo, ap_amount apAmount, packet_time packetTime,
+			 asset_rating assetRating, create_time createTime, create_user_id createUser
+		from asset_package
+		<where>
+			1=1
+			<if test="corpId != null and corpId != ''">
+				and corp_id = #{corpId}
+			</if>
+			<if test="corpName != null and corpName != ''">
+				and corp_name LIKE CONCAT('%',#{corpName},'%')
+			</if>
+		</where>
+		order by create_time desc
+	</select>
+	
+	<insert id="insertPackage" parameterType="hashmap">
+		insert into asset_package (rec_uid, corp_id, corp_name, ap_no, ap_amount, packet_time,
+			 asset_rating, create_user_id, create_time)
+		values (#{recUid,jdbcType=VARCHAR},#{corpId,jdbcType=VARCHAR},
+		#{corpName,jdbcType=VARCHAR},#{apNo,jdbcType=VARCHAR},#{apAmount,jdbcType=DECIMAL},
+		#{packetTime,jdbcType=TIMESTAMP},#{assetRating,jdbcType=VARCHAR},
+		#{createUserId,jdbcType=VARCHAR},
+		sysdate)
+	</insert>
+	
+	<update id="updatePackage" parameterType="hashmap">
+		update asset_package
+		<set>
+			<if test="corpId != null">
+				corp_id = #{corpId,jdbcType=VARCHAR},
+			</if>
+			<if test="corpName != null">
+				corp_name = #{corpName,jdbcType=VARCHAR},
+			</if>
+			<if test="apNo != null">
+				ap_no = #{apNo,jdbcType=VARCHAR},
+			</if>
+			<if test="apAmount != null">
+				ap_amount = #{apAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="packetTime != null">
+				packet_time = #{packetTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="assetRating != null">
+				asset_rating = #{assetRating,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where rec_uid = #{recUid,jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="deletePackage" parameterType="java.lang.String">
+		delete from asset_package
+		where rec_uid = #{recUid}
+	</delete>
+	
+  
+</mapper>

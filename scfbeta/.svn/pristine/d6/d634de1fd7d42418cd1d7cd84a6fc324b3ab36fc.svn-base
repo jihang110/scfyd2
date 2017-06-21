@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="ThemeBucket">
+<link rel="shortcut icon" href="#" type="image/png">
+<title>征信</title>
+<scfCSS>
+<link href="/scfbeta/css/bootstrap-table.css" rel="stylesheet">
+<link href="/scfbeta/css/validator/bootstrapValidator.css" rel="stylesheet">
+<link href="/scfbeta/js/bootstrap-datetimepicker/css/datetimepicker.css"
+	rel="stylesheet" />
+<link href="/scfbeta/css/bootstrap-fileupload.min.css" rel="stylesheet"
+	type="text/css" />
+<link href="/scfbeta/css/sysfun.css" rel="stylesheet">
+<link href="/scfbeta/106/css/selectordie_theme_03.css" rel="stylesheet">
+</scfCSS>
+<scfScript>
+<script src="/scfbeta/106/js/selectordie.min.js" type="text/javascript"></script>
+<script src="/scfbeta/js/password.js"></script>
+<script type="text/javascript"
+	src="/scfbeta/js/advanced-datatable/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="/scfbeta/js/bootstrap-table.js"></script>
+<script type="text/javascript"
+	src="/scfbeta/js/bootstrap-validator/bootstrapValidator.js"></script>
+<script type="text/javascript"
+	src="/scfbeta/js/bootstrap-validator/zh_CN.js"></script>
+<script type="text/javascript"
+	src="/scfbeta/js/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript"
+	src="/scfbeta/js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript"
+	src="/scfbeta/js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript"
+	src="/scfbeta/js/bootstrap-fileupload.min.js"></script>
+<script type="text/javascript" src="/scfbeta/js/ajaxfileupload.js"></script>
+<script src="/scfbeta/js/validation-init.js"></script>
+<!--dynamic table initialization -->
+<script src="/scfbeta/js/crm/custInfoManager/creditReportManager.js"
+	type="text/javascript"></script>
+</scfScript>
+</head>
+
+<body>
+	<section class="iframeBody">
+		<div class="main-content-child ">
+			<div class="row">
+				<div class="title">
+					<span>信用报告</span>
+				</div>
+			</div>
+
+			<!-- 企业征信  -->
+
+			<fieldset>
+				<div class="row rowpad">
+					<div class="form-group">
+						<div class="col-sm-2">
+							<button id="btn_add" type="button" class="btn btn-default add"
+								data-toggle="modal" onclick="corpAddFun()">
+								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
+							</button>
+						</div>
+
+					</div>
+				</div>
+			</fieldset>
+			<table id="corpListTable" class="table" cellspacing="0" width="100%"></table>
+
+			<!-- 个人征信 -->
+
+			<fieldset style="margin-top: 16px">
+				<div class="row rowpad">
+					<div class="form-group">
+						<div class="col-sm-2">
+							<button id="btn_add" type="button" class="btn btn-default add"
+								data-toggle="modal" onclick="shareAddFun()">
+								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
+							</button>
+						</div>
+
+					</div>
+				</div>
+			</fieldset>
+			<table id="shareHolderListTable" class="table" cellspacing="0"
+				width="100%"></table>
+
+			<!--企业模态框 -->
+			<form class="form-horizontal" role="form" id="corpAddForm"
+				data-toggle="validator">
+				<div class="modal fade" id="corpAddModal" tabindex="-1"
+					role="dialog" aria-labelledby="corpAddModalLabel">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<h4 class="modal-title" id="corpAddModalLabel">新增</h4>
+							</div>
+							<div class="modal-body">
+								<input type="hidden" id="corpIsEdit" name="corpIsEdit">
+								<input type="hidden" id="creditId" name="creditId">
+								<fieldset id='corpField'>
+									<div class="form-group">
+										<label class="col-sm-4 control-label" for="corpId"> <span
+											class="required">*</span>所属企业
+										</label>
+										<div class="col-sm-6">
+											<select id="corpId" name="corpId" class="form-control"
+												required>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-4 control-label" for="relaEnterpriseId">
+											<span class="required">*</span>关联企业
+										</label>
+										<div class="col-sm-6">
+											<select id="relaEnterpriseId" name="relaEnterpriseId"
+												class="form-control">
+											</select>
+										</div>
+									</div>
+									<div class="form-group" style="display: none">
+										<label class="col-sm-4 control-label" for="creditType">征信类型</label>
+										<div class="col-sm-6">
+											<input type="text" name="creditType" class="form-control"
+												id="creditType" value="0">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-4 control-label" for="corpInquiryTime">查询时间</label>
+										<div class="col-sm-6">
+											<span style="position: relative; z-index: 9999;"> <input
+												id="corpInquiryTime" style="cursor: pointer;"
+												name="inquiryTime" class="form-control time" size="16"
+												type="text" value="2012-12-31" readonly>
+											</span> <span class="add-on"
+												style="margin-top: -31px; margin-right: 10px;"> <i
+												class="glyphicon glyphicon-calendar"></i>
+											</span>
+
+										</div>
+									</div>
+								</fieldset>
+
+							</div>
+							<div class="modal-footer">
+								<div class="form-group">
+									<div class="col-sm-4" id="corp_btn_blank"></div>
+									<div class="col-sm-3">
+										<button type="button" class="btn btn-default cancel"
+											data-dismiss="modal">取消</button>
+									</div>
+									<div class="col-sm-3">
+										<button type="submit" id="corp_btn_save"
+											class="btn btn-default add">保存</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+
+			<!--个人模态框 -->
+			<form class="form-horizontal" role="form" id="shareAddForm"
+				data-toggle="validator">
+				<div class="modal fade" id="shareAddModal" tabindex="-1"
+					role="dialog" aria-labelledby="shareAddModalLabel">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<h4 class="modal-title" id="shareAddModalLabel">新增</h4>
+							</div>
+							<div class="modal-body">
+
+								<input type="hidden" id="shareIsEdit" name="shareIsEdit">
+								<input type="hidden" id="creditId" name="creditId">
+								<fieldset id='shareField'>
+									<div class="form-group" style="display: none">
+										<label class="col-sm-4 control-label" for="shareCorpId">
+											<span class="required">*</span>企业名称
+										</label>
+										<div class="col-sm-6">
+											<select id="shareCorpId" name="corpId" class="form-control">
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-4 control-label" for="shareHolderId">
+											<span class="required">*</span>股东姓名
+										</label>
+										<div class="col-sm-6">
+											<select id="shareHolderId" name="shareHolderId"
+												class="form-control">
+											</select>
+										</div>
+									</div>
+									<div class="form-group" style="display: none">
+										<label class="col-sm-4 control-label" for="creditType">征信类型</label>
+										<div class="col-sm-6">
+											<input type="text" name="creditType" class="form-control"
+												id="creditType" value="1">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-4 control-label" for="shareInquiryTime">查询时间</label>
+										<div class="col-sm-6">
+											<span style="position: relative; z-index: 9999;"> <input
+												id="shareInquiryTime" style="cursor: pointer;"
+												name="inquiryTime" class="form-control time" size="16"
+												type="text" value="2012-12-31" readonly>
+											</span> <span class="add-on"
+												style="margin-top: -31px; margin-right: 10px;"> <i
+												class="glyphicon glyphicon-calendar"></i>
+											</span>
+										</div>
+									</div>
+								</fieldset>
+							</div>
+							<div class="modal-footer">
+								<div class="form-group">
+									<div class="col-sm-4" id="share_btn_blank"></div>
+									<div class="col-sm-3">
+										<button type="button" class="btn btn-default cancel"
+											data-dismiss="modal">取消</button>
+									</div>
+									<div class="col-sm-3">
+										<button type="submit" id="share_btn_save"
+											class="btn btn-default add">保存</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+
+
+		</div>
+	</section>
+
+</body>
+</html>

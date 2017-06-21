@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ut.scf.dao.crm.ICorpContractDao">
+	<select id="selectCorpContractList" resultType="hashmap" parameterType="hashmap" >
+    select cc.con_id "conId", cc.corp_id "corpId",cc.contract_type "contractType",
+    cc.project_name "projectName",cc.project_user "projectUser",
+    cc.start_date "startDate",cc.end_date "endDate",
+    cc.amount "amount",cc.create_time "createTime",
+    cc.create_user_id "createUserId"
+    from corp_contract cc 
+    where 1=1 
+    <if test="corpId != null">
+	  and cc.corp_id = #{corpId}
+	</if>
+	<if test="contractType != null">
+      and cc.contract_type = #{contractType,jdbcType=BIT}
+    </if>
+	order by create_time desc
+  </select>
+
+	<insert id="insertCorpContract" parameterType="hashmap">
+    insert into corp_contract (con_id, corp_id, contract_type, 
+      project_name, project_user, start_date, 
+      end_date, amount, create_time, 
+      create_user_id)
+    values (#{conId,jdbcType=VARCHAR}, #{corpId,jdbcType=VARCHAR}, #{contractType,jdbcType=BIT}, 
+      #{projectName,jdbcType=VARCHAR}, #{projectUser,jdbcType=VARCHAR}, #{startDate,jdbcType=DATE}, 
+      #{endDate,jdbcType=DATE}, #{amount,jdbcType=DECIMAL}, sysdate, 
+      #{createUserId,jdbcType=VARCHAR})
+  </insert>
+
+	<update id="updateCorpContract" parameterType="hashmap">
+   update corp_contract
+    <set>
+      <if test="corpId != null">
+        corp_id = #{corpId,jdbcType=VARCHAR},
+      </if>
+      <if test="contractType != null">
+        contract_type = #{contractType,jdbcType=BIT},
+      </if>
+      <if test="projectName != null">
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="projectUser != null">
+        project_user = #{projectUser,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null">
+        start_date = #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null">
+        end_date = #{endDate,jdbcType=DATE},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where con_id = #{conId,jdbcType=VARCHAR}
+  </update>
+
+	<delete id="deleteCorpContract" parameterType="java.lang.String">
+    delete from corp_contract
+    where con_id = #{conId,jdbcType=VARCHAR}
+  </delete>
+
+
+</mapper>

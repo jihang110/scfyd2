@@ -1,0 +1,5 @@
+ function addFun(type){
+	
+		 $('#mainFrame',top.document).attr('src','pubManager/custManager/custAdd.html');
+	 
+ }

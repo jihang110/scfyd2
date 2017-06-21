@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;MulitiInstanceCompleteTask.java&apos; to &apos;scfbeta/src/com.ut.scf.service.bpm.impl&apos;&#x0D;&#x0A;- Original project: &apos;activiti-basic&apos;&#x0D;&#x0A;- Destination element: &apos;scfbeta/src/com.ut.scf.service.bpm.impl&apos;&#x0D;&#x0A;- Original element: &apos;com.mossle.activiti.MulitiInstanceCompleteTask.java&apos;" description="Copy compilation unit" destination="=scfbeta/src&lt;com.ut.scf.service.bpm.impl" element1="/src\/main\/java&lt;com.mossle.activiti{MulitiInstanceCompleteTask.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1494482687524" units="1" version="1.0"/>
+</session>

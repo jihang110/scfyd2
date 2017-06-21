@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ut.scf.dao.sys.IRoleDao" >
+<resultMap id="BaseResultMap" type="com.ut.scf.respbean.sys.inner.Role">
+    <id column="role_id" jdbcType="VARCHAR" property="roleId" />
+    <result column="role_code" jdbcType="VARCHAR" property="roleCode" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="role_type" jdbcType="SMALLINT" property="roleType" />
+    <result column="corp_id" jdbcType="VARCHAR" property="corpId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="BIT" property="status" />
+  </resultMap>
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="com.ut.scf.respbean.sys.inner.Role">
+  	select 
+    role_id, role_code, role_name, role_type, corp_id, create_time, status
+    from sys_role
+     where true 
+			<if test="roleName!=null"> AND role_name LIKE CONCAT('%',#{roleName},'%')</if>
+			<if test="roleType!=null">AND role_type = #{roleType}</if>
+  </select>
+    <select id="selectbyexample" resultType="hashmap" parameterType="hashmap" >
+    	select sr.role_id, sr.role_code, sr.role_name, sr.role_type, st.type_name,sr.corp_id
+    	from scfnew.sys_role sr join scfnew.sys_type st on sr.role_type = st.type_id
+    		where true 
+    		<if test="roleName!=null"> AND sr.role_name LIKE CONCAT('%',#{roleName},'%')</if>
+			<if test="roleType!=null">AND sr.role_type = #{roleType}</if>
+  </select>
+  <insert id="insertIntoRole" parameterType="hashmap">
+  	INSERT INTO sys_role (role_id,role_code,role_name,role_type,corp_id,create_time,status)
+  	VALUES(#{roleId},#{roleCode},#{roleName},#{roleType},#{corpId},#{createTime},#{status})
+  </insert>
+  <insert id="insertIntoRoleMenu" parameterType="hashmap">
+  	INSERT INTO sys_role_menu (rec_uid,role_id,menu_id,create_time) VALUES
+  	(#{recUid},#{roleId},#{menuId},#{createTime})
+  </insert>
+  <delete id="deleteRole" parameterType="java.lang.String">
+  	DELETE from sys_role WHERE role_id = #{roleId}
+  </delete>
+   <delete id="deleteRoleMenu" parameterType="java.lang.String">
+	DELETE from sys_role_menu WHERE role_id = #{roleId}
+   </delete>
+</mapper>

@@ -1,0 +1,33 @@
+/*package com.ut.scf.web.controller.sys;
+
+import java.io.IOException;
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.ut.scf.core.dict.ErrorCodeEnum;
+import com.ut.scf.reqbean.sys.UserLoginReqBean;
+import com.ut.scf.respbean.BaseRespBean;
+import com.ut.scf.respbean.sys.inner.Role;
+
+@Controller
+public class IRoleController {
+	private static final Logger log = LoggerFactory
+			.getLogger(LoginController.class);
+	@RequestMapping(value = "/role")
+	@Resource 
+	public @ResponseBody List<Role> queryRole(){
+		return null;
+		}
+}
+*/

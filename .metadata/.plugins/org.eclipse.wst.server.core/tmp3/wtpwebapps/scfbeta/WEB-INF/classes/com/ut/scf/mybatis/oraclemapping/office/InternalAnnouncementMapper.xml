@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ut.scf.dao.office.IinternalAnnouncementDao">
+  <select id="selectInternalAnnouncementList" parameterType="hashmap" resultType="hashmap">
+	select 
+	i.rec_uid recUid,
+	i.corp_id coprId, 
+	i.title,
+	i.user_id userId,
+	s.username,
+	i.announcement_content announcementContent, 
+	to_char(i.release_date,'yyyy-mm-dd') releaseDate,  
+	i.attachment_url attachmentUrl,
+	to_char(i.create_time,'yyyy-mm-dd HH24:mm:ss') createTime
+    from internal_announcement i join sys_user s on i.user_id = s.user_id
+    <where>
+        1=1
+		<if test="title != null">
+	  		and i.title LIKE CONCAT(CONCAT('%', #{title}),'%')
+		</if>
+		and i.corp_id = #{corpId}
+		<if test="createUserId != null">
+	  		and i.create_user_id = #{createUserId}
+		</if>
+    </where>
+    order by i.create_time desc
+  </select>
+
+   <select id="selectInternalAnnouncement" parameterType="java.lang.String" resultType="hashmap">
+	select 
+	corp_id coprId, 
+	title, 
+	user_id userId, 
+	announcement_content announcementContent, 
+	to_char(release_date,'yyyy-mm-dd') releaseDate, 
+	attachment_url attachmentUrl
+    from internal_announcement
+    where rec_uid = #{recUid}
+  </select>
+  
+  <delete id="deleteInternalAnnouncement" parameterType="java.lang.String">
+    delete from internal_announcement
+    where rec_uid = #{recUid}
+  </delete>
+  
+  <insert id="insertInternalAnnouncement" parameterType="hashmap">
+    insert into internal_announcement (rec_uid, corp_id, title, 
+      user_id, announcement_content, release_date, 
+      attachment_url, create_user_id, create_time
+      )
+    values (#{recUid,jdbcType=VARCHAR}, #{corpId,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+      #{userId,jdbcType=VARCHAR}, #{announcementContent,jdbcType=VARCHAR}, #{releaseDate,jdbcType=TIMESTAMP}, 
+      #{attachmentUrl,jdbcType=VARCHAR}, #{createUserId,jdbcType=VARCHAR}, sysdate
+      )
+  </insert>
+  
+  <update id="updateInternalAnnouncement" parameterType="hashmap">
+    update internal_announcement
+    <set>
+      <if test="corpId != null">
+        corp_id = #{corpId,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="announcementContent != null">
+        announcement_content = #{announcementContent,jdbcType=VARCHAR},
+      </if>
+      <if test="releaseDate != null">
+        release_date = #{releaseDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="attachmentUrl != null">
+        attachment_url = #{attachmentUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where rec_uid = #{recUid,jdbcType=VARCHAR}
+  </update>
+</mapper>

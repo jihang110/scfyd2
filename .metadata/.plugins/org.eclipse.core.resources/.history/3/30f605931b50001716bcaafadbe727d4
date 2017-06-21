@@ -1,0 +1,14 @@
+ function addFun(type){
+	
+	 $('#detailForm input').attr('readonly',false);
+	 	$("select").attr("disabled",false);
+	 	$("#file").attr("disabled",false);
+		$("#btn-add").attr("disabled",false);
+	 if(type === 0){
+		 $('#mainFrame',top.document).attr('src','pubManager/custManager/custAdd.html');
+		 $('#isEdit').val(1); //新增1;修改2 
+	 }else if(type === 1){
+		 $("#shareInfoModal").modal();
+		 $('#isEdit2').val(1); //新增1;修改2 
+	 }
+ }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemesh>
+	<!-- 默认情况下， sitemesh 只对 HTTP 响应头中 Content-Type 为 text/html 的类型进行拦截和装饰， 我们可以添加更多的 mime 类型 -->
+ 	<mime-type>text/html</mime-type>
+ 	<mime-type>application/xhtml+xml</mime-type>
+ 	
+ 	<!-- 默认装饰器，当下面的路径都不匹配时，启用该装饰器进行装饰 -->
+<!--  	<mapping decorator="/decorator.html" /> -->
+ 	
+ 	<!-- 对不同的路径，启用不同的装饰器 -->
+    <!-- 指明满足“/*”的页面，将被“/WEB-INF/views/decorators/decorator.html”所装饰 -->
+    <mapping path="/*.html" decorator="/decorator.html" />
+
+	<!-- 排除，不进行装饰的路径 -->
+    <!-- 指明满足“/exclude.jsp*”的页面，将被排除，不被装饰 -->
+    <mapping path="/login.html" exclude="true" />
+    <mapping path="/crm/custInfoManager/info/*.html" exclude="true" />
+    <mapping path="/tabs/bmp/flowManager/projectTuning/*.html" exclude="true" />
+    <mapping path="/bpm/flowManager/FlowMngCommon.html" exclude="true" />
+   
+    
+    
+    <!-- 自定义 tag 规则 -->
+    <!-- Sitemesh 3 默认只提供了 body，title，head 等 tag 类型，我们可以通过实现 TagRuleBundle 扩展自定义的 tag 规则： -->
+    <content-processor>
+        <tag-rule-bundle class="com.ut.scf.web.tags.CSSTagRuleBundle" /> 
+        <tag-rule-bundle class="com.ut.scf.web.tags.ScriptTagRuleBundle" />
+    </content-processor>
+</sitemesh>

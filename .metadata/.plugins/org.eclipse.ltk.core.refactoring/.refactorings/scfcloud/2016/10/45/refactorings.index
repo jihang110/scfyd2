@@ -1,0 +1,46 @@
+1477880189598	Copy package
+1477880215120	Copy package
+1477880244577	Copy package
+1477880264719	Copy package
+1477880286018	Copy package
+1477880305844	Rename package 'com.ut.scf.service.cpm'
+1477880378954	Copy package
+1477880397624	Copy package
+1477880421655	Copy package
+1477880439163	Copy package
+1477880450449	Rename package 'com.ut.scf.reqbean.bpm.finance'
+1477880488828	Copy package
+1477880502186	Delete element
+1477880533420	Copy package
+1477880544414	Rename package 'com.ut.scf.reqbean.office.bpm'
+1477880586344	Copy package
+1477880604703	Copy package
+1477880643240	Copy package
+1477880674214	Copy package
+1477880724128	Copy package
+1477880803769	Delete elements
+1477880819220	Copy package
+1477880827827	Delete element
+1477880897917	Copy package
+1477880913933	Copy package
+1477881402855	Rename package 'com.ut.scf.dao.bpm.finance'
+1477881416862	Copy package
+1477881436905	Rename package 'com.ut.scf.dao.bpm.finance'
+1477881452494	Copy package
+1477892735948	Rename resource 'NewFile.xml'
+1477893901302	Rename resource 'IinternalAnnouncement.xml'
+1477894404039	Copy compilation units
+1477894445415	Delete element
+1477894482987	Rename resource 'IinternalAnnouncementMapping.xml'
+1477894494870	Rename type 'ClassNewsAddReqBean'
+1477894505079	Rename type 'ClassNewsUpdateReqBean'
+1477894531296	Rename type 'ClassNewsListReqBean'
+1477894564686	Rename type 'InternalAnnouncementReqBean'
+1477894799303	Copy compilation units
+1477894805798	Delete elements
+1477897180676	Copy package
+1477897255237	Copy package
+1477897415019	Delete element
+1477900978530	Copy compilation unit
+1477901141936	Rename type 'ClassNewsDetailRespBean'
+1477904374551	Rename resource 'InternalAnnouncementMapping.xml'

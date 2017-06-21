@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;scfcloud/src/com/ut/scf/dao/bpm/IFlowGuaranteeInfoDao.java&apos;" deleteContents="false" description="Delete resource &apos;scfcloud/src/com/ut/scf/dao/bpm/IFlowGuaranteeInfoDao.java&apos;" element1="/scfcloud/src/com/ut/scf/dao/bpm/IFlowGuaranteeInfoDao.java" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1491806368598"/>
+</session>

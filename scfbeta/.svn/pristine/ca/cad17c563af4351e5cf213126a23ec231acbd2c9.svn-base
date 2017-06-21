@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ut.scf.dao.sys.ICorpDao">
+  <resultMap id="CorpDeptResultMap" type="com.ut.scf.pojo.CorpDept">
+    <id column="dept_id" jdbcType="VARCHAR" property="deptId" />
+    <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+    <result column="corp_id" jdbcType="VARCHAR" property="corpId" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="contact_person" jdbcType="VARCHAR" property="contactPerson" />
+    <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+  </resultMap>
+  
+  <resultMap id="CorpInfoResultMap" type="com.ut.scf.pojo.CorpInfo">
+    <id column="corp_id" jdbcType="VARCHAR" property="corpId" />
+    <result column="corp_name" jdbcType="VARCHAR" property="corpName" />
+    <result column="corp_type" jdbcType="VARCHAR" property="corpType" />
+    <result column="sys_type" jdbcType="SMALLINT" property="sysType" />
+    <result column="is_country" jdbcType="TINYINT" property="isCountry" />
+    <result column="legal_person" jdbcType="VARCHAR" property="legalPerson" />
+    <result column="control_person" jdbcType="VARCHAR" property="controlPerson" />
+    <result column="reg_date" jdbcType="TIMESTAMP" property="regDate" />
+    <result column="logo_url" jdbcType="VARCHAR" property="logoUrl" />
+    <result column="real_pay_cap" jdbcType="INTEGER" property="realPayCap" />
+    <result column="reg_cap" jdbcType="INTEGER" property="regCap" />
+    <result column="industry" jdbcType="VARCHAR" property="industry" />
+    <result column="reg_address" jdbcType="VARCHAR" property="regAddress" />
+    <result column="office_address" jdbcType="VARCHAR" property="officeAddress" />
+    <result column="spec_natural" jdbcType="VARCHAR" property="specNatural" />
+    <result column="busi_scope" jdbcType="VARCHAR" property="busiScope" />
+    <result column="history_evc" jdbcType="VARCHAR" property="historyEvc" />
+    <result column="staff_num" jdbcType="INTEGER" property="staffNum" />
+    <result column="fixed_phone" jdbcType="VARCHAR" property="fixedPhone" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="ccy" jdbcType="VARCHAR" property="ccy" />
+    <result column="loanCardNo" jdbcType="VARCHAR" property="loanCardNo" />
+    <result column="nTaxReg" jdbcType="VARCHAR" property="nTaxReg" />
+    <result column="lTaxReg" jdbcType="VARCHAR" property="lTaxReg" />
+  </resultMap>
+  
+  
+  <select id="getCorpInfoList" resultType="hashmap" parameterType="hashmap">
+    select
+ ci.corp_id "corpId", ci.corp_name "corpName",ci.reg_cap "regCap",ci.corp_type "corpType",ci.is_country "isCountry", ci.sys_type "sysType", ci.note "note",
+ 	ci.legal_person "legalPerson",ci.ccy "ccy", ci.control_person "controlPerson", ci.fixed_phone "fixedPhone", ci.reg_date "regDate", ci.logo_url "logoUrl",
+ 	ci.staff_num "staffNum", ci.real_pay_cap "realPayCap", ci.industry "industry", ci.reg_address "regAddress",ci.core_corp_id "coreCorpId",ci.loan_card_no "loanCardNo",
+ 	ci.office_address "officeAddress", ci.history_evc "historyEvc", ci.spec_natural "specNatural", ci.busi_scope "busiScope",ci.core_corp_name "coreCorpName",
+ 	ci.app_num "appNum",ci.open_account_licence "openAccountLicence",ci.customer_app_serial_num "customerAppSerialNum", ci.orgn_credit_num "orgnCreditNum",
+ 	ci.orgn_num "orgnNum",ci.business_license "businessLicense",ci.applicant_name "applicantName",ci.applicant_phone "applicantPhone",
+ 	ci.applicant_fix_phone "applicantFixPhone",ci.apply_amt "applyAmt",ci.is_push "isPush",ci.prd_status "prdStatus", NVL(a.num,0) "supplierNum",
+ 	ci.job "job",ci.email "email"    from corp_info ci LEFT JOIN (SELECT COUNT(1) num, core_corp_id corp_id FROM corp_info WHERE core_corp_id IS NOT NULL GROUP BY core_corp_id) a
+    ON ci.corp_id = a.corp_id
+    <where>
+        ci.status=1
+        <if test="corpId!=null and corpId!='' ">  
+            and ci.corp_id = '${corpId}'
+        </if>
+        <if test="userCorpList !=null">
+	 	 and ci.corp_id in ${userCorpList}
+		</if>
+    	<if test="corpName!=null and corpName!='' ">
+	    	<choose>
+				<when test="corpNameIsAll == 1">
+					and ci.corp_name = '${corpName}'
+				</when>
+				<otherwise>
+					and ci.corp_name LIKE CONCAT(CONCAT('%', '${corpName}'),'%')
+				</otherwise>
+			</choose>
+        </if>
+        <if test="legalPerson!=null and legalPerson!='' ">  
+            and ci.legal_person LIKE CONCAT(CONCAT('%', ${legalPerson}),'%')   
+        </if>
+        <if test="controlPerson!=null and controlPerson!='' ">  
+            and ci.control_person LIKE CONCAT(CONCAT('%', ${controlPerson}),'%')   
+        </if>
+        <if test="sysType!=null and sysType!='' ">  
+            and ci.sys_type=${sysType}
+        </if>
+        <if test="prdStatus !=null and prdStatus !=''">
+			and ci.prd_status = ${prdStatus}
+		</if>
+		<if test="createUserId != null">
+		  and ci.create_user_id = ${createUserId}
+		</if>
+    </where>
+  </select>
+  
+  <select id="countCorpByName" resultType="int" parameterType="hashmap" >
+    select count(1)
+    from corp_info d
+    where d.status=1 and  d.corp_name = #{corpName}
+    	<if test="corpId != null and corpId!=''">
+		 	and d.corp_id!= #{corpId}
+		</if>
+		<if test="sysType != null and sysType!=''">
+		 	and d.sys_type= #{sysType}
+		</if>
+  </select>
+  
+  <insert id="insertCorp" parameterType="com.ut.scf.pojo.CorpInfo">
+    insert into corp_info (corp_id, corp_name, corp_type, 
+      sys_type, is_country, legal_person, 
+      control_person, reg_date, logo_url, 
+      real_pay_cap, ccy, loan_card_no, 
+      industry, national_tax_registration, local_tax_registration, 
+      reg_cap, reg_address, office_address, 
+      spec_natural, busi_scope, history_evc, core_corp_id, core_corp_name, 
+      app_num, open_account_licence, customer_app_serial_num, 
+      orgn_num, business_license, orgn_credit_num,
+      staff_num, fixed_phone, applicant_name, applicant_phone, 
+      applicant_fix_phone, apply_amt,
+      note, create_time, create_user_id, status,is_push,prd_status,
+      job,email)
+    values (#{corpId,jdbcType=VARCHAR}, #{corpName,jdbcType=VARCHAR}, #{corpType,jdbcType=VARCHAR}, 
+      #{sysType,jdbcType=INTEGER}, #{isCountry,jdbcType=TINYINT}, #{legalPerson,jdbcType=VARCHAR}, 
+      #{controlPerson,jdbcType=VARCHAR}, #{regDate,jdbcType=DATE}, #{logoUrl,jdbcType=VARCHAR}, 
+      #{realPayCap,jdbcType=INTEGER}, #{ccy,jdbcType=VARCHAR}, #{loanCardNo,jdbcType=VARCHAR}, 
+      #{industry,jdbcType=VARCHAR}, #{nTaxReg,jdbcType=VARCHAR}, #{lTaxReg,jdbcType=VARCHAR}, 
+      #{regCap,jdbcType=INTEGER}, #{regAddress,jdbcType=VARCHAR}, #{officeAddress,jdbcType=VARCHAR}, 
+      #{specNatural,jdbcType=VARCHAR}, #{busiScope,jdbcType=VARCHAR}, #{historyEvc,jdbcType=VARCHAR},#{coreCorpId,jdbcType=VARCHAR}, #{coreCorpName,jdbcType=VARCHAR}, 
+      #{appNum,jdbcType=VARCHAR}, #{openAccountLicence,jdbcType=VARCHAR}, #{customerAppSerialNum,jdbcType=VARCHAR}, 
+      #{orgnNum,jdbcType=VARCHAR}, #{businessLicense,jdbcType=VARCHAR},  #{orgnCreditNum,jdbcType=VARCHAR},
+      #{staffNum,jdbcType=INTEGER}, #{fixedPhone,jdbcType=VARCHAR}, #{applicantName,jdbcType=VARCHAR}, #{applicantPhone,jdbcType=VARCHAR}, 
+      #{applicantFixPhone,jdbcType=VARCHAR}, #{applyAmt,jdbcType=DECIMAL},
+      #{note,jdbcType=VARCHAR},sysdate,#{createUserId,jdbcType=VARCHAR},1,#{isPush,jdbcType=TINYINT},#{prdStatus,jdbcType=TINYINT},
+      #{job,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="updateCorpInfoByPrimaryKey" parameterType="hashmap">
+    update corp_info
+     <set>
+      <if test="corpName != null">
+        corp_name = #{corpName},
+      </if>
+      <if test="corpType != null">
+        corp_type = #{corpType},
+      </if>
+      <if test="sysType != null">
+        sys_type = #{sysType},
+      </if>
+      <if test="isCountry != null">
+        is_country = #{isCountry},
+      </if>
+      <if test="legalPerson != null">
+        legal_person = #{legalPerson},
+      </if>
+      <if test="controlPerson != null">
+        control_person = #{controlPerson},
+      </if>
+      <if test="regDate != null">
+        reg_date = #{regDate},
+      </if>
+      <if test="logoUrl != null">
+        logo_url = #{logoUrl},
+      </if>
+      <if test="realPayCap != null">
+        real_pay_cap = #{realPayCap},
+      </if>
+      <if test="ccy != null">
+        ccy = #{ccy,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCardNo != null">
+        loan_card_no = #{loanCardNo},
+      </if>
+      <if test="industry != null">
+        industry = #{industry},
+      </if>
+      <if test="nationalTaxRegistration != null">
+        national_tax_registration = #{nationalTaxRegistration},
+      </if>
+      <if test="localTaxRegistration != null">
+        local_tax_registration = #{localTaxRegistration},
+      </if>
+      <if test="regCap != null">
+        reg_cap = #{regCap},
+      </if>
+      <if test="regAddress != null">
+        reg_address = #{regAddress},
+      </if>
+      <if test="officeAddress != null">
+        office_address = #{officeAddress},
+      </if>
+      <if test="specNatural != null">
+        spec_natural = #{specNatural},
+      </if>
+      <if test="busiScope != null">
+        busi_scope = #{busiScope},
+      </if>
+      <if test="historyEvc != null">
+        history_evc = #{historyEvc},
+      </if>
+      <if test="coreCorpId != null">
+        core_corp_id = #{coreCorpId},
+      </if>
+      <if test="coreCorpName != null">
+        core_corp_name = #{coreCorpName},
+      </if>
+      <if test="appNum != null">
+        app_num = #{appNum,jdbcType=VARCHAR},
+      </if>
+      <if test="orgnCreditNum != null">
+      	orgn_credit_num = #{orgnCreditNum},
+      </if>
+      <if test="openAccountLicence != null">
+        open_account_licence = #{openAccountLicence},
+      </if>
+      <if test="customerAppSerialNum != null">
+        customer_app_serial_num = #{customerAppSerialNum},
+      </if>
+      <if test="orgnNum != null">
+        orgn_num = #{orgnNum,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicense != null">
+        business_license = #{businessLicense,},
+      </if>
+      <if test="staffNum != null">
+        staff_num = #{staffNum},
+      </if>
+      <if test="fixedPhone != null">
+        fixed_phone = #{fixedPhone},
+      </if>
+      <if test="applicantName != null">
+        applicant_name = #{applicantName},
+      </if>
+      <if test="applicantPhone != null">
+        applicant_phone = #{applicantPhone},
+      </if>
+      <if test="applicantFixPhone != null">
+        applicant_fix_phone = #{applicantFixPhone},
+      </if>
+      <if test="applyAmt != null">
+        apply_amt = #{applyAmt},
+      </if>
+      <if test="note != null">
+        note = #{note},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId},
+      </if>
+      <if test="status != null">
+        status = #{status},
+      </if>
+      <if test="isPush != null">
+        is_push = #{isPush},
+      </if>
+      <if test="prdStatus != null">
+        prd_status = #{prdStatus},
+      </if>
+      <if test="job != null">
+        job = #{job},
+      </if>
+      <if test="email != null">
+        email = #{email},
+      </if>
+    </set>
+    where corp_id = #{corpId}  and status = 1
+  </update>
+  
+  <select id="countDeptByCorpId" resultType="int" parameterType="string" >
+    select count(1)
+    from corp_dept d
+    where d.status=1 and d.corp_id = #{corpId}
+  </select>
+  
+  <select id="selectAllRelaCorp" resultType="map" >
+    select c.corp_id corpId
+    from corp_info c
+    where c.status=1
+  </select>
+  
+  
+  <select id="getSupplierInfoList" resultType="hashmap" parameterType="hashmap">
+    select
+    ci.corp_name "corpName",ci.sys_type "sysType","ci.core_corp_id",
+    ci.orgn_num "orgnNum"
+   
+    from corp_info ci 
+    <where>
+        ci.status=1
+        <if test="corpId!=null">  
+            and ci.core_corp_id = #{corpId}
+        </if>
+        <if test="sysType!=null and sysType!='' ">  
+            and ci.sys_type = 5
+        </if>
+    </where>
+  </select>
+  
+  <select id="queryCoreEnterpriseList" resultType="hashmap" parameterType="hashmap">
+	SELECT ci.corp_id "corpId", ci.corp_name "corpName"
+	FROM corp_info ci
+	<where>
+        ci.status=1
+        <if test="sysType!=null and sysType!='' ">  
+            AND ci.sys_type = #{sysType}
+        </if>
+    </where>
+  </select>
+  
+  <select id="getPackageCorpList" resultType="hashmap" parameterType="hashmap">
+	select ci.corp_id "corpId", ci.corp_name "corpName"
+	from corp_info ci
+	<where>
+        ci.status=1 
+        <if test="sysType!=null and sysType!='' "> 
+        	and ci.sys_type = #{sysType}
+        </if>
+<!-- 		and ci.corp_id not in (select corp_id from asset_package) -->
+    </where>
+  </select>
+  
+  <select id="getSupplierByPush" resultType="hashmap" parameterType="hashmap">
+  	SELECT 
+  	corp_id "corpId", corp_name "customerName", customer_app_serial_num "customerAppSerialNum", app_num "appNum", orgn_num "orgnNum", 
+  	applicant_name "applicantName", applicant_fix_phone "applicantFixPhone", applicant_phone "applicantPhone", apply_amt "applyAmt"
+	FROM corp_info
+	WHERE sys_type = #{sysType} AND is_push = #{isPush} AND customer_app_serial_num IS NULL
+	AND core_corp_id = (SELECT corp_id FROM corp_info WHERE orgn_num = #{orgnNum})
+	ORDER BY create_time LIMIT 0, #{size}
+  </select>
+  
+  <update id="updateSupplierByPush" parameterType="list">
+  	UPDATE corp_info 
+  	SET customer_app_serial_num = CASE corp_id
+  	<foreach collection="list" item="item" index="index">
+  		WHEN #{item.corpId} THEN #{item.customerAppSerialNum}
+  	</foreach>
+  	END WHERE corp_id IN
+  	<foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+		#{item.corpId}
+	</foreach>
+  </update>
+  
+  <select id="countCorpByOrgnNum" resultType="int" parameterType="hashmap" >
+    select count(1)
+    from corp_info
+    where status=1  and  orgn_num = #{orgnNum,jdbcType=VARCHAR} 
+    	<if test="corpId != null and corpId!=''">
+		 	and corp_id!= #{corpId,jdbcType=VARCHAR}
+		</if>
+  </select>
+  
+  <select id="getSupplierIdByOrgn" resultType="java.lang.String" parameterType="hashmap">
+  	SELECT corp_id corpId FROM corp_info
+	WHERE sys_type = #{sysType} AND orgn_num = #{orgnNum}
+	AND core_corp_id = (SELECT corp_id FROM corp_info WHERE orgn_num = #{requestOrgnNum})
+	<if test="appNum!=null and sysType!='' "> 
+    	and app_num = #{appNum}
+    </if>
+  </select>
+</mapper>

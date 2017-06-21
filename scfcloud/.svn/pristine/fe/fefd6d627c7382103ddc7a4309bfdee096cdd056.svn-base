@@ -1,0 +1,438 @@
+<div class="panel-body">
+	<!-- 基本信息 -->
+	<div class="container-fluid">
+		<div class="row" style="margin-bottom: 10px;margin-top: 20px;">
+			<div class="col-sm-2" style="line-height: 40px;">
+				<strong class="text-muted">基本信息</strong>
+			</div>
+			<form class="form-horizontal" id="splinfoForm">
+				<div class="col-sm-12" style="margin-top: 30px">
+					<div class="form-group">
+						<label for="corpName" class="col-sm-2 control-label">供应商名称</label>
+						<div class="col-sm-3 scf_valid">
+							<input type="text" class="form-control" id="corpName"
+								name="corpName" >
+						</div>
+						<label for="coreCorpName" class="col-sm-2 control-label">核心企业名称</label>
+						<div class="col-sm-3 scf_valid">
+							<input type="hidden" class="form-control" id="coreCorpId"
+								name="coreCorpId" >
+							<input type="text" class="form-control" id="coreCorpName"
+								name="coreCorpName" >
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="orgnCreditNum" class="col-sm-2 control-label">机构信用代码</label>
+						<div class="col-sm-3 scf_valid">
+							<input type="text" class="form-control" id="orgnCreditNum"
+								name="orgnCreditNum">
+						</div>
+						<label for="openAccountLicence" class="col-sm-2 control-label">开户许可证</label>
+						<div class="col-sm-3 scf_valid">
+							<input type="text" class="form-control" id="openAccountLicence"
+								name="openAccountLicence">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="orgnNum" class="col-sm-2 control-label">组织机构代码</label>
+						<div class="col-sm-3 scf_valid">
+							<input type="text" class="form-control" id="orgnNum" name="orgnNum">
+						</div>
+						<label for="businessLicense" class="col-sm-2 control-label">营业执照</label>
+						<div class="col-sm-3 scf_valid">
+							<input type="text" class="form-control" id="businessLicense"
+								name="businessLicense">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="applicantName" class="col-sm-2 control-label">申请人姓名</label>
+						<div class="col-sm-3 scf_valid">
+							<input type="text" class="form-control" id="applicantName"
+								name="applicantName"  >
+						</div>
+						<label for="loanCardNo" class="col-sm-2 control-label">贷款卡号</label>
+						<div class="col-sm-3 scf_valid">
+							<input type="text" class="form-control" id="loanCardNo"
+								name="loanCardNo">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="applicantPhone" class="col-sm-2 control-label">申请人手机</label>
+						<div class="col-sm-3 scf_valid">
+							<input type="text" class="form-control" id="applicantPhone"
+								name="applicantPhone" >
+						</div>
+						<label for="applicantFixPhone" class="col-sm-2 control-label">申请人固定电话</label>
+						<div class="col-sm-3 scf_valid">
+							<input type="text" class="form-control" id="applicantFixPhone"
+								name="applicantFixPhone" >
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="applyAmt" class="col-sm-2 control-label">申贷金额</label>
+						<div class="col-sm-3 scf_valid">
+							<input type="text" class="form-control" id="applyAmt" name="applyAmt">
+						</div>
+					</div>
+				</div>
+				<div class="form-group" style="margin-top: 30px;">
+					<div class="col-sm-offset-9 col-sm-2" style="margin-right: 0px;">
+						<button type="button" style="margin-left: 70px;" class="btn btn-info" onclick="saveSplInfo()">
+							&nbsp;&nbsp;<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存&nbsp;&nbsp;
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<!-- 关联企业信息 -->
+	<div class="container-fluid new_hide">
+		<div class="row" style="margin-bottom: 10px;margin-top: 20px;">
+			<div class="col-sm-2" style="line-height: 40px;">
+				<strong class="text-muted">关联企业信息</strong>
+			</div>
+		</div>
+		<div class="pull-left">
+			<button class="btn btn-link" onclick="addInfoFun('Enterprise', 1)">
+				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
+			</button>
+		</div>
+	</div>
+	<table id="tableEnterprise" class="table"></table>
+	
+	<!-- 股东信息 -->
+	<div class="container-fluid new_hide">
+		<div class="row" style="margin-bottom: 10px;margin-top: 20px;">
+			<div class="col-sm-2" style="line-height: 40px;">
+				<strong class="text-muted">股东信息</strong>
+			</div>
+		</div>
+		<div class="pull-left">
+			<button class="btn btn-link" onclick="addInfoFun('ShareHolder', 1)">
+				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
+			</button>
+		</div>
+	</div>
+	<table id="tableShareHolder" class="table" ></table>
+	
+	<!-- 账户信息 -->
+	<div class="container-fluid new_hide">
+		<div class="row" class="row" style="margin-bottom: 10px;margin-top: 20px;">
+			<div class="col-sm-2" style="line-height: 40px;">
+				<strong class="text-muted">账户信息</strong>
+			</div>
+		</div>
+		<div class="pull-left">
+			<button class="btn btn-link" onclick="addInfoFun('CorpAccount', 1)">
+				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
+			</button>
+		</div>
+	</div>
+	<table id="tableCorpAccount" class="table" ></table>
+	
+	<!-- 附件上传 -->
+	<div class="container-fluid new_hide">
+		<div class="row" style="margin-bottom: 10px;margin-top: 20px;">
+			<div class="col-sm-2" style="line-height: 40px;">
+				<strong class="text-muted">附件上传</strong>
+			</div>
+		</div>
+		<div class="pull-left">
+			<button class="btn btn-link" onclick="uploadAttachment(1)">
+				<span class="glyphicon glyphicon-export" aria-hidden="true">&nbsp;</span>上传
+			</button>
+		</div>
+	</div>
+	<table id="baseAttachment" class="table table-bordered"></table> 
+</div>
+
+<!-- 关联企业模态框 -->
+<form class="form-horizontal" role="form" id="addModalFormEnterprise" data-toggle="validator">
+	<input type="hidden" id="recUid" name="recUid">
+	<div class="modal fade" id="addModalEnterprise" tabindex="-1" role="dialog"
+	 aria-labelledby="addModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="addModalEnterpriseLabel">新增</h4>
+				</div>
+				<div class="modal-body">
+					<fieldset id='field'>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="enterpriseName">
+								<span class="required">*</span> 关联企业名称
+							</label>
+							<div class="col-sm-6">
+								<input class="form-control" placeholder="关联企业名称"
+									name="enterpriseName" id="enterpriseName" type="text" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="enterpriseType">企业类型</label>
+							<div class="col-sm-6">
+								<select id="enterpriseType" name="enterpriseType"
+									class="form-control">
+									<option value="1">国有企业</option>
+									<option value="2">外资企业</option>
+									<option value="3">民营企业</option>
+									<option value="4">上市公司</option>
+									<option value="5">其他</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="relationType"><span
+								class="required">*</span>关系类型</label>
+							<div class="col-sm-6">
+								<select id="relationType" name="relationType"
+									class="form-control">
+									<option value="1">子公司</option>
+									<option value="2">母公司</option>
+									<option value="3">兄弟公司</option>
+									<option value="4">其他</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="enterpriseCorporation"><span
+								class="required">*</span>企业法人</label>
+							<div class="col-sm-6">
+								<input type="text" id="enterpriseCorporation"
+									name="enterpriseCorporation" class="form-control"
+									placeholder="企业法人" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="busiScope">经营范围</label>
+							<div class="col-sm-6">
+								<input class="form-control" placeholder="经营范围" name="busiScope"
+									id="busiScope" type="text" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="industry"><span
+								class="required">*</span>所属行业</label>
+							<div class="col-sm-6">
+								<input class="form-control" placeholder="所属行业" name="industry"
+									id="industry" type="text" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="ccy">注册资本币别</label>
+							<div class="col-sm-6">
+								<select id="ccy" name="ccy" class="form-control">
+									<option value="人民币">人民币</option>
+									<option value="美元">美元</option>
+								</select>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+				<div class="modal-footer">
+					<div class="form-group">
+						<div class="col-sm-4" id="btn_blank"></div>
+						<div class="col-sm-3">
+							<button type="button" class="btn btn-default cancel"
+								data-dismiss="modal">取消</button>
+						</div>
+						<div class="col-sm-3">
+							<button type="submit" id="btn_save" class="btn btn-default add">保存
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
+<!-- 股东信息模态框 -->
+<form class="form-horizontal" role="form" id="addModalFormShareHolder" data-toggle="validator">
+	<input type="hidden" id="shareHolderId" name="shareHolderId">
+	<div class="modal fade" id="addModalShareHolder" tabindex="-1" role="dialog"
+		aria-labelledby="addModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="addModalShareHolderLabel">新增</h4>
+				</div>
+				<div class="modal-body">
+					<fieldset id='field'>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="shareName"><span
+								class="required">*</span>股东名称</label>
+							<div class="col-sm-6">
+								<input type="text" name="shareName" class="form-control"
+									id="shareName">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="shareType">股东性质</label>
+							<div class="col-sm-6">
+								<select id="shareType" name=shareType class="form-control">
+									<option value="1">个人</option>
+									<option value="2">法人</option>
+									<option value="3">其他</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="subscribedCapital">认缴资本</label>
+							<div class="col-sm-6">
+								<input type="text" name="subscribedCapital" class="form-control"
+									id="subscribedCapital">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="paidInCapital">实缴资本</label>
+							<div class="col-sm-6">
+								<input type="text" name="paidInCapital" class="form-control"
+									id="paidInCapital">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="shareProportion">持股比例(%)</label>
+							<div class="col-sm-6">
+								<input type="text" name="shareProportion" class="form-control"
+									id="shareProportion">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="note">一年内股东变动情况</label>
+							<div class="col-sm-6">
+								<textarea rows="3" name="note" class="form-control" id="note"></textarea>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+				<div class="modal-footer">
+					<div class="form-group">
+						<div class="col-sm-4"></div>
+						<div class="col-sm-3">
+							<button type="button" class="btn btn-default cancel"
+								data-dismiss="modal">取消</button>
+						</div>
+						<div class="col-sm-3">
+							<button type="submit" id="btn_save" class="btn btn-default add">保存
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
+<!-- 账户信息模态框 -->
+<form class="form-horizontal" role="form" id="addModalFormCorpAccount" data-toggle="validator">
+	<input type="hidden" id="recUid" name="recUid" />
+	<div class="modal fade" id="addModalCorpAccount" aria-hidden="true"
+		data-backdrop="static" tabindex="-1" role="dialog"
+		aria-labelledby="addModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="addModalCorpAccountLabel">添加</h4>
+				</div>
+				<div class="modal-body">
+					<fieldset id="field">
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="accountType"><span
+								class="required">*</span>账号类型</label>
+							<div class="col-sm-6">
+								<select id="accountType" name="accountType" class="form-control">
+									<option value="1">买方</option>
+									<option value="2">卖方</option>
+									<option value="3">其他</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="accountMark">账号标志</label>
+							<div class="col-sm-6 date form_datetime">
+								<select id="accountMark" name="accountMark" class="form-control">
+									<option value="1">实体账户</option>
+									<option value="2">虚拟账户</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="account"><span
+								class="required">*</span>账号</label>
+							<div class="col-sm-6">
+								<input type="text" name="account" class="form-control"
+									id="account" placeholder="账号" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="accountName"><span
+								class="required">*</span>户名</label>
+							<div class="col-sm-6">
+								<input type="text" name="accountName" class="form-control"
+									id="accountName" placeholder="开户人姓名" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="currency">币种</label>
+							<div class="col-sm-6">
+								<select id="currency" name="currency" class="form-control">
+									<option value="人民币">人民币</option>
+									<option value="美元">美元</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="accountBank"><span
+								class="required">*</span>开户银行</label>
+							<div class="col-sm-6">
+								<input type="text" name="accountBank" class="form-control"
+									id="accountBank" placeholder="开户银行" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="bankLocation"><span
+								class="required">*</span>开户网点</label>
+							<div class="col-sm-6">
+								<input type="text" name="bankLocation" class="form-control"
+									id="bankLocation" placeholder="开户网点" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-4 control-label" for="accountAmount"><span
+								class="required">*</span>账户金额</label>
+							<div class="col-sm-6">
+								<input type="text" name="accountAmount" class="form-control"
+									id="accountAmount" placeholder="账户金额" />
+							</div>
+						</div>
+					</fieldset>
+				</div>
+				<div class="modal-footer">
+					<div class="form-group">
+						<div class="col-sm-4"></div>
+						<div class="col-sm-3">
+							<button type="button" class="btn btn-default cancel"
+								data-dismiss="modal">取消</button>
+						</div>
+						<div class="col-sm-3">
+							<button type="submit" id="btn_save" class="btn btn-default add">保存</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>

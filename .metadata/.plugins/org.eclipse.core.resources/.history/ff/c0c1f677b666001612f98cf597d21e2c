@@ -1,0 +1,46 @@
+/****
+ * 
+ * 案例如此，还有其他不懂的细节。请自行查看bootstrapt-table.js的使用
+ */
+
+
+function creatable(data) {
+	$('#example').bootstrapTable({
+	    columns: [{
+	        field: 'role_code',
+	        title: 'roleCode'
+	    }, {
+	        field: 'role_id',
+	        title: 'roleId'
+	    }, {
+	        field: 'role_name',
+	        title: 'roleName'
+	    },{
+	        field: 'role_type',
+	        title: 'roleType'
+	    }{
+	        field: 'type_name',
+	        title: 'typeName'
+	    }],
+	    data:data
+	});
+}
+
+$(document).ready(function ajaxtable(){
+	 $.ajax({
+         type: "POST",
+         url: "/scfcloud/role/list",
+         contentType: "application/json",
+         data: JSON.stringify({ 
+        	 "roleName": "管理员",  //模糊匹配，可选参数
+        	  "roleType": "1",  //可选参数
+        	  "pageNo": 0,
+        	  "pageSize": 10
+}),
+         dataType: "json",
+         success: function(data){
+        	 console.log(data);
+        	 creatable(data.dataList);
+                  }
+     });
+});

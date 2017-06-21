@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>供应商信息</title>
+<scfCSS>
+<link rel="stylesheet" href="/scfcloud/css/bootstrap-table.css" />
+<link rel="stylesheet" href="/scfcloud/css/validator/bootstrapValidator.css" rel="stylesheet" />
+<link rel="stylesheet" href="/scfcloud/js/bootstrap-datetimepicker/css/datetimepicker.css" />
+<link rel="stylesheet" href="/scfcloud/js/autocompleter/jquery.autocompleter.css" />
+<link rel="stylesheet" href="/scfcloud/css/sysfun.css" />
+</scfCSS>
+<scfScript>
+<script type="text/javascript" src="/scfcloud/js/jquery.number.js"></script>
+<script type="text/javascript" src="/scfcloud/js/autocompleter/jquery.autocompleter.js"></script>
+<script type="text/javascript" src="/scfcloud/js/ajaxfileupload.js"></script>
+<script type="text/javascript" src="/scfcloud/js/bootstrap-table.js"></script>
+<script type="text/javascript" src="/scfcloud/js/bootstrap-validator/bootstrapValidator.js"></script>
+<script type="text/javascript" src="/scfcloud/js/bootstrap-validator/zh_CN.js"></script>
+<script type="text/javascript" src="/scfcloud/js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="/scfcloud/js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="/scfcloud/js/crm/custInfoManager/packaging_sup.js"></script>
+<script type="text/javascript" src="/scfcloud/js/crm/custInfoManager/financeCountManager.js"></script>
+<script type="text/javascript" src="/scfcloud/js/crm/custInfoManager/financeViladManager.js"></script>
+<script type="text/javascript" src="/scfcloud/js/crm/custInfoManager/financeInfoManager.js"></script>
+<script type="text/javascript" src="/scfcloud/js/crm/custInfoManager/attachment.js"></script>
+<script type="text/javascript" src="/scfcloud/js/crm/custInfoManager/creditInfoManager.js"></script>
+<script type="text/javascript" src="/scfcloud/js/crm/custInfoManager/contractInfoManager.js"></script>
+<script type="text/javascript" src="/scfcloud/js/crm/custInfoManager/supplierBase.js"></script>
+</scfScript>
+</head>
+<body>
+<section class="iframeBody">
+	<div class="main-content-child">
+		<div class="row">
+			<div class="title">
+				<span id="iframe_title">供应商信息</span>
+			</div>
+		</div>
+		<div class="tabbable">
+			<ul class="nav nav-pills nav-justified">
+				<li role="presentation" class="active">
+					<a href="#panel-base" class="btn btn-default" data-toggle="tab">基本信息</a>
+				</li>
+				<li role="presentation">
+					<a href="#panel-finance" class="btn btn-default" data-toggle="tab">财务信息</a>
+				</li>
+				<li role="presentation">
+					<a href="#panel-credit" class="btn btn-default" data-toggle="tab">信用及诉讼信息</a>
+				</li>
+				<li role="presentation">
+					<a href="#panel-business" class="btn btn-default" data-toggle="tab">业务信息</a>
+				</li>
+				<li role="presentation" class="invisible">
+					<a href="#" class="btn btn-default" data-toggle="tab"></a>
+				</li>
+				<li role="presentation" class="invisible">
+					<a href="#" class="btn btn-default" data-toggle="tab"></a>
+				</li>
+			</ul>
+		</div>
+		<div class="tab-content">
+			<div class="tab-pane fade in active" id="panel-base">
+				
+			</div>
+			<div class="tab-pane fade" id="panel-finance">
+				
+			</div>
+			<div class="tab-pane fade" id="panel-credit">
+				
+			</div>
+			<div class="tab-pane fade" id="panel-business">
+				
+			</div>
+		</div>
+		<input type="file" name="file" id="file" onchange="ajaxFileUpload();" style="display:none;">
+	</div>
+</section>
+<input type="hidden" id="corpId" name="corpId">
+<input type="hidden" id="isEdit" name="isEdit">
+</body>
+</html>

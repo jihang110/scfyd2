@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ut.scf.dao.auto.SysConfigMapper">
+  <resultMap id="BaseResultMap" type="com.ut.scf.pojo.auto.SysConfig">
+    <id column="ITEM_KEY" jdbcType="NVARCHAR" property="itemKey" />
+    <result column="ITEM_VALUE" jdbcType="NVARCHAR" property="itemValue" />
+    <result column="MODULE_NAME" jdbcType="NVARCHAR" property="moduleName" />
+    <result column="ITEM_NOTE" jdbcType="NVARCHAR" property="itemNote" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ITEM_KEY, ITEM_VALUE, MODULE_NAME, ITEM_NOTE, CREATE_TIME
+  </sql>
+  <select id="selectByExample" parameterType="com.ut.scf.pojo.auto.SysConfigExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from SCFCLOUD.SYS_CONFIG
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from SCFCLOUD.SYS_CONFIG
+    where ITEM_KEY = #{itemKey,jdbcType=NVARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from SCFCLOUD.SYS_CONFIG
+    where ITEM_KEY = #{itemKey,jdbcType=NVARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ut.scf.pojo.auto.SysConfigExample">
+    delete from SCFCLOUD.SYS_CONFIG
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ut.scf.pojo.auto.SysConfig">
+    insert into SCFCLOUD.SYS_CONFIG (ITEM_KEY, ITEM_VALUE, MODULE_NAME, 
+      ITEM_NOTE, CREATE_TIME)
+    values (#{itemKey,jdbcType=NVARCHAR}, #{itemValue,jdbcType=NVARCHAR}, #{moduleName,jdbcType=NVARCHAR}, 
+      #{itemNote,jdbcType=NVARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ut.scf.pojo.auto.SysConfig">
+    insert into SCFCLOUD.SYS_CONFIG
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="itemKey != null">
+        ITEM_KEY,
+      </if>
+      <if test="itemValue != null">
+        ITEM_VALUE,
+      </if>
+      <if test="moduleName != null">
+        MODULE_NAME,
+      </if>
+      <if test="itemNote != null">
+        ITEM_NOTE,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="itemKey != null">
+        #{itemKey,jdbcType=NVARCHAR},
+      </if>
+      <if test="itemValue != null">
+        #{itemValue,jdbcType=NVARCHAR},
+      </if>
+      <if test="moduleName != null">
+        #{moduleName,jdbcType=NVARCHAR},
+      </if>
+      <if test="itemNote != null">
+        #{itemNote,jdbcType=NVARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ut.scf.pojo.auto.SysConfigExample" resultType="java.lang.Integer">
+    select count(*) from SCFCLOUD.SYS_CONFIG
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update SCFCLOUD.SYS_CONFIG
+    <set>
+      <if test="record.itemKey != null">
+        ITEM_KEY = #{record.itemKey,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.itemValue != null">
+        ITEM_VALUE = #{record.itemValue,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.moduleName != null">
+        MODULE_NAME = #{record.moduleName,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.itemNote != null">
+        ITEM_NOTE = #{record.itemNote,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update SCFCLOUD.SYS_CONFIG
+    set ITEM_KEY = #{record.itemKey,jdbcType=NVARCHAR},
+      ITEM_VALUE = #{record.itemValue,jdbcType=NVARCHAR},
+      MODULE_NAME = #{record.moduleName,jdbcType=NVARCHAR},
+      ITEM_NOTE = #{record.itemNote,jdbcType=NVARCHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ut.scf.pojo.auto.SysConfig">
+    update SCFCLOUD.SYS_CONFIG
+    <set>
+      <if test="itemValue != null">
+        ITEM_VALUE = #{itemValue,jdbcType=NVARCHAR},
+      </if>
+      <if test="moduleName != null">
+        MODULE_NAME = #{moduleName,jdbcType=NVARCHAR},
+      </if>
+      <if test="itemNote != null">
+        ITEM_NOTE = #{itemNote,jdbcType=NVARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ITEM_KEY = #{itemKey,jdbcType=NVARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ut.scf.pojo.auto.SysConfig">
+    update SCFCLOUD.SYS_CONFIG
+    set ITEM_VALUE = #{itemValue,jdbcType=NVARCHAR},
+      MODULE_NAME = #{moduleName,jdbcType=NVARCHAR},
+      ITEM_NOTE = #{itemNote,jdbcType=NVARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+    where ITEM_KEY = #{itemKey,jdbcType=NVARCHAR}
+  </update>
+</mapper>

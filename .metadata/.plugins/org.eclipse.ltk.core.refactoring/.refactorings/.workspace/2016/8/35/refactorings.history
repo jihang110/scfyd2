@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;scfcloud/WebContent/META-INF/sysManager&apos;" deleteContents="false" description="Delete resource &apos;scfcloud/WebContent/META-INF/sysManager&apos;" element1="/scfcloud/WebContent/META-INF/sysManager" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1472284199820"/>
+</session>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ut.scf.dao.bpm.FlowProjectMapper">
+
+  <delete id="deleteFlowProject" parameterType="java.lang.String">
+    
+    delete from flow_project
+    where pro_id = #{proId}
+  </delete>
+  
+  <update id="updateFlowProject" parameterType="hashmap">
+    
+    update flow_project
+    <set>
+      <if test="projectName != null">
+        project_name = #{projectName},
+      </if>
+      <if test="apId != null">
+        ap_id = #{apId},
+      </if>
+      <if test="creditMode != null">
+        credit_mode = #{creditMode},
+      </if>
+      <if test="proStatus != null">
+        pro_status = #{proStatus},
+      </if>
+      <if test="loanAmt != null">
+      	loan_amt = #{loanAmt},
+      </if>
+      <if test="state != null">
+        state = #{state},
+      </if>
+    </set>
+    where pro_id = #{proId}
+  </update>
+
+  <select id="selectFlowProject" parameterType="hashmap" resultType="hashmap">
+  	select
+	fp.pro_id proId,fp.corp_id corpId, fp.project_name projectName, fp.ap_id apId, fp.credit_mode creditMode, fp.pro_status proStatus, fp.state fpState
+    from flow_project fp 
+    where  fp.pro_id = #{proId}
+  </select>
+  
+  <select id="selectFlowProjectList" parameterType="hashmap" resultType="hashmap">
+  	select fp.loan_amt loanAmt,
+	fp.pro_id proId,ci.orgn_num orgNo,ci.corp_name custName,fp.project_name projectName,ci.corp_id custNo,
+	fp.ap_id apId,ci.core_corp_id coreCorpId,ci.core_corp_name coreCorpName,fp.create_time createTime,
+	fp.create_user_id  createUserId, fp.credit_mode creditMode, fc.cnt_no cntNo, fc.contract_serial_num contractSerialNum, fp.pro_status proStatus
+    from flow_project fp 
+    join corp_info ci on fp.corp_id = ci.corp_id
+    LEFT JOIN flow_cntract fc on fc.pro_id = fp.pro_id
+    <where>
+        ci.status = 1
+		<if test="corpId != null and corpId !=''">
+	  		and fp.corp_id = #{corpId}
+		</if>
+		<if test="projectName != null and projectName !=''">
+	  		and fp.project_name LIKE CONCAT('%',#{projectName},'%')
+		</if>
+		<if test="apId != null and apId != ''">
+			and fp.ap_id = #{apId}
+		</if>
+		<if test="proStatus != null">
+			<choose>
+				<when test="proStatus == 2">
+					and fp.pro_status = 2 or fp.pro_status = 3
+				</when>
+				<otherwise>
+					and fp.pro_status = #{proStatus}
+				</otherwise>
+			</choose>
+		</if>
+		<if test="state !=null">
+			and fp.state = #{state}
+		</if>
+	</where>
+    order by fp.create_time desc
+  </select>
+  
+  <select id="selectFlowProjectListByCorpId" parameterType="hashmap" resultType="hashmap">
+  	select
+	fp.pro_id proId, ci.corp_name projectName,ci.corp_id corpId,ci.core_corp_name coreCorpName,fp.create_time createTime, fp.create_user_id  createUserId, fp.credit_mode creditMode, fp.pro_status proStatus
+    from flow_project fp join corp_info ci on fp.corp_id = ci.corp_id
+    where ci.status = 1 and ci.prd_status = 1
+    	<if test="corpId != null and corpId != ''">
+    		and fp.corp_id = #{corpId}
+    	</if>
+		<if test="projectName != null and projectName !=''">
+	  		and ci.corp_name LIKE CONCAT('%',#{projectName},'%')
+		</if>
+		<if test="proStatus !=null and proStatus !=''">
+			and fp.pro_status = #{proStatus}
+		</if>
+    order by fp.create_time desc
+  </select>
+  
+  <insert id="insertFlowProject" parameterType="hashmap">
+   	insert into flow_project (pro_id, corp_id, project_name, create_time, 
+      create_user_id, credit_mode, pro_status, state
+      )
+    values (#{proId}, #{corpId}, #{projectName}, sysdate, 
+      #{createUserId}, #{creditMode}, #{proStatus}, 0
+      )
+  </insert>
+  
+  <update id="updateFlowProjectByPackage" parameterType="hashmap">
+  	update flow_project set ap_id = #{apId}, pro_status = #{proStatus} where pro_id
+  	<foreach collection="proIds" item="item" index="index" separator="," open="in (" close=")">
+  		#{item}
+  	</foreach>
+  </update>
+</mapper>

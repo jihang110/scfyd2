@@ -1,0 +1,154 @@
+let isJump = CloudUtils.getIframeParams(window.location.href).isJump;
+
+$(function(){
+	$(".riskAdvices").attr("style","display:none;");
+	//如果是再申请跳转来的取值
+	if(isJump==1){
+		//1.隐藏查询
+		$("#proNameS").parents(".form-group").hide();
+		//2.把按钮改成申请
+		$("#changeText").html('&nbsp;&nbsp;<span class="glyphicon glyphicon glyphicon-share-alt" aria-hidden="true"></span>申请&nbsp;&nbsp;');
+		//获取存在store里的值
+		var XMJDData = store.get('XMJD');
+		//给前面定义的corpId赋值
+		corpId = XMJDData.custNo;
+		//项目尽调中的项目简介详情
+		CloudUtils.setForm(XMJDData,"infoForm");
+		//项目分析加上详情
+		CloudUtils.setForm(XMJDData,"addProAnlyForm");
+		//给供应商基本信息赋值
+		setSupplierBaseInfo(corpId);
+		
+	}else if(isJump==2){
+		$(".riskAdvices").attr("style","display:block;");
+		//1.隐藏查询
+		$("#proNameS").parents(".form-group").hide();
+		//2.把按钮改成申请
+		$("#changeText").html('&nbsp;&nbsp;<span class="glyphicon glyphicon glyphicon-share-alt" aria-hidden="true"></span>申请&nbsp;&nbsp;');
+		//3.变为只读
+		$(".setReadonly").attr("readonly","readonly");
+		//获取存在store里的值
+		var XMJDData = store.get('XMJD');
+		//给前面定义的corpId赋值
+		corpId = XMJDData.custNo;
+		//项目尽调中的项目简介详情
+		CloudUtils.setForm(XMJDData,"infoForm");
+		//项目分析加上详情
+		CloudUtils.setForm(XMJDData,"addProAnlyForm");
+		//给供应商基本信息赋值
+		setSupplierBaseInfo(corpId);
+	}
+})
+
+
+function clickbtn(){
+	var baseData = CloudUtils.convertStringJson('infoForm');
+	var anlyData = CloudUtils.convertStringJson('addProAnlyForm');
+	baseData = eval("(" + baseData + ")");
+	anlyData = eval("(" + anlyData + ")");
+	var data = $.extend({}, baseData, anlyData);
+	data['sysType'] = 5;
+	data['corpId'] = corpId ? corpId : '';
+	//如果是再申请
+	if(isJump==1){
+		var XMJDData = store.get('XMJD');
+		data.stepId = XMJDData.stepId;
+		data.workItemId = XMJDData.workItemId;
+		data.procInsId = XMJDData.procInsId;
+		var options = {
+				url : '../../workflow/apply_XMJD',
+				data : JSON.stringify(data),
+				callBackFun : function(data) {
+					if(data.result==0){
+						//FlowMngCommon.initTable('hndlNotFlowListTable', 'not', 'NOT');
+						//FlowMngCommon.initDetailTable('detail', $("#detailModal #procInsId").val(), 'NOT');
+						bootbox.alert(data.resultNote);
+						$("#changeText").attr("disabled","disabled");
+					}else{
+						bootbox.alert(data.resultNote);
+						return false;
+					}
+				},
+				errorCallback:function(data){
+					bootbox.alert(data.resultNote);
+					return false;
+				}
+		};
+		CloudUtils.ajax(options);
+	}else if(isJump==2){
+		var XMJDData = store.get('XMJD');
+		data.stepId = XMJDData.stepId;
+		data.workItemId = XMJDData.workItemId;
+		data.procInsId = XMJDData.procInsId;
+		data.agreeFlg = 0;
+		
+		var options = {
+				url : '../../workflow/check',
+				data : JSON.stringify(data),
+				callBackFun : function(data) {
+					if(data.result==0){
+						//FlowMngCommon.initTable('hndlNotFlowListTable', 'not', 'NOT');
+						//FlowMngCommon.initDetailTable('detail', $("#detailModal #procInsId").val(), 'NOT');
+						bootbox.alert(data.resultNote);
+					}else{
+						bootbox.alert(data.resultNote);
+						return false;
+					}
+				},
+				errorCallback:function(data){
+					bootbox.alert(data.resultNote);
+					return false;
+				}
+		};
+		CloudUtils.ajax(options);
+	}else{
+		var options = {
+				url : '../../workflow/startJDProcess',
+				data : JSON.stringify(data),
+				callBackFun : function(data) {
+					if(data.result==0){
+						corpId = $("#corpId").val();
+						Buttonhidden();
+						$("#infoForm").data('bootstrapValidator').resetForm();
+						bootbox.alert(data.resultNote);
+						//$("#infoForm")[0].reset();
+						return true;
+					}else{
+						bootbox.alert(data.resultNote);
+						return false;
+					}
+				},
+				errorCallback:function(data){
+					bootbox.alert("error");
+				}
+			};
+			CloudUtils.ajax(options);
+	}
+}
+
+/**
+ * 供应商基本信息的加载
+ */
+function setSupplierBaseInfo(corpId){
+	var data = {};
+	data.sysType = 5;
+	data.corpId = corpId;
+	data = JSON.stringify(data);
+	var options = {
+			url : '../../corp/list',
+			data : data,
+			callBackFun : function(data) {
+				if(data.result==0){
+					 CloudUtils.setForm(data.dataList[0],"splinfoForm");
+					return true;
+				}else{
+					bootbox.alert(data.resultNote);
+					return false;
+				}
+			},
+			errorCallback:function(data){
+				bootbox.alert("error");
+			}
+		};
+	CloudUtils.ajax(options);
+}

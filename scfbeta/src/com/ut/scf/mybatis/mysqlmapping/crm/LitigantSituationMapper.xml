@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ut.scf.dao.crm.ILitigantSituationDao">
+  <resultMap id="BaseResultMap" type="com.ut.scf.pojo.LitigantSituation">
+    <id column="rec_uid" jdbcType="VARCHAR" property="recUid" />
+    <result column="corp_id" jdbcType="VARCHAR" property="corpId" />
+    <result column="litigant_name" jdbcType="VARCHAR" property="litigantName" />
+    <result column="litigant_money" jdbcType="DECIMAL" property="litigantMoney" />
+    <result column="query_source" jdbcType="VARCHAR" property="querySource" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user_id" jdbcType="VARCHAR" property="createUserId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    rec_uid,corp_id,litigant_name, litigant_money, query_source, create_time, create_user_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from litigant_situation
+    where rec_uid = #{recUid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectLitigantSituationList" parameterType="hashmap" resultMap="BaseResultMap">
+  select rec_uid, corp_id, litigant_name, litigant_money, query_source, create_time, 
+  create_user_id from litigant_situation where 1=1 and corp_id=#{corpId}
+  order by create_time desc
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from litigant_situation
+    where rec_uid = #{recUid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ut.scf.pojo.LitigantSituation">
+    insert into litigant_situation (rec_uid,corp_id, litigant_name, litigant_money, 
+      query_source, create_time, create_user_id
+      )
+    values (#{recUid,jdbcType=VARCHAR},#{corpId,jdbcType=VARCHAR}, #{litigantName,jdbcType=VARCHAR}, #{litigantMoney,jdbcType=DECIMAL}, 
+      #{querySource,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ut.scf.pojo.LitigantSituation">
+    insert into litigant_situation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="recUid != null">
+        rec_uid,
+      </if>
+       <if test="corpId != null">
+        corp_id,
+      </if>
+      <if test="litigantName != null">
+        litigant_name,
+      </if>
+      <if test="litigantMoney != null">
+        litigant_money,
+      </if>
+      <if test="querySource != null">
+        query_source,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="recUid != null">
+        #{recUid,jdbcType=VARCHAR},
+      </if>
+      <if test="corpId != null">
+        #{corpId,jdbcType=VARCHAR},
+      </if>
+      <if test="litigantName != null">
+        #{litigantName,jdbcType=VARCHAR},
+      </if>
+      <if test="litigantMoney != null">
+        #{litigantMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="querySource != null">
+        #{querySource,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ut.scf.pojo.LitigantSituation">
+    update litigant_situation
+    <set>
+      <if test="corpId != null">
+        corp_id = #{corpId,jdbcType=VARCHAR},
+      </if>
+      <if test="litigantName != null">
+        litigant_name = #{litigantName,jdbcType=VARCHAR},
+      </if>
+      <if test="litigantMoney != null">
+        litigant_money = #{litigantMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="querySource != null">
+        query_source = #{querySource,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where rec_uid = #{recUid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ut.scf.pojo.LitigantSituation">
+    update litigant_situation
+    set  corp_id = #{corpId,jdbcType=VARCHAR},
+      litigant_name = #{litigantName,jdbcType=VARCHAR},
+      litigant_money = #{litigantMoney,jdbcType=DECIMAL},
+      query_source = #{querySource,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{createUserId,jdbcType=VARCHAR}
+    where rec_uid = #{recUid,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<link rel="shortcut icon" href="#" type="image/png" />
+<title>券商信息新增</title>
+<scfCSS>
+<link href="/scfcloud/css/bootstrap-table.css" rel="stylesheet" />
+<link href="/scfcloud/css/validator/bootstrapValidator.css" rel="stylesheet" />
+<link href="/scfcloud/js/bootstrap-datetimepicker/css/datetimepicker.css"
+	rel="stylesheet" />
+<link href="/scfcloud./js/autocompleter/jquery.autocompleter.css" rel="stylesheet" />
+<link href="/scfcloud/css/sysfun.css" rel="stylesheet" />
+<link href="/scfcloud/106/css/selectordie_theme_03.css" rel="stylesheet" />
+</scfCSS>
+</head>
+
+<body>
+	<section  class="iframeBody">
+		<div class="row">
+			<div class="title">
+				<span>券商信息</span>
+			</div>
+		</div>
+		<div class="panel-body">
+			<div class="container-fluid">
+				<div class="row">
+					<form class="form-horizontal" id="traderInfoMod" name="traderInfoMod">
+						<div class="col-sm-12" style="margin-top: 30px">
+							<input type="hidden" id="sysType" name="sysType">
+							<div class="form-group nonepadding">
+								<label for="corpName" class="col-sm-2 control-label">券商名称</label>
+								<div class="col-sm-3 scf_valid">
+								<!-- <input type='hidden' class="form-control" placeholder="券商名称" 
+								       name="corpId" id="corpId" AUTOCOMPLETE="off" /> -->
+								<input type="text" class="form-control" id="corpName"
+										name="corpName" AUTOCOMPLETE="off" />
+								</div>
+								<label for="applicantName" class="col-sm-2 control-label">联系人</label>
+								<div class="col-sm-3 scf_valid">
+									<input type="text" class="form-control" id="applicantName"
+										name="applicantName" AUTOCOMPLETE="off">
+								</div>
+							</div>	
+							<div class="form-group nonepadding">
+								<label for="applicantPhone" class="col-sm-2 control-label">移动电话</label>
+								<div class="col-sm-3 scf_valid">
+									<input type="text" class="form-control" id="applicantPhone"
+										name="applicantPhone" AUTOCOMPLETE="off">
+								</div>
+								<label for="job" class="col-sm-2 control-label">职务</label>
+								<div class="col-sm-3 scf_valid">
+									<input type="text" class="form-control" id="job"
+										name="job" AUTOCOMPLETE="off">
+								</div>
+							</div>
+							<div class="form-group nonepadding">
+								<label for="email" class="col-sm-2 control-label">电子邮箱</label>
+								<div class="col-sm-3 scf_valid">
+									<input type="text" class="form-control" id="email"
+										name="email" AUTOCOMPLETE="off">
+								</div>
+								<label for="regAddress" class="col-sm-2 control-label">联系地址</label>
+								<div class="col-sm-3 scf_valid">
+									<input type="text" class="form-control" id="regAddress"
+										name="regAddress" AUTOCOMPLETE="off">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-offset-9 col-sm-2" style="margin-right: 0px;">
+									<button type="submit" class="btn btn-info" style="margin-left: 70px;">
+										&nbsp;&nbsp;<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存&nbsp;&nbsp;
+									</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+<scfScript>
+<script src="/scfcloud/106/js/selectordie.min.js" type="text/javascript"></script>
+<script src="/scfcloud/js/password.js"></script>
+<script type="text/javascript" src="/scfcloud/js/jquery.validate.min.js"></script>
+<script src="/scfcloud/js/validation-init.js"></script>
+<script type="text/javascript"
+	src="/scfcloud/js/advanced-datatable/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="/scfcloud/js/bootstrap-table.js"></script>
+<script type="text/javascript"
+	src="/scfcloud/js/bootstrap-validator/bootstrapValidator.js"></script>
+<script type="text/javascript"
+	src="/scfcloud/js/bootstrap-validator/zh_CN.js"></script>
+<script type="text/javascript"
+	src="/scfcloud/js/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript"
+	src="/scfcloud/js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript"
+	src="/scfcloud/js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="/scfcloud/js/jquery.number.js"></script>
+<script type="text/javascript" src="/scfcloud/js/ajaxfileupload.js"></script>
+<!-- <script type="text/javascript" src="/scfcloud/js/autocompleter/jquery.autocompleter.js"></script> -->
+<!-- <script type="text/javascript" src="/scfcloud/js/asset/traderInfo/traderInfoManager.js"></script> -->
+<script type="text/javascript" src="/scfcloud/js/asset/traderInfo/traderInfoModManager.js"></script>
+</scfScript>
+</body>
+
+</html>

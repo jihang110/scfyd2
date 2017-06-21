@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ut.scf.dao.auto.SysMenuMapper">
+  <resultMap id="BaseResultMap" type="com.ut.scf.pojo.auto.SysMenu">
+    <id column="MENU_ID" jdbcType="NVARCHAR" property="menuId" />
+    <result column="MENU_NAME" jdbcType="NVARCHAR" property="menuName" />
+    <result column="MENU_LEVEL" jdbcType="DECIMAL" property="menuLevel" />
+    <result column="PARENT_ID" jdbcType="NVARCHAR" property="parentId" />
+    <result column="MENU_PATH" jdbcType="NVARCHAR" property="menuPath" />
+    <result column="MENU_ORDER" jdbcType="DECIMAL" property="menuOrder" />
+    <result column="NOTE" jdbcType="NVARCHAR" property="note" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="STATUS" jdbcType="DECIMAL" property="status" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    MENU_ID, MENU_NAME, MENU_LEVEL, PARENT_ID, MENU_PATH, MENU_ORDER, NOTE, CREATE_TIME, 
+    STATUS
+  </sql>
+  <select id="selectByExample" parameterType="com.ut.scf.pojo.auto.SysMenuExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from SCFCLOUD.SYS_MENU
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from SCFCLOUD.SYS_MENU
+    where MENU_ID = #{menuId,jdbcType=NVARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from SCFCLOUD.SYS_MENU
+    where MENU_ID = #{menuId,jdbcType=NVARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ut.scf.pojo.auto.SysMenuExample">
+    delete from SCFCLOUD.SYS_MENU
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ut.scf.pojo.auto.SysMenu">
+    insert into SCFCLOUD.SYS_MENU (MENU_ID, MENU_NAME, MENU_LEVEL, 
+      PARENT_ID, MENU_PATH, MENU_ORDER, 
+      NOTE, CREATE_TIME, STATUS
+      )
+    values (#{menuId,jdbcType=NVARCHAR}, #{menuName,jdbcType=NVARCHAR}, #{menuLevel,jdbcType=DECIMAL}, 
+      #{parentId,jdbcType=NVARCHAR}, #{menuPath,jdbcType=NVARCHAR}, #{menuOrder,jdbcType=DECIMAL}, 
+      #{note,jdbcType=NVARCHAR}, sysdate, #{status,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ut.scf.pojo.auto.SysMenu">
+    insert into SCFCLOUD.SYS_MENU
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="menuId != null">
+        MENU_ID,
+      </if>
+      <if test="menuName != null">
+        MENU_NAME,
+      </if>
+      <if test="menuLevel != null">
+        MENU_LEVEL,
+      </if>
+      <if test="parentId != null">
+        PARENT_ID,
+      </if>
+      <if test="menuPath != null">
+        MENU_PATH,
+      </if>
+      <if test="menuOrder != null">
+        MENU_ORDER,
+      </if>
+      <if test="note != null">
+        NOTE,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="menuId != null">
+        #{menuId,jdbcType=NVARCHAR},
+      </if>
+      <if test="menuName != null">
+        #{menuName,jdbcType=NVARCHAR},
+      </if>
+      <if test="menuLevel != null">
+        #{menuLevel,jdbcType=DECIMAL},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=NVARCHAR},
+      </if>
+      <if test="menuPath != null">
+        #{menuPath,jdbcType=NVARCHAR},
+      </if>
+      <if test="menuOrder != null">
+        #{menuOrder,jdbcType=DECIMAL},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=NVARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ut.scf.pojo.auto.SysMenuExample" resultType="java.lang.Integer">
+    select count(*) from SCFCLOUD.SYS_MENU
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update SCFCLOUD.SYS_MENU
+    <set>
+      <if test="record.menuId != null">
+        MENU_ID = #{record.menuId,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.menuName != null">
+        MENU_NAME = #{record.menuName,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.menuLevel != null">
+        MENU_LEVEL = #{record.menuLevel,jdbcType=DECIMAL},
+      </if>
+      <if test="record.parentId != null">
+        PARENT_ID = #{record.parentId,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.menuPath != null">
+        MENU_PATH = #{record.menuPath,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.menuOrder != null">
+        MENU_ORDER = #{record.menuOrder,jdbcType=DECIMAL},
+      </if>
+      <if test="record.note != null">
+        NOTE = #{record.note,jdbcType=NVARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null">
+        STATUS = #{record.status,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update SCFCLOUD.SYS_MENU
+    set MENU_ID = #{record.menuId,jdbcType=NVARCHAR},
+      MENU_NAME = #{record.menuName,jdbcType=NVARCHAR},
+      MENU_LEVEL = #{record.menuLevel,jdbcType=DECIMAL},
+      PARENT_ID = #{record.parentId,jdbcType=NVARCHAR},
+      MENU_PATH = #{record.menuPath,jdbcType=NVARCHAR},
+      MENU_ORDER = #{record.menuOrder,jdbcType=DECIMAL},
+      NOTE = #{record.note,jdbcType=NVARCHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      STATUS = #{record.status,jdbcType=DECIMAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ut.scf.pojo.auto.SysMenu">
+    update SCFCLOUD.SYS_MENU
+    <set>
+      <if test="menuName != null">
+        MENU_NAME = #{menuName,jdbcType=NVARCHAR},
+      </if>
+      <if test="menuLevel != null">
+        MENU_LEVEL = #{menuLevel,jdbcType=DECIMAL},
+      </if>
+      <if test="parentId != null">
+        PARENT_ID = #{parentId,jdbcType=NVARCHAR},
+      </if>
+      <if test="menuPath != null">
+        MENU_PATH = #{menuPath,jdbcType=NVARCHAR},
+      </if>
+      <if test="menuOrder != null">
+        MENU_ORDER = #{menuOrder,jdbcType=DECIMAL},
+      </if>
+      <if test="note != null">
+        NOTE = #{note,jdbcType=NVARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where MENU_ID = #{menuId,jdbcType=NVARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ut.scf.pojo.auto.SysMenu">
+    update SCFCLOUD.SYS_MENU
+    set MENU_NAME = #{menuName,jdbcType=NVARCHAR},
+      MENU_LEVEL = #{menuLevel,jdbcType=DECIMAL},
+      PARENT_ID = #{parentId,jdbcType=NVARCHAR},
+      MENU_PATH = #{menuPath,jdbcType=NVARCHAR},
+      MENU_ORDER = #{menuOrder,jdbcType=DECIMAL},
+      NOTE = #{note,jdbcType=NVARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      STATUS = #{status,jdbcType=DECIMAL}
+    where MENU_ID = #{menuId,jdbcType=NVARCHAR}
+  </update>
+</mapper>

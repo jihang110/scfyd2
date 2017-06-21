@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ut.scf.dao.office.IinternalInformDao">
+  <select id="selectInternalInformList" parameterType="hashmap" resultType="hashmap">
+	select 
+		rec_uid recUid,
+		title,
+		user_id userId,
+		inform_content informContent,
+		DATE_FORMAT(inform_date,'%Y-%m-%d') inform_date,
+		create_time create_time
+	from 
+		internal_inform
+    <where>
+        1=1
+		<if test="title != null">
+	  		and title LIKE CONCAT(CONCAT('%', #{title}),'%')
+		</if>
+    </where>
+    order by create_time desc
+  </select>
+
+   <select id="selectInternalInform" parameterType="java.lang.String" resultType="hashmap">
+	select 
+		rec_uid recUid,
+		title,
+		user_id userId,
+		inform_content informContent,
+		DATE_FORMAT(inform_date,'%Y-%m-%d') inform_date,
+		create_time create_time
+    from 
+    	internal_inform
+    where 
+    	rec_uid = #{recUid}
+  </select>
+
+</mapper>

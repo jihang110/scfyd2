@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><sitemesh:write property='title' /></title>
+<link rel="stylesheet" href="/scfcloud/css/index.css">
+<link rel="stylesheet" href="/scfcloud/css/style.css">
+<link rel="stylesheet" href="/scfcloud/css/style-responsive.css">
+<sitemesh:write property='scfCSS' />
+<style type="text/css">
+span.icon.expand-icon.glyphicon{
+	margin-right: 10px;
+}
+ul#leftMenuList{
+	border: none;
+}
+</style>
+</head>
+<body>
+	<header id="titleLogo" style="z-index:1000">
+		<div class="menu-left">
+			<img id="logo" src="/scfcloud/images/logo.png" style="height:50px" alt="">
+		</div>
+	    <div class="menu-right" style="width:136px;height:60px;">
+	        <ul class="notification-menu" >
+	            <li><i class="fa fa-user"></i>
+	                <a href="#" id="loginRealName" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+	                    <span class="caret"></span>
+	                </a>
+	                <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
+	                    <li onclick="logOut()"><a href="javascript:;"><i class="fa fa-sign-out"></i>退出登录</a></li>
+	                </ul>
+	            </li>
+	        </ul>
+	    </div>
+	</header>
+    <aside class="left-side sticky-left-side">
+         <ul class="nav nav-pills nav-stacked custom-nav" >
+            <li id="left-home"><a href="javascript:;" style="padding: 12px 15px;" onclick="goHome()"><i class="fa fa-home" style="margin-right: 5px;"></i> <span>首页</span></a></li>
+        </ul>
+        <div class="left-side-inner">
+            <ul class="nav nav-pills nav-stacked custom-nav" id="leftMenuList"></ul>
+        </div>
+    </aside>
+    <section class="main-content" >
+        <section class="wrapper">
+<!--             <div class="row"> -->
+<!--                 <div class="tab-form" id="tab-form"> -->
+<!--                     <section class="panel"> -->
+<!--                     	<div class="panel-body"> -->
+                        	
+<!-- 						</div> -->
+<!--                     </section> -->
+<!--                 </div> -->
+<!--             </div> -->
+            <sitemesh:write property='body' />
+        </section>
+	</section>
+<script type="text/javascript" src="/scfcloud/js/jquery-3.0.0.min.js"></script>
+<script type="text/javascript" src="/scfcloud/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/scfcloud/js/CloudUtils.js"></script>
+<script type="text/javascript" src="/scfcloud/js/store.js"></script>
+<script type="text/javascript" src="/scfcloud/js/jquery.nicescroll.js"></script>
+<script type="text/javascript" src="/scfcloud/js/bootstrap-treeview.js"></script>
+<script type="text/javascript" src="/scfcloud/js/bootbox-4.4.0/bootbox.js"></script>
+<script src="/scfcloud/js/index.js"></script>
+<sitemesh:write property='scfScript' />
+</body>
+</html>

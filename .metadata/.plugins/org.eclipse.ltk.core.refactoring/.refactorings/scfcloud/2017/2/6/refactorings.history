@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete 3 elements from project &apos;scfcloud&apos;&#x0D;&#x0A;- Original project: &apos;scfcloud&apos;&#x0D;&#x0A;- Original elements:&#x0D;&#x0A;     generatorConfig.xml.mine&#x0D;&#x0A;     generatorConfig.xml.r12856&#x0D;&#x0A;     generatorConfig.xml.r14621" description="Delete elements" element1="src/generatorConfig.xml.mine" element2="src/generatorConfig.xml.r12856" element3="src/generatorConfig.xml.r14621" elements="0" flags="589830" id="org.eclipse.jdt.ui.delete" resources="3" stamp="1486368179524" subPackages="false" version="1.0"/>
+</session>

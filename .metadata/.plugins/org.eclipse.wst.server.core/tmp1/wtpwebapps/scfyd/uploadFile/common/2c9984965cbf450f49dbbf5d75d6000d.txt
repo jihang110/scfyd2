@@ -1,0 +1,101 @@
+/**
+     * 驳回任务
+     * @return
+     */
+    def execute(String taskId) {
+        try {
+            Map<String, Object> variables
+            // 取得当前任务
+            HistoricTaskInstance currTask = getProcessEngine().historyService
+            //在历史表中根据taskId查询历史任务实例
+                    .createHistoricTaskInstanceQuery().taskId(taskId)
+                    .singleResult()
+            // 取得流程实例
+            ProcessInstance instance = getProcessEngine().runtimeService
+            //在运行表中根据 历史任务实例 中的 流程实例ID 取得对应的运行表中的流程实例
+                    .createProcessInstanceQuery()
+                    .processInstanceId(currTask.getProcessInstanceId())
+                    .singleResult()
+            if (instance == null) {
+                return "流程已经结束"
+            }
+            def map = getProcessEngine().runtimeService.getVariables(instance.id)
+            //取得流程实例中的变量
+            /*def list = getProcessEngine().historyService.createHistoricVariableInstanceQuery().processInstanceId(instance.getProcessInstanceId()).list()
+            for (def vb :list){
+                def variableName = vb.variableName
+                def value = vb.value
+
+                println("流程变量名："+variableName)
+                println("流程变量值："+value)
+                variables =new HashMap<String, Object>()
+                variables.put(variableName,value)
+            }*/
+            //取得流程实例中的变量
+            variables = instance.getProcessVariables()
+            // 取得流程定义
+            ProcessDefinitionEntity definition = (ProcessDefinitionEntity) ((RepositoryServiceImpl) getProcessEngine().repositoryService)
+            //根据历史任务实例中的流程定义查询仓库表中对应的流程定义
+                    .getDeployedProcessDefinition(currTask
+                    .getProcessDefinitionId())
+            if (definition == null) {
+                return "流程定义未找到"
+            }
+            /** 取得上一步活动*/
+            ActivityImpl currActivity = ((ProcessDefinitionImpl) definition)
+            //根据任务定义Key查找当前任务节点对象 返回当前活动对象
+                    .findActivity(currTask.getTaskDefinitionKey())
+
+            //获取当前节点进线对象
+            List<PvmTransition> nextTransitionList = currActivity
+                    .getIncomingTransitions()
+            // 清除当前活动的出口
+            List<PvmTransition> oriPvmTransitionList = new ArrayList<PvmTransition>()//保存当前活动出口
+            //当前活动输出流
+            List<PvmTransition> pvmTransitionList = currActivity
+                    .getOutgoingTransitions()//取出活动里的输出流==>也称为转向，或连线
+            for (PvmTransition pvmTransition : pvmTransitionList) {
+                oriPvmTransitionList.add(pvmTransition)
+            }
+            //清除活动里的输出流
+            pvmTransitionList.clear()
+
+            // 建立新出口
+            List<TransitionImpl> newTransitions = new ArrayList<TransitionImpl>()//保存新出口
+            //遍历进线对象
+            for (PvmTransition nextTransition : nextTransitionList) {
+                //获取来源
+                PvmActivity nextActivity = nextTransition.getSource()
+                //根据流程定义实体 查询来源对象 返回活动对象
+                ActivityImpl nextActivityImpl = ((ProcessDefinitionImpl) definition)
+                        .findActivity(nextActivity.getId())
+                //创建转向连线
+                TransitionImpl newTransition = currActivity//当前活动对象
+                        .createOutgoingTransition()
+                newTransition.setDestination(nextActivityImpl)
+                newTransitions.add(newTransition)
+            }
+            // 完成任务
+            def taskService = getProcessEngine().taskService
+            def historyService = getProcessEngine().historyService
+            List<Task> tasks = taskService.createTaskQuery()
+                    .processInstanceId(instance.getId())
+                    .taskDefinitionKey(currTask.getTaskDefinitionKey()).list()
+            for (Task task : tasks) {
+                taskService.complete(task.getId(), map)
+                historyService.deleteHistoricTaskInstance(task.getId())
+            }
+            // 恢复方向
+            for (TransitionImpl transitionImpl : newTransitions) {
+                //取出改变后的输出流 清除新建进去的输出流
+                currActivity.getOutgoingTransitions().remove(transitionImpl)
+            }
+            for (PvmTransition pvmTransition : oriPvmTransitionList) {
+                //将保存的活动出口添加进原始输出流集合中
+                pvmTransitionList.add(pvmTransition)
+            }
+            return "SUCCESS"
+        } catch (Exception e) {
+            return "ERROR"
+        }
+    }

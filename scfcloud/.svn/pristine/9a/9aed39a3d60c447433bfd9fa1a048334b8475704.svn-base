@@ -1,0 +1,51 @@
+<div class="panel-body">
+	<div class="container-fluid">
+		<div class="row">
+			<form class="form-horizontal" id="addProAnlyForm">
+				<div class="col-sm-12" style="margin-top:30px">
+					<div class="form-group col-sm-12 nonepadding">
+						<label for="proGuarantNote" class="col-sm-2 control-label">项目担保情况</label>
+						<div class="col-sm-10">
+							<textarea class="form-control" rows="3" id="proGuarantNote" name="proGuarantNote"></textarea>
+						</div>
+					</div>
+					<div class="form-group col-sm-12 nonepadding">
+						<label for="riskPrevMth" class="col-sm-2 control-label">风险防范及措施</label>
+						<div class="col-sm-10">
+							<textarea class="form-control" rows="3" id="riskPrevMth" name="riskPrevMth"></textarea>
+						</div>
+					</div>
+					<div class="form-group col-sm-12 nonepadding">
+						<label for="hisTransAnly" class="col-sm-2 control-label">买卖双方历史交易资料分析</label>
+						<div class="col-sm-10">
+							<textarea class="form-control" rows="3" id="hisTransAnly" name="hisTransAnly"></textarea>
+						</div>
+					</div>
+					<div class="form-group col-sm-12 nonepadding">
+						<label for="facBaseDocAnly" class="col-sm-2 control-label">保理基础资料分析</label>
+						<div class="col-sm-10">
+							<textarea class="form-control" rows="3" id="facBaseDocAnly" name="facBaseDocAnly"></textarea>
+						</div>
+					</div>
+					<div class="form-group col-sm-12 nonepadding">
+						<label for="profitAnly" class="col-sm-2 control-label">盈利情况分析</label>
+						<div class="col-sm-10">
+							<textarea class="form-control" rows="3" id="profitAnly" name="profitAnly"></textarea>
+						</div>
+					</div>
+					<div class="form-group col-sm-12 nonepadding">
+						<label for="concluSuggestion" class="col-sm-2 control-label">结论与建议</label>
+						<div class="col-sm-10">
+							<textarea class="form-control" rows="3" id="concluSuggestion" name="concluSuggestion"></textarea>
+						</div>
+					</div>
+				</div>
+			</form>
+			<div class="col-sm-offset-9 col-sm-2" style="margin-right: 0px;">
+				<button type="button" class="btn btn-info" id="changeText" style="margin-left: 70px;" onclick="clickbtn()" >
+				&nbsp;&nbsp;<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存&nbsp;&nbsp;
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

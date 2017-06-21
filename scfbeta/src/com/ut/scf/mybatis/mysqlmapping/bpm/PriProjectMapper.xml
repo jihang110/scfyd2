@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ut.scf.dao.bpm.IPriProjectDao">
+  <insert id="insertPriProject" parameterType="hashmap">
+    insert into pri_project (pri_id,pro_id, project_name, create_user_id,pri_status)
+    values (#{procInsID},#{proId}, #{projectName}, #{proMembId}, #{priStatus})
+  </insert>
+  
+  <update id="updatePriProject" parameterType="hashmap">
+    update pri_project
+    <set>
+      <if test="username != null">
+        terminate_username = #{username},
+      </if>
+      <if test="priStatus != null">
+        pri_status = #{priStatus},
+      </if>
+    </set>
+    where pri_id = #{procInsId}
+  </update>
+  
+  <select id="selectTerminateUserName" parameterType="long" resultType="string">
+    select terminate_username
+    from pri_project
+    where pri_id = #{procInsId}
+  </select>
+  
+  <select id="countProjectName" resultType="int" parameterType="hashmap" >
+    select count(1)
+    from flow_project e
+    <where>
+    	1=1 and e.project_name = #{projectName}
+    	<if test="state !=null">
+    		and e.state = #{state}
+    	</if>
+    	<if test ="proStatus !=null">
+    		and e.pro_status = #{proStatus}
+    	</if>
+    </where>
+  </select>
+</mapper>

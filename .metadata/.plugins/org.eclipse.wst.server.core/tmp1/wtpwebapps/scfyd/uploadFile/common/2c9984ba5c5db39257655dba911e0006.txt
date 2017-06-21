@@ -1,0 +1,36 @@
+http://www.importnew.com/14621.html
+
+http://blog.sina.com.cn/s/blog_4550f3ca0100qrsd.html
+
+
+
+
+http://jinnianshilongnian.iteye.com/blog/1752171 springmvc
+
+http://jinnianshilongnian.iteye.com/blog/1482071 spring
+
+
+存储过程http://www.cnblogs.com/carekee/articles/3070971.html
+
+
+存储过程文档  http://blog.csdn.net/rdarda/article/category/1214942
+
+
+http://blog.csdn.net/i_v1hu/article/details/44979197 spring值传递
+
+
+websocket、长连接、轮询
+
+
+http://www.cnblogs.com/mfc-itblog/p/5233453.html
+
+
+https://zhidao.baidu.com/question/2205686247312130028.html
+
+
+https://172.25.1.46/svn/SCF/SCFWEB2/scfcloud
+http://localhost:8080/scfcloud/uploadFile/corplogo/2c9984ba59b601b45cbeb60a47be0004.jpg
+http://localhost:8080/scfcloud/uploadFile/corplogo/2c9984ba59b601b41d1eb60a98c00005.jpg
+
+开放封闭原则
+netcat

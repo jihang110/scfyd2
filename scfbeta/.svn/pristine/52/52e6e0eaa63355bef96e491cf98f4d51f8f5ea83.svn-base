@@ -1,0 +1,889 @@
+$(document).ready(function() {
+	CloudUtils.inputCacheClear();
+	dataSearch();
+	initSupplierBaseTable();
+	formSupplierBaseValidator();
+	Buttonhidden();
+	$("#aplFactorLimit").number(true, 2);
+	$("#aplAmt").number(true, 2);
+	$("#proExpectProfit").number(true, 2);
+	$("#loanRt").number(true, 2);
+	$("#factorRate").number(true, 2);
+});
+/**
+ * 按钮的隐藏和显示
+ */
+function Buttonhidden(){
+	if (corpId) {
+		$(".new_hide .btn-link").removeClass('hidden');
+	} else {
+		$(".new_hide .btn-link").addClass('hidden');
+	}
+}
+
+
+/**
+ * 获取已通过立项的项目
+ */
+function dataSearch(){
+	var options = {
+		url : "../../flowProject/list",
+		data :'{"proStatus":0,"isPage":0,"state":0}',
+		callBackFun : function(data) {
+			if(data.result==0){
+				fuzzySearch(data);
+			}else{
+				bootbox.alert(data.resultNote);
+				return false;
+			}
+		},
+		errorCallback:function(data){
+			bootbox.alert(data.resultNote);
+			return false;
+		}
+	};		
+	CloudUtils.ajax(options);
+}
+/*
+ * 模糊查询
+ */
+function fuzzySearch(data){
+	var jsonStringData = JSON.stringify(data.dataList);
+	jsonStringData=jsonStringData.replace(/projectName/g,'label');
+	var jsonData=eval('('+ jsonStringData +')');
+	$('#proNameS').autocompleter({
+        highlightMatches: true,
+        source: jsonData,
+        // show hint
+        hint: false,
+        empty: true,
+        cashe: true,
+        callback: function (value, index, selected) {
+        	//给页面中的隐藏字段赋值
+        	$("#proName").val(value);
+        	$("#coreCorpName").val(selected.coreCorpName);
+        	$("#coreCorpNo").val(selected.coreCorpId);
+        	$("#custName").val(selected.custName);
+        	$("#custNo").val(selected.custNo);
+        	$("#corpId").val(selected.custNo);
+        	corpId = selected.custNo;
+        	//添加按钮的隐藏和显示
+        	Buttonhidden();
+        	$("#proNo").val(selected.proId);
+        	//根据custNo查询出corpId表的数据，插入到供应商信息中
+        	var options = {
+        			url : "../../corp/list",
+        			data :'{"corpId":"'+selected.custNo+'"}',
+        			callBackFun : function(data) {
+        				if(data.result==0){
+        					CloudUtils.setForm(data.dataList[0],'splinfoForm');
+        				}else{
+        					bootbox.alert(data.resultNote);
+        					return false;
+        				}
+        			},
+        			errorCallback:function(data){
+        				bootbox.alert(data.resultNote);
+        				return false;
+        			}
+        		};		
+        		CloudUtils.ajax(options);
+        		//初始化其他表格
+        		initSupplierBaseTable();
+        		//初始化附件表格
+    			initAttachment('base');
+    			initAttachment('finance');
+    			initAttachment('credit');
+    			initAttachment('contract');
+        }
+	});
+}
+
+function formSupplierBaseValidator(){
+	formEnterpriseValidator();//关联企业校验
+	formShareHolderValidator();//股东信息校验
+	formCorpAccountValidator();//账户信息校验
+	formIntroductionValidator();//项目简介校验
+}
+
+
+function formEnterpriseValidator(){
+	$('#addModalFormEnterprise').bootstrapValidator({
+	      message: 'This value is not valid',
+	      excluded:':disabled',
+	      feedbackIcons: {
+	          valid: 'glyphicon glyphicon-ok',
+	          invalid: 'glyphicon glyphicon-remove',
+	          validating: 'glyphicon glyphicon-refresh'
+	      },
+	      fields: {
+	    	 enterpriseName: {
+	              validators: {
+	                  notEmpty: {
+	                      message: '关联企业名称不能为空'
+	                  },
+	                  regexp: {
+	                	  regexp: /^[\u0391-\uFFE5A-Za-z]+$/,
+	                        message: '只能输入中文和英文'
+	                  },
+	                  stringLength: {
+	                      min: 1,
+	                      max: 32,
+	                      message: '关联企业名称长度为1-32'
+	                  }
+	              }
+	          },
+	         enterpriseCorporation: {
+	              validators: {
+	                  notEmpty: {
+	                      message: '企业法人不能为空'
+	                  },
+	                  regexp: {
+	                	  regexp: /^[\u0391-\uFFE5A-Za-z]+$/,
+	                        message: '只能输入中文和英文'
+	                  },
+	                  stringLength: {
+	                      min: 1,
+	                      max: 32,
+	                      message: '关联企业名称长度为1-32'
+	                  }
+	              }
+	          },
+	         busiScope : {
+	              validators: {
+	            	 stringLength: {
+	                      min: 1,
+	                      max: 32,
+	                      message: '经营范围长度为1-32'
+	                  }
+	              }
+	          },
+	        industry : {
+	              validators: {
+	            	 notEmpty: {
+	                      message: '所属行业不能为空'
+	                  },
+	                  regexp: {
+	                	  regexp: /^[\u0391-\uFFE5A-Za-z]+$/,
+	                        message: '只能输入中文和英文'
+	                  },
+	            	 stringLength: {
+	                      min: 1,
+	                      max: 32,
+	                      message: '所属行业长度为1-32'
+	                  }
+	              }
+	          } 
+	      }
+		})
+		.on('success.form.bv', function (e) {
+			e.preventDefault();
+			saveInfoFun('Enterprise');
+		    $(e.target).bootstrapValidator('resetForm', true);
+		});	
+}
+
+function formShareHolderValidator(){
+	$('#addModalFormShareHolder').bootstrapValidator({
+	      message: 'This value is not valid',
+	      excluded: ':disabled',
+	      feedbackIcons: {
+	          valid: 'glyphicon glyphicon-ok',
+	          invalid: 'glyphicon glyphicon-remove',
+	          validating: 'glyphicon glyphicon-refresh'
+	      },
+	      fields: {
+	    	  shareName: {
+	              validators: {
+	            	  notEmpty: {
+	                      message: '股东名称不能为空'
+	                  },
+	                  stringLength: {
+	                      min: 1,
+	                      max: 16,
+	                      message: '长度为1-16'
+	                  }
+	              }
+	          },
+	          shareType: {
+	              validators: {
+	            	  stringLength: {
+	                      min: 1,
+	                      max: 16,
+	                      message: '长度为1-16'
+	                  }
+	              }
+	          },
+	          corpId: {
+	              validators: {
+	                  notEmpty: {
+	                      message: '所属企业不能为空'
+	                  }
+	              }
+	          },
+	          subscribedCapital: {
+	              validators: {
+	            	  numeric: {
+	            		  message: '认缴资本只能输入数字'
+	            	  },
+	            	  callback: {  
+	                         message: '认缴资本在0~1000000000之间',  
+	                         callback: function(value, validator) { 
+	                        	 return value =="" || (parseFloat(value)>=0&&parseFloat(value)<=999999999.99);
+	                         }  
+	                     } 
+	              }
+	          },
+	          paidInCapital: {
+	              validators: {
+	            	  numeric: {
+	            		  message: '实缴资本只能输入数字'
+	            	  },
+	            	  callback: {  
+	                         message: '实缴资本在0~1000000000之间',  
+	                         callback: function(value, validator) { 
+	                        	 return value =="" || (parseFloat(value)>=0&&parseFloat(value)<=999999999.99);
+	                         }  
+	                     } 
+	              }
+	          },
+	          shareProportion: {
+	              validators: {
+	            	  numeric: {
+	            		  message: '持股比例只能输入数字'
+	            	  },
+	            	  callback: {  
+	                         message: '持股比例在0-100之间',  
+	                         callback: function(value, validator) { 
+	                        	 return value == "" || (parseFloat(value)>=0&&parseFloat(value)<=100);
+	                         }  
+	                     } 
+	              }
+	          },
+	          note: {
+	              validators: {
+	                  stringLength: {
+	                      min: 1,
+	                      max: 2000,
+	                      message: '长度为1-2000'
+	                  }
+	              }
+	          }
+	      }
+		}).on('success.form.bv', function (e) {
+			e.preventDefault();
+			saveInfoFun('ShareHolder');
+			$(e.target).bootstrapValidator('resetForm', true);
+		});
+}
+
+function formCorpAccountValidator(){
+	$('#addModalFormCorpAccount').bootstrapValidator({
+	      message: 'This value is not valid',
+	      excluded: ':disabled',
+	      feedbackIcons: {
+	          valid: 'glyphicon glyphicon-ok',
+	          invalid: 'glyphicon glyphicon-remove',
+	          validating: 'glyphicon glyphicon-refresh'
+	      },
+	      fields: {
+	    	  accountAmount : {
+	    		  validators: {
+						notEmpty: {message: '账户金额不能为空'},
+	                	numeric: {message: '只能输入数字'},
+	                	callback: {  
+	                        message: '账户金额在-1000000000.00~1000000000.00之间',  
+	      						callback: function(value, validator) { 
+	      						return parseFloat(value)> -1000000000&&parseFloat(value)<1000000000;
+	                        }  
+	                    } 
+					}
+	         },
+	         account : {
+	        	 validators: {
+						notEmpty: {message: '账户不能为空'},
+						numeric: {message: '只能输入数字'},
+						stringLength: {
+		                      min: 1,
+		                      max: 32,
+		                      message: '长度为1-32'
+		                  }
+					}	        	 
+	         },
+	         currency : {
+	        	 validators: {
+						notEmpty: {message: '币种不能为空'},
+					}
+	         },
+	         accountName : {
+					validators: {
+						notEmpty: {message: '户名不能为空'},
+						stringLength: {
+		                      min: 1,
+		                      max: 32,
+		                      message: '户名长度为1-32'
+		                  }
+					}
+				},
+				accountBank : {
+					validators: {
+						notEmpty: {message: '开户银行不能为空'},
+						stringLength: {
+		                      min: 1,
+		                      max: 32,
+		                      message: '开户银行名称长度为1-32'
+		                  }
+					}
+				},
+				bankLocation : {
+					validators: {
+						notEmpty: {message: '开户网点不能为空'},
+				stringLength: {
+                  min: 1,
+                  max: 32,
+                  message: '开户网点名称长度为1-32'
+              }
+					}
+				},
+	      }
+		})
+		.on('success.form.bv', function (e) {
+			e.preventDefault();
+			saveInfoFun('CorpAccount');
+			$(e.target).bootstrapValidator('resetForm', true);
+		});	
+}
+
+function formIntroductionValidator(){
+	$('#infoForm').bootstrapValidator({
+		  group: '.scf_valid',
+	      message: 'This value is not valid',
+	      excluded: ':disabled',
+	      feedbackIcons: {
+	          valid: 'glyphicon glyphicon-ok',
+	          invalid: 'glyphicon glyphicon-remove',
+	          validating: 'glyphicon glyphicon-refresh'
+	      },
+	      fields: {
+	    	  aplFactorLimit : {
+	    		  validators: {
+	                	numeric: {
+	                		message: '只能输入数字'
+	                		} 
+					}
+	         },
+	         aplDeadLine:{
+	    		  validators: {
+	                	numeric: {
+	                		message: '只能输入数字'
+	                		} ,
+	                	 regexp: {
+	                		 regexp: /^[1-9]\d*$/,
+		                     message: '只能输入正整数'
+	   	                }		
+					}
+	         },
+	         aplAmt : {
+	    		  validators: {
+	                	numeric: {
+	                		message: '只能输入数字'
+	                		} 
+					}
+	         },
+	         proExpectProfit : {
+	    		  validators: {
+	                	numeric: {
+	                		message: '只能输入数字'
+	                		} 
+					}
+	         },
+	         factorRate : {
+	    		  validators: {
+	                	numeric: {
+	                		message: '只能输入数字'
+	                		} 
+					}
+	         },
+	         loanRt : {
+	              validators: {
+	            	  numeric: {message: '只能输入数字'},
+	            	  callback: {  
+	                       message: '融资比例在0~100之间',  
+	                       callback: function(value, validator) { 
+	                        	return value =="" || (parseFloat(value)>=0&&parseFloat(value)<=100);
+	                         }  
+	                     } 
+	              }
+	          }
+	      }
+		})
+		.on('success.form.bv', function (e) {
+			e.preventDefault();
+			$("#proAnlyPanelTab").tab('show');
+			$(e.target).find("button[type='submit']").attr("disabled",false);
+		});
+}
+
+function addInfoFun(type, num) {
+	$('#addModal' +type + 'Label').text("添加");
+    $('#addModal' + type).modal({backdrop: 'static', keyboard: false});//防止点击空白/ESC 关闭
+    $('#isEdit').val(num); //添加1；修改2
+}
+
+function modInfoFun(row, type, num) {
+	$('#addModal' +type + 'Label').text("修改");
+	CloudUtils.setForm(row, 'addModalForm' + type);
+	$('#addModal' +type).modal({backdrop: 'static', keyboard: false});
+	$('#isEdit').val(num); //添加1;修改2;
+}
+
+function saveInfoFun(type) {
+	var data = CloudUtils.convertStringJson('addModalForm' + type);
+	data = eval("(" + data + ")");
+	data['corpId'] = corpId;
+	data = JSON.stringify(data);
+	var uri =  $('#isEdit').val() == 1 ? 'add' : 'mod', mUrl;
+	switch(type) {
+		case 'Enterprise': mUrl = '../../affiliatedEnterprise/' + uri;break;
+		case 'ShareHolder': mUrl = '../../shareHolder/' + uri;break;
+		case 'CorpAccount': mUrl = '../../corpAccount/' + uri;break;
+	}
+	$('#addModal' +type).modal("hide");
+	var options = {
+			url : mUrl,
+			data : data,
+			callBackFun : function(data) {
+				if(data.result==0){
+					eval('initTable' + type + '()');
+					bootbox.alert(data.resultNote);
+				}else{
+					bootbox.alert(data.resultNote);
+					return false;
+				}
+			},
+			errorCallback:function(data){
+				bootbox.alert("error");
+			}
+	};
+	CloudUtils.ajax(options);
+	
+}
+
+function initSupplierBaseTable(){
+	initTableEnterprise();//初始化关联企业信息表    data-type="a"
+	initTableShareHolder();//初始化股东信息表         data-type="b"
+	initTableCorpAccount();//初始化账户信息表         data-type="c"
+	negativeInitTable();//初始化资产负债表
+	profitInitTable();//初始化利润表
+	cashflowInitTable();//初始化现金流量表
+	bankRecInitTable();//初始化银行对账单表
+	taxReturnsInitTable();//初始化纳税申请表
+	corpInitTable();//初始化企业征信表
+	shareInitTable();//初始化个人征信表
+	orgnInitTable();//初始化机构借款统计表
+	guaranteeInitTable();//初始化对外担保明细表
+	litigantInitTable();//初始化诉讼情况表
+	initTableBid();//初始化招/投标合同表
+	initTableSale();//初始化贸易/销售合同表
+}
+
+window.operateEvents = {
+	'click .modify': function (e, value, row, index) {
+		modInfoFun(row, $(e.target).data('type'), 2);
+	},
+    'click .remove': function (e, value, row, index) {
+    	var type = $(e.target).data('type'), mUrl, mData;
+    	switch(type) {
+	    	case 'Enterprise': mUrl = '../../affiliatedEnterprise/delete';mData = '{"recUid":"'+row.recUid+'"}';break;
+	    	case 'ShareHolder': mUrl = '../../shareHolder/delete';mData = '{"shareHolderId":"'+row.shareHolderId+'"}';break;
+	    	case 'CorpAccount': mUrl = '../../corpAccount/delete';mData = '{"recUid":"'+row.recUid+'"}';break;
+    	}
+		bootbox.confirm("确定删除此条记录?", function(result) {
+			if (result) {
+				var options = {
+					url : mUrl,
+					data : mData,
+					callBackFun : function(data) {
+						if (data.result == 0) {
+							eval('initTable' + type + '()');
+							bootbox.alert(data.resultNote);
+						} else {
+							bootbox.alert(data.resultNote);
+							return false;
+						}
+					},
+					errorCallback : function(data) {
+						bootbox.alert("error");
+					}
+				};
+				CloudUtils.ajax(options);
+			}
+		});
+	}
+};
+
+function initTableCorpAccount() { 
+	$('#tableCorpAccount').bootstrapTable('destroy');  
+	$("#tableCorpAccount").bootstrapTable({  
+         method: "post", 
+         url: "../../corpAccount/list", 
+         striped: false,  //表格显示条纹  
+         pagination: true, //启动分页  
+         pageSize: 5,  //每页显示的记录数  
+         pageNumber:1, //当前第几页  
+         pageList: [5, 10, 15, 20, 25],  //记录数可选列表  
+         search: false,  //是否启用查询  
+         showColumns: false,  //显示下拉框勾选要显示的列  
+         showRefresh: false,  //显示刷新按钮  
+         sidePagination: "server", //表示服务端请求  
+         //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder  
+         //设置为limit可以获取limit, offset, search, sort, order  
+         queryParamsType : "undefined",   
+         queryParams: function queryParams(params) {   //设置查询参数  
+           var param = {    
+               pageNumber: params.pageNumber,    
+               pageSize: params.pageSize,
+               corpId: corpId ? corpId : 0
+           };    
+           return JSON.stringify(param);                   
+         },  
+         responseHandler:function responseHandler(res) {
+        	 if (res.result==0) {
+	        	 return {
+	        		 "rows": res.dataList,
+	        		 "total": res.records
+	        	 };
+        	 } else {
+        		 bootbox.alert(res.resultNote);
+        		 return {
+			        	 "rows": [],
+			        	 "total": 0
+			        	 };
+        	 }
+         },
+         columns: [{
+ 	        field: 'recUid',
+ 	        title: 'Item ID',
+ 	        align: 'center',
+            valign: 'middle',
+            visible: false
+ 	    }, {
+ 	        field: 'corpId',
+ 	        title: '付款企业',
+ 	        align: 'center',
+            valign: 'middle',
+             visible: false
+ 	    },{
+ 	        field: 'accountType',
+ 	        title: '账号类型',
+ 	        align: 'center',
+            valign: 'middle',
+            formatter:function(value,row,index){
+              	if(value==1){
+              		return "买方";
+              	}else if(value==2){
+              		return "卖方";
+              	}else{
+              		return "其他";
+              	}
+              } 
+ 	    },{
+ 	        field: 'accountName',
+ 	        title: '户名',
+ 	        align: 'center',
+             valign: 'middle'
+ 	    },{
+ 	        field: 'currency',
+ 	        title: '币种',
+ 	        align: 'center',
+             valign: 'middle',
+                 formatter:function(value,row,index){
+                 	if(value=="人民币"){
+                 		return "人民币";
+                 	}else if(value=="美元"){
+                 		return "美元";
+                 	}
+                 } 
+ 	    },{
+ 	        field: 'accountBank',
+ 	        title: '开户银行',
+ 	        align: 'center',
+             valign: 'middle'
+ 	    }, {
+ 	        field: 'bankLocation',
+ 	        title: '开户网点',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }, {
+ 	        field: 'operation',
+ 	        title: '操作',
+ 	        align: 'center',
+ 	        formatter:function(value,row,index){
+ 	        	var m = '<a class = "fa fa-edit modify" style="color:#d864fd;padding:0px 5px;" data-type="CorpAccount" title="修改" href="javascript:void(0)"></a>';
+	 	        var r = '<a class = "fa fa-trash-o remove" style="color:#fa8564;padding:0px 5px;" data-type="CorpAccount" title="删除" href="javascript:void(0)"></a>';
+	 	        return m+' '+r;
+ 	        },
+ 	        events: 'operateEvents'
+ 	    }]
+       });  
+}
+
+function initTableShareHolder() {
+	$('#tableShareHolder').bootstrapTable('destroy');  
+	$("#tableShareHolder").bootstrapTable({  
+         method: "post", 
+         url: "../../shareHolder/list", 
+         striped: true,  //表格显示条纹  
+         pagination: true, //启动分页  
+         pageSize: 5,  //每页显示的记录数  
+         pageNumber:1, //当前第几页  
+         pageList: [5, 10, 15, 20, 25],  //记录数可选列表  
+         search: false,  //是否启用查询  
+         showColumns: false,  //显示下拉框勾选要显示的列  
+         showRefresh: false,  //显示刷新按钮  
+         sidePagination: "server", //表示服务端请求  
+         //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder  
+         //设置为limit可以获取limit, offset, search, sort, order  
+         queryParamsType : "undefined",   
+         queryParams: function queryParams(params) {   //设置查询参数  
+           var param = {    
+               pageNumber: params.pageNumber,    
+               pageSize: params.pageSize,
+               corpId: corpId ? corpId : 0
+           };    
+           return JSON.stringify(param);                   
+         },  
+         responseHandler:function responseHandler(res) {
+        	 if (res.result==0) {
+	        	 return {
+	        		 "rows": res.dataList,
+	        		 "total": res.records
+	        	 };
+
+        	 } else {
+        		 bootbox.alert(res.resultNote);
+        		 return {
+			        	 "rows": [],
+			        	 "total": 0
+			        	 };
+        	 }
+         },
+         columns: [{
+ 	        field: 'shareHolderId',
+ 	        title: 'Item ID',
+ 	        align: 'center',
+            valign: 'middle',
+            visible: false
+ 	    }, {
+ 	        field: 'corpId',
+ 	        title: '所属企业',
+ 	        align: 'center',
+            valign: 'middle',
+            visible: false
+ 	    },{
+ 	        field: 'shareName',
+ 	        title: '股东名称',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }, {
+ 	        field: 'shareType',
+ 	        title: '股东性质',
+ 	        align: 'center',
+            valign: 'middle',
+            formatter:function(value,row,index){
+              	if(value==1){
+              		return "个人";
+              	}else if(value==2){
+              		return "法人";
+              	}else{
+              		return "其他";
+              	}
+              } 
+ 	    }, {
+ 	        field: 'subscribedCapital',
+ 	        title: '认缴资本',
+ 	        align: 'center',
+ 	        formatter:function(value,row,index){
+	 	    	return $.number(value,2);
+		        },
+            valign: 'middle'
+ 	    }, {
+ 	        field: 'paidInCapital',
+ 	        title: '实缴资本',
+ 	        formatter:function(value,row,index){
+	 	    	return $.number(value,2);
+		        },
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }, {
+ 	        field: 'shareProportion',
+ 	        title: '持股比例',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    },{
+ 	        field: 'note',
+ 	        title: '变动情况',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    },{
+ 	        field: 'corpName',
+ 	        title: '企业名称',
+ 	        align: 'center',
+            valign: 'middle',
+            visible: false
+ 	    },{
+ 	        field: 'operation',
+ 	        title: '操作',
+ 	       align: 'center',
+           valign: 'middle',
+	        formatter:function(value,row,index){
+	            var s = '<a class = "fa fa-edit modify" style="color:#d864fd;padding:0px 5px;" data-type="ShareHolder" title="编辑"  href="javascript:void(0)"></a>';
+	            var r = '<a class = "fa fa-trash-o remove" style="color:#fa8564;padding:0px 5px;" data-type="ShareHolder" title="删除" href="javascript:void(0)"></a>';
+	            return  s+' '+r;
+	        },
+ 	        events: 'operateEvents'
+ 	    }]
+       });  
+}
+
+function initTableEnterprise() { 
+	$('#tableEnterprise').bootstrapTable('destroy');  
+	$("#tableEnterprise").bootstrapTable({  
+         method: "post", 
+         url: "../../affiliatedEnterprise/list", 
+         striped: true,  //表格显示条纹  
+         pagination: true, //启动分页  
+         pageSize: 5,  //每页显示的记录数  
+         pageNumber:1, //当前第几页  
+         pageList: [5, 10, 15, 20, 25],  //记录数可选列表  
+         search: false,  //是否启用查询  
+         showColumns: false,  //显示下拉框勾选要显示的列  
+         showRefresh: false,  //显示刷新按钮  
+         sidePagination: "server", //表示服务端请求  
+         //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder  
+         //设置为limit可以获取limit, offset, search, sort, order  
+         queryParamsType : "undefined",   
+         queryParams: function queryParams(params) {   //设置查询参数  
+           var param = {    
+               pageNumber: params.pageNumber,    
+               pageSize: params.pageSize,
+               isPage : 1,
+               corpId: corpId ? corpId : 0
+           };    
+           return JSON.stringify(param);                   
+         },  
+         responseHandler:function responseHandler(res) {
+        	 if (res.result==0) {
+	        	 return {
+	        		 "rows": res.dataList,
+	        		 "total": res.records
+	        	 };
+
+        	 } else {
+        		 bootbox.alert(res.resultNote);
+        		 return {
+			        	 "rows": [],
+			        	 "total": 0
+			        	 };
+        	 }
+         },
+         columns: [{
+	 	        field: 'recUid',
+	 	        title: '关联企业Id',
+	 	        align: 'center',
+	            valign: 'middle',
+	            visible: false
+	 	}, {
+ 	        field: 'enterpriseName',
+ 	        title: '关联企业名称',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }, {
+ 	        field: 'corpName',
+ 	        title: '所属企业',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    },{
+	 		field: 'industry',
+	 		title: '所属行业',
+	 		align: 'center',
+            valign: 'middle'
+	 	},{
+ 	        field: 'relationType',
+ 	        title: '关系类型',
+ 	        align: 'center',
+            valign: 'middle',
+            formatter:function(value,row,index){
+ 	        	if(value==1){
+ 	        		return "子公司";
+ 	        	}else if(value==2){
+ 	        		return "母公司";
+ 	        	}else if(value==3){
+ 	        		return "兄弟公司";
+ 	        	}else{
+ 	        		return "其他";
+ 	        	}
+ 	        }
+ 	    }, {
+ 	        field: 'enterpriseCorporation',
+ 	        title: '企业法人',
+ 	        align: 'center',
+            valign: 'middle'
+ 	    }, {
+ 	        field: 'operation',
+ 	        title: '操作',
+ 	       align: 'center',
+           valign: 'middle',
+ 	        formatter:function(value,row,index){
+ 	            var s = '<a class = "fa fa-edit modify" style="color:#d864fd;padding:0px 5px;" data-type="Enterprise" title="编辑" href="javascript:void(0)"></a>';
+ 	            var r = '<a class = "fa fa-trash-o remove" style="color:#fa8564;padding:0px 5px;" data-type="Enterprise" title="删除" href="javascript:void(0)"></a>';
+ 	            return s+' '+r;
+ 	        },
+ 	        events: 'operateEvents'
+ 	    }]
+       });  
+}
+
+/*
+ * 供应商基本信息保存
+ */
+function saveSplInfo(){
+	var data = CloudUtils.convertStringJson('splinfoForm');
+	data = eval("(" + data + ")");
+	data['sysType'] = 5;
+	data['corpId'] = corpId ? corpId : '';
+	data = JSON.stringify(data);
+	var options = {
+		url : '../../corp/' + (corpId ? 'mod' : 'add'),
+		data : data,
+		callBackFun : function(data) {
+			if(data.result==0){
+				bootbox.alert(data.resultNote);
+				return true;
+			}else{
+				bootbox.alert(data.resultNote);
+				return false;
+			}
+		},
+		errorCallback:function(data){
+			bootbox.alert("error");
+		}
+	};
+	CloudUtils.ajax(options);
+}
+/*
+ * 当项目名称查询改变的时候清空数据
+ */
+function changeName(){
+	$("#proName").val("");
+	$("#coreCorpName").val("");
+	$("#coreCorpNo").val("");
+	$("#custName").val("");
+	$("#custNo").val("");
+	$("#corpId").val("");
+	corpId = null;
+	Buttonhidden();
+	$("#proNo").val("");
+	//基本信息页面信息清除
+	$("#splinfoForm input").val("");
+}

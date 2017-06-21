@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ut.scf.dao.bpm.IProjectAnalyDao">
+  <insert id="insertProjectAnaly" parameterType="hashmap">
+    insert into project_analy (pro_analy_id,pro_guarant_note, risk_prev_mth, his_trans_anly,fac_base_doc_anly,
+    profit_anly,conclu_suggestion,create_time)
+    values (#{proAnalyId}, #{proGuarantNote}, #{riskPrevMth}, #{hisTransAnly},#{facBaseDocAnly},
+    #{profitAnly},#{concluSuggestion},sysdate)
+  </insert>
+
+</mapper>

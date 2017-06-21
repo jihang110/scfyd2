@@ -1,0 +1,101 @@
+<div class="panel-body">
+	<div class="container-fluid">
+		<div class="row" style="margin-bottom: 10px;margin-top: 20px;">
+			<div style="line-height: 40px;">
+				<strong class="text-muted">基本信息</strong>
+			</div>
+			<fieldset id='field'>
+				<form class="form-horizontal" id="infoForm">
+					<div class="col-sm-12" style="margin-top: 30px">
+						<div class="form-group">
+							<label for="corpName" class="col-sm-2 control-label">核心企业名称</label>
+							<div class="col-sm-3 scf_valid">
+								<input type="text" class="form-control" id="corpName"
+									name="corpName">
+							</div>
+							<label for="businessLicense" class="col-sm-2 control-label">营业执照</label>
+							<div class="col-sm-3 scf_valid">
+								<input type="text" class="form-control" id="businessLicense"
+									name="businessLicense" >
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="orgnCreditNum" class="col-sm-2 control-label">机构信用代码</label>
+							<div class="col-sm-3 scf_valid">
+								<input type="text" class="form-control" id="orgnCreditNum"
+									name="orgnCreditNum">
+							</div>
+							<label for="orgnNum" class="col-sm-2 control-label">组织机构代码</label>
+							<div class="col-sm-3 scf_valid">
+								<input type="text" class="form-control" id="orgnNum"
+									name="orgnNum">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="openAccountLicence" class="col-sm-2 control-label">开户许可证</label>
+							<div class="col-sm-3 scf_valid">
+								<input type="text" class="form-control" id="openAccountLicence"
+									name="openAccountLicence">
+							</div>
+							<label for="fixedPhone" class="col-sm-2 control-label">联系人固定电话</label>
+							<div class="col-sm-3 scf_valid">
+								<input type="text" class="form-control"
+									id="fixedPhone" name="fixedPhone">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="applicantName" class="col-sm-2 control-label">联系人姓名</label>
+							<div class="col-sm-3 scf_valid">
+								<input type="text" class="form-control" id="applicantName"
+									name="applicantName">
+							</div>
+						<label for="applicantPhone" class="col-sm-2 control-label">联系人手机</label>
+							<div class="col-sm-3 scf_valid">
+								<input type="text" class="form-control" id="applicantPhone"
+									name="applicantPhone">
+							</div>	
+						</div>
+						<div class="form-group" id="dis">
+						<label  for="supplierNum" class="col-sm-2 control-label">供应商数量</label>
+							<div class="col-sm-3 scf_valid">
+								<input type="text" class="form-control" id="supplierNum"
+									name="supplierNum" readonly>
+							</div>
+							
+						</div>
+						<div class="form-group">
+							<div class="col-sm-offset-10 col-sm-2" >
+								<button type="submit" class="btn btn-info add">
+										&nbsp;<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存&nbsp;
+								</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</fieldset>
+		</div>
+	</div>
+
+	<div class="container-fluid">
+		<div class="row" style="margin-bottom: 10px;margin-top: 20px;">
+			<div class="col-sm-2" style="line-height: 40px;">
+				<strong class="text-muted">供应商信息</strong>
+			</div>
+		</div>
+	</div>
+	<table id="supplierInfoList" class="table table-bordered"></table>
+
+	<div class="container-fluid new_hide">
+		<div class="row" style="margin-bottom: 10px;margin-top: 20px;">
+			<div class="col-sm-2" style="line-height: 40px;">
+				<strong class="text-muted">附件上传</strong>
+			</div>
+		</div>
+		<div class="col-sm-2">
+			<button class="btn btn-link add" onclick="uploadAttachment(1)">
+					<span class="glyphicon glyphicon-export" aria-hidden="true"></span>&nbsp;&nbsp;上传
+			</button>
+		</div>
+	</div>
+	<table id="baseAttachment" class="table table-bordered"></table>
+</div>

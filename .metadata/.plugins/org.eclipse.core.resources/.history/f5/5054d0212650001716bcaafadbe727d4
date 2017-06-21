@@ -1,0 +1,9 @@
+$(function() {
+	
+});
+function addFun(type){
+	$('#mainFrame',top.document).attr('src','pubManager/custManager/custAdd.html');
+ }
+function searchFun(){
+	 initTable("");
+}
